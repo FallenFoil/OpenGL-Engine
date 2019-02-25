@@ -8,4 +8,4 @@ include_directories(tinyxml2-master)
 add_executable(CG
         tinyxml2-master/tinyxml2.cpp
         tinyxml2-master/tinyxml2.h
-        main.cpp)
+        main.cpp Model.cpp Model.h Scene.cpp Scene.h)
