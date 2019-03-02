@@ -2,9 +2,52 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
+#include "Ponto.h"
 #include <sstream>
 
 using namespace std;
+
+string createBox(float width, float height, float depth,  int stacks, int slices, int depthDivisions){
+    if(stacks < 1 && slices < 1) return string();
+
+    stringstream ss;
+    ss << stacks * slices * depthDivisions*6*6 << "\n";
+    float boxWidth, boxHeight, boxDepth;
+    boxWidth = width/slices; boxHeight = height/stacks; boxDepth = depth/depthDivisions;
+    Ponto t1(-width/2, height/2, -depth/2);
+    Ponto t2, t3, t4, b1, b2, b3, b4;
+
+    for(int i = 0; i < stacks; i++){
+        b1 = t1.translate(0,-boxHeight, 0);
+        Ponto b1Saved(b1);
+        for(int k = 0; k < depthDivisions; k++){
+            t2 = t1.translate(0, 0, boxDepth);
+            Ponto t2Saved(t2);
+            for(int j = 0; j < slices; j++){
+                t2 = t1.translate(0, 0, boxDepth);
+                t3 = t1.translate(boxWidth, 0, boxDepth);
+                t4 = t1.translate(boxWidth, 0, 0);
+                b1 = t1.translate(0,-boxHeight, 0);
+                b2 = t1.translate(0,-boxHeight, boxDepth);
+                b3 = t1.translate(boxWidth,-boxHeight, boxDepth);
+                b4 = t1.translate(boxWidth,-boxHeight, 0);
+
+                ss << toStringPlane(t1,t2,t3,t4);
+                ss << toStringPlane(b3,b2,b1,b4);
+                ss << toStringPlane(b4,b1,t1,t4);
+                ss << toStringPlane(t2,b2,b3,t3);
+                ss << toStringPlane(b2,t2,t1,b1);
+                ss << toStringPlane(t3,b3,b4,t4);
+
+                t1 = t1.translate(boxWidth,0,0);
+            }
+            t1 = Ponto(t2Saved);
+        }
+        t1 = Ponto(b1Saved);
+    }
+    return ss.str();
+}
+
 
 /*
  * Cria e retorna uma string com o numero de vertices e as coordenadas desses vertices.
@@ -63,7 +106,7 @@ string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, 
  *
  * Recebe os tamnahos da Box.
  */
-string createBox(double sizeX, double sizeY, double sizeZ){
+/*string createBox(double sizeX, double sizeY, double sizeZ){
     stringstream ss;
 
     ss << createPlane(0,-sizeY/2,0,sizeX,0,sizeZ,-1);
@@ -74,7 +117,7 @@ string createBox(double sizeX, double sizeY, double sizeZ){
     ss << createPlane( sizeX/2,0,0,0,sizeY,sizeZ, 1);
 
     return ss.str();
-}
+}*/
 
 int main(int argc, char** argv){
 
@@ -101,19 +144,29 @@ int main(int argc, char** argv){
         file << createPlane(0,0,0,atof(argv[2]),0,atof(argv[2]),1);
     }
     if(shape.compare("Box")==0){
-        if(argc<5){
-            printf("Required X,Y,Z dimensions.\n");
-            exit(EXIT_FAILURE);
+        if(argc == 6){
+            file.open(argv[5]);
+            file << createBox(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, 1, 1);
         }
-        if(argc<6){
-            printf("Required file name.\n");
-            exit(EXIT_FAILURE);
+        else{
+            if(argc<6){
+                printf("Required X,Y,Z dimensions.\n");
+                exit(EXIT_FAILURE);
+            }
+            if(argc == 9){
+                file.open(argv[8]);
+                file << createBox(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
+            } else {
+                if(argc<8){
+                    printf("Required slices,stacks,depthDivisions numbers.\n");
+                    exit(EXIT_FAILURE);
+                }
+                if(argc==8){
+                    printf("Required file name.\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
         }
-
-        file.open(argv[5]);
-        file << "8\n";
-        file << createBox(atof(argv[2]), atof(argv[3]), atof(argv[4]));
     }
-
     return 0;
 }
