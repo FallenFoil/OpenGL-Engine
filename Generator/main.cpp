@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "Ponto.h"
 #include <sstream>
+#include <math.h>
 
 using namespace std;
 
@@ -119,6 +120,39 @@ string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, 
     return ss.str();
 }*/
 
+string createPoint(double alpha, double beta, double radius){
+    double x,y,z;
+    stringstream ss;
+
+    x = radius * cos(beta) * cos(alpha);
+    y = radius * cos(beta) * sin(alpha);
+    z = radius * sin(beta);
+
+    ss << "glVertex3f(" << x << "," << y << "," << z << ");" << endl;
+
+    return ss.str();
+}
+
+string createSphere(double radius, int slices, int stacks){
+    stringstream ss;
+
+    double oneSlice=(2*M_PI)/slices, oneStack=(M_PI)/stacks;
+
+    for(int i = -(stacks/2); i < (stacks-(stacks/2)); i++){
+        for(int j = 0; j < slices; j++){
+            ss << createPoint(oneSlice*j, oneStack*i, radius);
+            ss << createPoint(oneSlice*(j+1), oneStack*(i+1), radius);
+            ss << createPoint(oneSlice*j, oneStack*(i+1), radius);
+
+            ss << createPoint(oneSlice*(j+1), oneStack*(i+1), radius);
+            ss << createPoint(oneSlice*j, oneStack*i, radius);
+            ss << createPoint(oneSlice*(j+1), oneStack*i, radius);
+        }
+    }
+
+    return ss.str();
+}
+
 int main(int argc, char** argv){
 
     if(argc<2){
@@ -129,7 +163,7 @@ int main(int argc, char** argv){
     string shape = string(argv[1]);
     ofstream file;
 
-    if(shape.compare("Plane")==0){
+    if(shape.compare("Plane")==0 || shape.compare("plane")==0){
         if(argc<3){
             printf("Required dimension.\n");
             exit(EXIT_FAILURE);
@@ -142,6 +176,8 @@ int main(int argc, char** argv){
         file.open(argv[3]);
         file << "4\n";
         file << createPlane(0,0,0,atof(argv[2]),0,atof(argv[2]),1);
+
+        return 0;
     }
     if(shape.compare("Box")==0){
         if(argc == 6){
@@ -167,6 +203,29 @@ int main(int argc, char** argv){
                 }
             }
         }
+    }
+    if(shape.compare("Sphere")==0 || shape.compare("sphere")==0){
+        if(argc<5){
+            printf("Required Radius, Slices and Stacks.\n");
+            exit(EXIT_FAILURE);
+        }
+        if(argc<6){
+            printf("Required file name.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        file.open(argv[5]);
+        file << (atof(argv[3])+1)*(atof(argv[4])+1) << endl;
+        file << createSphere(atof(argv[2]), atof(argv[3]), atof(argv[4]));
+
+        return 0;
+    }
+    if(shape.compare("Cone")==0 || shape.compare("cone")==0){
+        
+    }
+    else{
+        printf("Wrong shape\n");
+        exit(EXIT_FAILURE);
     }
     return 0;
 }
