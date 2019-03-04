@@ -106,25 +106,6 @@ string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, 
 }
 
 /*
- * Cria e retorna uma string com os pontos de uma Box, criando cada plano.
- *
- * Recebe os tamnahos da Box.
- */
-/*string createBox(double sizeX, double sizeY, double sizeZ){
-    stringstream ss;
-
-    ss << createPlane(0,-sizeY/2,0,sizeX,0,sizeZ,-1);
-    ss << createPlane(0, sizeY/2,0,sizeX,0,sizeZ, 1);
-    ss << createPlane(0,0,-sizeZ/2,sizeX,sizeY,0,-1);
-    ss << createPlane(0,0, sizeZ/2,sizeX,sizeY,0, 1);
-    ss << createPlane(-sizeX/2,0,0,0,sizeY,sizeZ,-1);
-    ss << createPlane( sizeX/2,0,0,0,sizeY,sizeZ, 1);
-
-    return ss.str();
-}*/
-
-
-/*
  * Transforma coordenadas esfericas em cartesianas
  *
  * Recebe o angulo alpha e beta e o raio da esfera
@@ -139,7 +120,7 @@ string createSpherePoint(double alpha, double beta, double radius){
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
 
-    ss << x << " " << y << " " << z << endl;
+    ss << "glVertex3f(" << x << ", " << y << ", " << z << ");" << endl;
 
     return ss.str();
 }
@@ -178,7 +159,7 @@ string createSphere(double radius, int slices, int stacks){
  *
  * Retorna uma string com a coordenadas cartesianas do ponto.
  */
-string createConePoint(double alpha, double radius, double height){
+    string createConePoint(double alpha, double radius, double height){
     double x,y,z;
     stringstream ss;
 
@@ -186,7 +167,7 @@ string createConePoint(double alpha, double radius, double height){
     y = height;
     z = radius * cos(alpha);
 
-    ss << x << " " << y << " " << z << endl;
+    ss << "glVertex3f(" << x << ", " << y << ", " << z << ");" << endl;
 
     return ss.str();
 }
@@ -203,20 +184,19 @@ string createCone(double radius, double height, int slices, int stacks){
     stringstream ss;
 
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
+    int j = 0, i = 0;
+    
+    //Base
+    //A
+    ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+    //Origem
+    ss << "glVertex3f(0, 0, 0);" << endl;
+    //B
+    ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
 
-    for (int j = 0; j < stacks; ++j){
+    for ( j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
-        for(int i = 0; i < slices; i++){
-            if(j==0){
-                //Base
-                //A
-                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-                //Origem
-                ss << "0 0 0" << endl;
-                //B
-                ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
-            }
-
+        for(i = 0; i < slices; i++){
             //Face
             //A
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
