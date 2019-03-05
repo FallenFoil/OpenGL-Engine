@@ -6,14 +6,14 @@
 #define CG_SCENE_H
 
 #include "Model.h"
-#include <forward_list>
+#include <vector>
 
 class Scene {
-    std::forward_list<Model> models;
+    std::vector<Model> models;
 
 public:
     void addModel(Model m);
-    std::forward_list<Model> getModels();
+    std::vector<Model> getModels();
     Scene();
 };
 

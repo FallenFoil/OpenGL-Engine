@@ -5,10 +5,10 @@
 #include "Scene.h"
 
 void Scene::addModel(Model m){
-    this->models.push_front(m);
+    this->models.push_back(m);
 }
 
-std::forward_list<Model> Scene::getModels(){
+std::vector<Model> Scene::getModels(){
     return this->models;
 }
 

@@ -14,6 +14,9 @@
 
 using namespace std;
 
+double alfa, beta;
+float dist;
+float dx,dy,dz;
 Scene scene;
 
 void loadScene() {
@@ -68,12 +71,19 @@ void processKeys(unsigned char c, int xx, int yy) {
 
 // put code to process regular keys in here
     switch(c){
-
+        case 'a': alfa -= 0.03f; break;
+        case 'w': beta -= 0.03f; break;
+        case 's': beta += 0.03f; break;
+        case 'd': alfa += 0.03f; break;
+        case 'r': dist += 0.02f; break;
+        case 't': dist -= 0.02f; break;
         default: break;
     }
+    dx =(float) (dist * cos(beta) * cos(alfa));
+    dy =(float) (dist * sin(beta));
+    dz =(float) (dist * cos(beta) * sin(alfa));
     glutPostRedisplay();
 }
-
 
 void processSpecialKeys(int key, int xx, int yy) {
 
@@ -87,24 +97,24 @@ void renderScene(void) {
 
     // set the camera
     glLoadIdentity();
-    gluLookAt(5.0,2,5.0,
+    gluLookAt(dx,dy,dz,
               0.0,0.0 ,0.0,
               0.0f,1.0f,0.0f);
 
-    glColor3f(1,1,1);
+    glColor3f(1,0,1);
 
-    glBegin(GL_TRIANGLES);
-    forward_list<Model> models = scene.getModels();
+    vector<Model> models = scene.getModels();
     for(auto model = models.begin(); model != models.end(); model++){
         Model m = *model;
-        forward_list<Ponto> pontos = m.getPoints();
+        vector<Ponto> pontos = m.getPoints();
+        glBegin(GL_TRIANGLES);
         for(auto ponto = pontos.begin(); ponto != pontos.end(); ponto++){
             Ponto p = *ponto;
             glVertex3f(p.getX(), p.getY(), p.getZ());
-            printf("%f %f %f\n", p.getX(), p.getY(), p.getZ());
         }
+        glEnd();
     }
-    glEnd();
+
 
     //drawCylinder(1,2,10);
     glBegin(GL_LINES);
@@ -130,7 +140,10 @@ void renderScene(void) {
 int main(int argc, char** argv) {
     loadScene();
 
-    // init GLUT and the window
+    alfa = beta = 0;
+    dz = dx = 0;
+    dist = dx = 0;
+// init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
@@ -153,5 +166,6 @@ int main(int argc, char** argv) {
 
 // enter GLUT's main cycle
     glutMainLoop();
-    return 0;
+
+    return 1;
 }

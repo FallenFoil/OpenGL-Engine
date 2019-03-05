@@ -43,12 +43,12 @@ void Model::loadPoints(){
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f %f", &x, &y, &z);
         p = Ponto(x,y,z) ;
-        this->pontos.push_front(p);
+        this->pontos.push_back(p);
     }
     file.close();
 }
 
-std::forward_list<Ponto> Model::getPoints(){
+std::vector<Ponto> Model::getPoints(){
     return this->pontos;
 }
 

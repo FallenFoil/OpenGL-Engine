@@ -1,3 +1,4 @@
 <Scene>
-    <model file="plane.3d" />
+    <model file="cone.3d" />
+    <model file="plane.3d"/>
 </Scene>
