@@ -179,14 +179,14 @@ int main(int argc, char** argv){
 
         return 0;
     }
-    if(shape.compare("Box")==0){
+    if(shape.compare("Box")==0 || shape.compare("box") ==0){
         if(argc == 6){
             file.open(argv[5]);
             file << createBox(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, 1, 1);
         }
         else{
             if(argc<6){
-                printf("Required X,Y,Z dimensions.\n");
+                printf("Use \"Box <X> <Y> <Z> <<slice> <stacks> <depthDivisions>>? \".\n");
                 exit(EXIT_FAILURE);
             }
             if(argc == 9){
@@ -203,6 +203,7 @@ int main(int argc, char** argv){
                 }
             }
         }
+        return 0;
     }
     if(shape.compare("Sphere")==0 || shape.compare("sphere")==0){
         if(argc<5){

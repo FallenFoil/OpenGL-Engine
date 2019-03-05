@@ -10,8 +10,10 @@
 
 class Scene {
     std::forward_list<Model> models;
+
 public:
     void addModel(Model m);
+    std::forward_list<Model> getModels();
     Scene();
 };
 

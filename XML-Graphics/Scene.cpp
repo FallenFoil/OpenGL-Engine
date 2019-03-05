@@ -8,6 +8,10 @@ void Scene::addModel(Model m){
     this->models.push_front(m);
 }
 
+std::forward_list<Model> Scene::getModels(){
+    return this->models;
+}
+
 Scene::Scene(){
     this->models;
 }
