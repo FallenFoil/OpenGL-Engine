@@ -80,27 +80,33 @@ string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, 
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    Ponto a = Ponto(x,y,z);
+    ss << a.toString() << endl;
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    Ponto c = Ponto(x,y,z);
+    ss << c.toString() << endl;
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
-    ss << x << " " << y << " " << z << endl;
+    Ponto d = Ponto(x,y,z);
+    ss << d.toString() << endl;
 
     //Triangulo direito
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    c = Ponto(x,y,z);
+    ss << c.toString() << endl;
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    a = Ponto(x,y,z);
+    ss << a.toString() << endl;
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
-    ss << x << " " << y << " " << z << endl;
+    Ponto b = Ponto(x,y,z);
+    ss << b.toString() << endl;
 
     return ss.str();
 }
@@ -119,8 +125,9 @@ string createSpherePoint(double alpha, double beta, double radius){
     z = radius * cos(beta) * cos(alpha);
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
+    Ponto a = Ponto(x,y,z);
 
-    ss << "glVertex3f(" << x << ", " << y << ", " << z << ");" << endl;
+    ss << a.toString() << endl;
 
     return ss.str();
 }
@@ -167,7 +174,8 @@ string createSphere(double radius, int slices, int stacks){
     y = height;
     z = radius * cos(alpha);
 
-    ss << x << " " << y << " " << z << endl;
+    Ponto a = Ponto(x,y,z);
+    ss << a.toString() << endl;
 
     return ss.str();
 }
