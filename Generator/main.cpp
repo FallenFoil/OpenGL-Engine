@@ -2,12 +2,12 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-#include "Ponto.h"
+//#include "Ponto.h"
 #include <sstream>
 #include <math.h>
 
 using namespace std;
-
+/*
 string createBox(float width, float height, float depth,  int stacks, int slices, int depthDivisions){
     if(stacks < 1 && slices < 1) return string();
 
@@ -47,7 +47,7 @@ string createBox(float width, float height, float depth,  int stacks, int slices
         t1 = Ponto(b1Saved);
     }
     return ss.str();
-}
+}*/
 
 
 /*
@@ -60,8 +60,8 @@ string createBox(float width, float height, float depth,  int stacks, int slices
  *
  * Retorna uma string com os vertice do plano
  */
-string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, double sizeZ, int direction){
-    double x, y=0, z;
+string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float sizeZ, int direction){
+    float x, y=0, z;
     stringstream ss;
     int dirX=direction, dirY=direction, dirZ=direction;
 
@@ -112,15 +112,15 @@ string createPlane(double oX, double oY, double oZ, double sizeX, double sizeY, 
  *
  * Retorna a string com o ponto em coordenadas cartesianas
  */
-string createSpherePoint(double alpha, double beta, double radius){
-    double x,y,z;
+string createSpherePoint(float alpha, float beta, float radius){
+    float x,y,z;
     stringstream ss;
 
     z = radius * cos(beta) * cos(alpha);
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
 
-    ss << "glVertex3f(" << x << ", " << y << ", " << z << ");" << endl;
+    ss << x << " " << y << " " << z << endl;
 
     return ss.str();
 }
@@ -132,13 +132,14 @@ string createSpherePoint(double alpha, double beta, double radius){
  *
  * Retorna uma string com todos os pontos da esfera.
  */
-string createSphere(double radius, int slices, int stacks){
+string createSphere(float radius, int slices, int stacks){
     stringstream ss;
 
-    double oneSlice=(2*M_PI)/slices, oneStack=(M_PI)/stacks;
+    float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
 
-    for(int i = -(stacks/2); i < (stacks-(stacks/2)); i++){
+    for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
         for(int j = 0; j < slices; j++){
+
             ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
             ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
             ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
@@ -159,8 +160,8 @@ string createSphere(double radius, int slices, int stacks){
  *
  * Retorna uma string com a coordenadas cartesianas do ponto.
  */
-    string createConePoint(double alpha, double radius, double height){
-    double x,y,z;
+    string createConePoint(float alpha, float radius, float height){
+    float x,y,z;
     stringstream ss;
 
     x = radius * sin(alpha);
@@ -180,30 +181,33 @@ string createSphere(double radius, int slices, int stacks){
  *
  * Retorna uma string com todos os pontos do cone.
  */
-string createCone(double radius, double height, int slices, int stacks){
+string createCone(float radius, float height, int slices, int stacks){
     stringstream ss;
 
-    double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
-    int j = 0, i = 0;
-    
-    //Base
-    //A
-    ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-    //Origem
-    ss << "0 0 0" << endl;
-    //B
-    ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+    float oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
 
-    for ( j = 0; j < stacks; ++j){
+    for (int j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
-        for(i = 0; i < slices; i++){
+        for(int i = 0; i < slices; i++){
+            if(j==0){
+                //Base
+                //A
+                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                //Origem
+                ss << "0 0 0" << endl;
+                //B
+                ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+            }
+
             //Face
-            //A
-            ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-            //C
-            ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
-            //D
-            ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+            if(j!=stacks-1){
+                //A
+                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                //C
+                ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+                //D
+                ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+            }
 
             //C
             ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
@@ -247,7 +251,7 @@ int main(int argc, char** argv){
     if(shape.compare("Box")==0 || shape.compare("box") ==0 ){
         if(argc == 6){
             file.open(argv[5]);
-            file << createBox(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, 1, 1);
+            //file << createBox(atof(argv[2]), atof(argv[3]), atof(argv[4]), 1, 1, 1);
         }
         else{
             if(argc<6){
@@ -256,7 +260,7 @@ int main(int argc, char** argv){
             }
             if(argc == 9){
                 file.open(argv[8]);
-                file << createBox(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
+                //file << createBox(atof(argv[2]), atof(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]), atoi(argv[7]));
             } else {
                 if(argc<8){
                     printf("Required slices,stacks,depthDivisions numbers.\n");
