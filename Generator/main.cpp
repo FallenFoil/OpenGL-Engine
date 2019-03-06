@@ -2,12 +2,12 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-//#include "Ponto.h"
+#include "Ponto.h"
 #include <sstream>
 #include <math.h>
 
 using namespace std;
-/*
+
 string createBox(float width, float height, float depth,  int stacks, int slices, int depthDivisions){
     if(stacks < 1 && slices < 1) return string();
 
@@ -47,7 +47,7 @@ string createBox(float width, float height, float depth,  int stacks, int slices
         t1 = Ponto(b1Saved);
     }
     return ss.str();
-}*/
+}
 
 
 /*
@@ -69,38 +69,38 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
     if(sizeY==0){dirY=1;}
     if(sizeZ==0){dirZ=1;}
 
-    /*
-     * D--C
-     * |  |
-     * A--B
-     */
-
 
     //Triangulo esquerdo
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    Ponto a = Ponto(x,y,z);
+    ss << a.toString() << endl;
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    Ponto c = Ponto(x,y,z);
+    ss << c.toString() << endl;
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
-    ss << x << " " << y << " " << z << endl;
+    Ponto d = Ponto(x,y,z);
+    ss << d.toString() << endl;
 
     //Triangulo direito
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    c = Ponto(x,y,z);
+    ss << c.toString() << endl;
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    ss << x << " " << y << " " << z << endl;
+    a = Ponto(x,y,z);
+    ss << a.toString() << endl;
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
-    ss << x << " " << y << " " << z << endl;
+    Ponto b = Ponto(x,y,z);
+    ss << b.toString() << endl;
 
     return ss.str();
 }
@@ -119,8 +119,9 @@ string createSpherePoint(float alpha, float beta, float radius){
     z = radius * cos(beta) * cos(alpha);
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
+    Ponto a = Ponto(x,y,z);
 
-    ss << x << " " << y << " " << z << endl;
+    ss << a.toString() << endl;
 
     return ss.str();
 }
@@ -134,6 +135,12 @@ string createSpherePoint(float alpha, float beta, float radius){
  */
 string createSphere(float radius, int slices, int stacks){
     stringstream ss;
+
+    if(slices < 3 || stacks < 2){
+        return string();
+    }
+
+    ss << 6 * slices * stacks - 6 * slices << endl;
 
     float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
 
@@ -168,7 +175,8 @@ string createSphere(float radius, int slices, int stacks){
     y = height;
     z = radius * cos(alpha);
 
-    ss << x << " " << y << " " << z << endl;
+    Ponto a = Ponto(x,y,z);
+    ss << a.toString() << endl;
 
     return ss.str();
 }
@@ -285,7 +293,6 @@ int main(int argc, char** argv){
         }
 
         file.open(argv[5]);
-        file << ( atof( argv[3] ) + 1 ) * ( atof( argv[4]) + 1 ) << endl;//Numero de vertices
         file << createSphere(atof(argv[2]), atof(argv[3]), atof(argv[4]));
 
         return 0;
@@ -301,7 +308,6 @@ int main(int argc, char** argv){
         }
 
         file.open(argv[6]);
-        file << ( atof( argv[4] ) * atof( argv[5] ) + 1 ) << endl;//Numero de vertices
         file << createCone(atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
     }
     else{
