@@ -7,10 +7,9 @@
 #include <fstream>
 #include "Ponto.h"
 
-Model::Model(char* filepath) {
+Model::Model(char* filepath)  {
     this->filePath = (char*) malloc(strlen(filepath) + 1);
     std::strcpy(this->filePath, filepath);
-    this->pontos;
     loadPoints();
 }
 
@@ -39,19 +38,24 @@ void Model::loadPoints(){
     n = atoi(buffer);
     Ponto p;
     this->numberOfPoints = n;
+    this->pontos = (Ponto*) malloc(sizeof(Ponto) * n);
     for (int i = 0; i < n ; ++i) {
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f %f", &x, &y, &z);
-        p = Ponto(x,y,z) ;
-        this->pontos.push_back(p);
+        p = Ponto(x,y,z);
+        this->pontos[i] = p;
     }
     file.close();
 }
 
-std::vector<Ponto> Model::getPoints(){
+Ponto* Model::getPoints(){
     return this->pontos;
 }
 
 int Model::getNumberOfPoints(){
     return this->numberOfPoints;
+}
+
+Ponto Model::getPoint(int i) {
+    return this->pontos[i];
 }

@@ -8,11 +8,12 @@
 
 using namespace std;
 
+
 string createBox(float width, float height, float depth,  int stacks, int slices, int depthDivisions){
     if(stacks < 1 && slices < 1) return string();
 
     stringstream ss;
-    ss << stacks * slices * depthDivisions*6*6 << "\n";
+    ss << (slices * stacks * 2 + stacks * depthDivisions * 2 + depthDivisions * slices * 2) * 6 << "\n";
     float boxWidth, boxHeight, boxDepth;
     boxWidth = width/slices; boxHeight = height/stacks; boxDepth = depth/depthDivisions;
     Ponto t1(-width/2, height/2, -depth/2);
@@ -33,12 +34,18 @@ string createBox(float width, float height, float depth,  int stacks, int slices
                 b3 = t1.translate(boxWidth,-boxHeight, boxDepth);
                 b4 = t1.translate(boxWidth,-boxHeight, 0);
 
-                ss << toStringPlane(t1,t2,t3,t4);
-                ss << toStringPlane(b3,b2,b1,b4);
-                ss << toStringPlane(b4,b1,t1,t4);
-                ss << toStringPlane(t2,b2,b3,t3);
-                ss << toStringPlane(b2,t2,t1,b1);
-                ss << toStringPlane(t3,b3,b4,t4);
+                if(i == 0)
+                    ss << toStringPlane(t1,t2,t3,t4);
+                if(i == stacks-1)
+                    ss << toStringPlane(b3,b2,b1,b4);
+                if(k == 0)
+                    ss << toStringPlane(b4,b1,t1,t4);
+                if(k == depthDivisions-1)
+                    ss << toStringPlane(t2,b2,b3,t3);
+                if(j == 0)
+                    ss << toStringPlane(b2,t2,t1,b1);
+                if(j == slices-1)
+                    ss << toStringPlane(t3,b3,b4,t4);
 
                 t1 = t1.translate(boxWidth,0,0);
             }
@@ -120,7 +127,7 @@ string createSpherePoint(double alpha, double beta, double radius){
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
 
-    ss << "glVertex3f(" << x << ", " << y << ", " << z << ");" << endl;
+    ss << x << " " << y << " " << z << " " << endl;
 
     return ss.str();
 }
@@ -181,22 +188,28 @@ string createSphere(double radius, int slices, int stacks){
  * Retorna uma string com todos os pontos do cone.
  */
 string createCone(double radius, double height, int slices, int stacks){
+    if(slices < 1 || stacks < 1) return string();
+
     stringstream ss;
 
+    ss << 3*2*slices + slices*(stacks-1)*2*3 << endl;//Numero de vertices
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
     int j = 0, i = 0;
     
-    //Base
-    //A
-    ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-    //Origem
-    ss << "0 0 0" << endl;
-    //B
-    ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+
 
     for ( j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
         for(i = 0; i < slices; i++){
+            if(j == 0){
+                //Base
+                //A
+                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                //Origem
+                ss << "0 0 0" << endl;
+                //B
+                ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+            }
             //Face
             //A
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
@@ -297,7 +310,6 @@ int main(int argc, char** argv){
         }
 
         file.open(argv[6]);
-        file << ( atof( argv[4] ) * atof( argv[5] ) + 1 ) << endl;//Numero de vertices
         file << createCone(atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
     }
     else{

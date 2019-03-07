@@ -106,10 +106,9 @@ void renderScene(void) {
     vector<Model> models = scene.getModels();
     for(auto model = models.begin(); model != models.end(); model++){
         Model m = *model;
-        vector<Ponto> pontos = m.getPoints();
         glBegin(GL_TRIANGLES);
-        for(auto ponto = pontos.begin(); ponto != pontos.end(); ponto++){
-            Ponto p = *ponto;
+        for(int ponto = 0 ; ponto < m.getNumberOfPoints(); ponto++){
+            Ponto p = m.getPoint(ponto);
             glVertex3f(p.getX(), p.getY(), p.getZ());
         }
         glEnd();

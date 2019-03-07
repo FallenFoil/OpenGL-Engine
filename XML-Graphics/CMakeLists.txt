@@ -12,7 +12,7 @@ include_directories(tinyxml2-master)
 add_executable(XML-Graphics
         tinyxml2-master/tinyxml2.cpp
         tinyxml2-master/tinyxml2.h
-        main.cpp Model.cpp Model.h Scene.cpp Scene.h)
+        main.cpp Model.cpp Model.h Scene.cpp Scene.h group.cpp group.h)
 target_link_libraries(XML-Graphics ${PROJECT_LINK_LIBS} )
 
 find_package(OpenGL REQUIRED)

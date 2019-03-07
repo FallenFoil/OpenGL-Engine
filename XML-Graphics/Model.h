@@ -12,16 +12,16 @@
 class Model {
     //// Tornar o tamanho do buffer variavel mais tarde ////
     char *filePath;
-    std::vector<Ponto> pontos;
+    Ponto* pontos;
     int numberOfPoints;
 public:
     Model(char* filePath);
     Model();
     Model(Model *m);
-    std::vector<Ponto> getPoints();
+    Ponto* getPoints();
+    Ponto getPoint(int i);
     char* getFilePath();
     int getNumberOfPoints();
-
 private:
     void loadPoints();
 };
