@@ -140,8 +140,8 @@ int main(int argc, char** argv) {
     loadScene();
 
     alfa = beta = 0;
-    dz = dx = 0;
-    dist = dx = 0;
+    dz = dx = dy = 0;
+    dist =  dx = 5;
 // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
