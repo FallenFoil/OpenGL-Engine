@@ -128,7 +128,8 @@ string createSpherePoint(float alpha, float beta, float radius){
     y = radius * sin(beta);
     Ponto a = Ponto(x,y,z);
 
-    ss << a.toString() << endl;
+    //ss << a.toString() << endl;
+    ss << x << " " << y << " " << z << endl;
 
     return ss.str();
 }
@@ -147,20 +148,25 @@ string createSphere(float radius, int slices, int stacks){
         return string();
     }
 
-    ss << 6 * slices * stacks - 6 * slices << endl;
+    int nPontos = (6 * slices * stacks) - (6 * slices);
+
+    ss << nPontos << endl;
 
     float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
 
     for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
         for(int j = 0; j < slices; j++){
+            if(i != (stacks/2.0f)-1){
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
+            }
 
-            ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-            ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
-            ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
-
-            ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
-            ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-            ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
+            if(i != -(stacks/2.0f)){
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
+            }
         }
     }
 
@@ -201,7 +207,10 @@ string createCone(double radius, double height, int slices, int stacks){
     if(slices < 3 || stacks < 3) return string();
 
     stringstream ss;
-    ss << 3*2*slices + slices*(stacks-1)*2*3 << endl;//Numero de vertices
+    int nPontos = (6 * slices * stacks);
+
+    ss << nPontos << endl;//Numero de vertices
+
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
     int j = 0, i = 0;
 

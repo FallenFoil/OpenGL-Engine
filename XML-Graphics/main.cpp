@@ -6,39 +6,21 @@
 
 #include <iostream>
 #include <tinyxml2.h>
-
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include "Ponto.h"
 #include "Scene.h"
 
 using namespace std;
 
-double alfa, beta;
-float dist;
-float dx,dy,dz;
+#define HSPEED 0.05
+#define VSPEED 0.05
+#define ZOOM 1
+
 Scene scene;
-
-void loadScene() {
-    printf("Loading Scene\n");
-    tinyxml2::XMLElement *child, *sibling;
-    tinyxml2::XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
-
-    child = doc.FirstChildElement( "Scene" )->FirstChildElement( "model");
-    Model toAdd;
-    if(child){
-        toAdd = Model((char*) child->FindAttribute("file")->Value());
-        scene.addModel(toAdd);
-    }
-    while(child && (sibling = child->NextSiblingElement())){
-        toAdd = Model((char*) sibling->FindAttribute("file")->Value());
-        scene.addModel(toAdd);
-        child = sibling;
-    }
-    printf("Finished loading Scene!!!\n");
-}
-
+double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
+        camX = radius * cos(beta) * sin(alpha),
+        camY = radius * sin(beta),
+        camZ = radius * cos(beta) * cos(alpha);
 
 void changeSize(int w, int h) {
 
@@ -67,41 +49,24 @@ void changeSize(int w, int h) {
 
 
 
-void processKeys(unsigned char c, int xx, int yy) {
+void draw(){
+    glBegin(GL_LINES);
 
-// put code to process regular keys in here
-    switch(c){
-        case 'a': alfa -= 0.03f; break;
-        case 'w': beta -= 0.03f; break;
-        case 's': beta += 0.03f; break;
-        case 'd': alfa += 0.03f; break;
-        case 'r': dist += 0.02f; break;
-        case 't': dist -= 0.02f; break;
-        default: break;
-    }
-    dx =(float) (dist * cos(beta) * cos(alfa));
-    dy =(float) (dist * sin(beta));
-    dz =(float) (dist * cos(beta) * sin(alfa));
-    glutPostRedisplay();
-}
+    glColor3f(1,0,0);
+    glVertex3f(10,0,0);
+    glVertex3f(-10,0,0);
 
-void processSpecialKeys(int key, int xx, int yy) {
+    glColor3f(0,1,0);
+    glVertex3f(0,10,0);
+    glVertex3f(0,-10,0);
 
-// put code to process special keys in here
-}
+    glColor3f(0,0,1);
+    glVertex3f(0,0,10);
+    glVertex3f(0,0,-10);
 
-void renderScene(void) {
+    glEnd();
 
-    // clear buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // set the camera
-    glLoadIdentity();
-    gluLookAt(dx,dy,dz,
-              0.0,0.0 ,0.0,
-              0.0f,1.0f,0.0f);
-
-    glColor3f(1,0,1);
+    glColor3f(1,1,1);
 
     vector<Model> models = scene.getModels();
     for(auto model = models.begin(); model != models.end(); model++){
@@ -113,42 +78,93 @@ void renderScene(void) {
         }
         glEnd();
     }
+}
 
+void renderScene(void) {
 
-    //drawCylinder(1,2,10);
-    glBegin(GL_LINES);
-    glColor3f(1,0,0);
-    glVertex3f(-4, 0, 0);
-    glVertex3f(4, 0, 0);
+    // clear buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glColor3f(0,1,0);
-    glVertex3f(0, -4, 0);
-    glVertex3f(0, 4, 0);
+    // set the camera
+    glLoadIdentity();
+    gluLookAt(camX,camY,camZ,
+              0.0,0.0,0.0,
+              0.0f,1.0f,0.0f);
 
-    glColor3f(0,0,1);
-    glVertex3f(0, 0, -4);
-    glVertex3f(0, 0, 4);
-    glEnd();
+    draw();
+
     // End of frame
     glutSwapBuffers();
 }
 
+void processKeys(unsigned char c, int xx, int yy) {
+// put code to process regular keys in here
+    switch (c) {
+        case 'w':
+            if(beta+VSPEED<=M_PI/2){beta+=VSPEED;}
+            else{beta=M_PI/2;}
+            break;
+        case 'a':
+            alpha-=HSPEED;
+            break;
+        case 'd':
+            alpha+=HSPEED;
+            break;
+        case 's':
+            if(beta-VSPEED>=-M_PI/2){beta-=VSPEED;}
+            else{beta=-M_PI/2;}
+            break;
+        case 'o':
+            radius += ZOOM;
+            break;
+        case 'i':
+            if(radius-ZOOM>0){radius -= ZOOM;}
+            break;
+        default:
+            break;
+    }
 
+    camX = radius * cos(beta) * sin(alpha);
+    camY = radius * sin(beta);
+    camZ = radius * cos(beta) * cos(alpha);
 
+    glutPostRedisplay();
+}
+
+void processSpecialKeys(int key, int xx, int yy) {
+
+// put code to process special keys in here
+}
+
+void loadScene() {
+    printf("Loading Scene\n");
+    tinyxml2::XMLElement *child, *sibling;
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile( "../scene.xml" );
+
+    child = doc.FirstChildElement( "Scene" )->FirstChildElement( "model");
+    Model toAdd;
+    if(child){
+        toAdd = Model((char*) child->FindAttribute("file")->Value());
+        scene.addModel(toAdd);
+    }
+    while(child && (sibling = child->NextSiblingElement())){
+        toAdd = Model((char*) sibling->FindAttribute("file")->Value());
+        scene.addModel(toAdd);
+        child = sibling;
+    }
+    printf("Finished loading Scene!!!\n");
+}
 
 int main(int argc, char** argv) {
     loadScene();
 
-    alfa = beta = 0;
-    dz = dx = dy = 0;
-    dist =  dx = 5;
 // init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
-    glutInitWindowSize(800,800);
-    glutCreateWindow("CG@DI-UM");
-    glPolygonMode(GL_FRONT , GL_LINE);
+    glutInitWindowSize(1000,800);
+    glutCreateWindow("MyWindow");
 
 // Required callback registry
     glutDisplayFunc(renderScene);
@@ -161,6 +177,7 @@ int main(int argc, char** argv) {
 //  OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT , GL_LINE);
 
 
 // enter GLUT's main cycle
