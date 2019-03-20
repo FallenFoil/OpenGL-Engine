@@ -1,11 +1,38 @@
 <scene>
     <group>
-        <translate X="1" Z="2"/>
-        <models>
-            <model file="sphere.3d" />
-        </models>
+        <translate X="1"/>
         <group>
-            <translate Y="2" />
+            <translate X="1"/>
+            <models>
+                <model file="sphere.3d" />
+            </models>
+            <group>
+                <translate X="1"/>
+                <models>
+                    <model file="sphere.3d" />
+                </models>
+                <group>
+                    <translate X="1"/>
+                    <models>
+                        <model file="sphere.3d" />
+                    </models>
+                    <group>
+                        <translate X="1"/>
+                        <models>
+                            <model file="sphere.3d" />
+                        </models>
+                        <group>
+                            <translate X="1"/>
+                            <models>
+                                <model file="sphere.3d" />
+                            </models>
+                        </group>
+                    </group>
+                </group>
+            </group>
+        </group>
+        <group>
+            <translate Z="3"/>
             <models>
                 <model file="sphere.3d" />
             </models>

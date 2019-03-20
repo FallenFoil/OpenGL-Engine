@@ -4,12 +4,12 @@
 
 #include "Scene.h"
 
-Group Scene::getGroup(){
+std::vector<Group> Scene::getGroups(){
     return this->root;
 }
 
-void Scene::setGroup(Group g) {
-    this->root = g;
+void Scene::addGroup(Group g) {
+    this->root.push_back(g);
 }
 
 Scene::Scene(){

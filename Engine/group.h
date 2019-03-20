@@ -31,9 +31,14 @@ public:
     void setTranslate(float x, float y, float z);
     void setRotate(float ang, float x, float y, float z);
     void setScale(float scaleX, float scaleY, float scaleZ);
+    void incrTranslate(float x, float y, float z);
+    void incrRotate(float ang, float x, float y, float z);
+    void incrScale(float scaleX, float scaleY, float scaleZ);
     void applyTransformations();
+    void getTransform(float* x, float* y, float *z);
 
-private:
+
+        private:
     int getTransformOrder(int ocurrence);
 };
 

@@ -10,11 +10,11 @@
 #include <vector>
 
 class Scene {
-    Group root;
+    std::vector<Group> root;
 
 public:
-    void setGroup(Group g);
-    Group getGroup();
+    void addGroup(Group g);
+    std::vector<Group> getGroups();
     Scene();
 };
 

@@ -50,26 +50,30 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void drawModel(Model m){
+    glBegin(GL_TRIANGLES);
+    for (int ponto = 0; ponto < m.getNumberOfPoints(); ponto++) {
+        Ponto p = m.getPoint(ponto);
+        glVertex3f(p.getX(), p.getY(), p.getZ());
+    }
+    glEnd();
+}
 
 void drawGroup(Group fatherGroup){
     glPushMatrix();
         fatherGroup.applyTransformations();
         vector<Model> models = fatherGroup.getModels();
-        glBegin(GL_TRIANGLES);
+
         for(auto model = models.begin(); model != models.end(); model++) {
             Model m = *model;
-            for (int ponto = 0; ponto < m.getNumberOfPoints(); ponto++) {
-                Ponto p = m.getPoint(ponto);
-                glVertex3f(p.getX(), p.getY(), p.getZ());
-            }
-            glEnd();
+            drawModel(m);
         }
 
-        vector<Group> childGroups = fatherGroup.getGroups();
-        for(int i = 0; i < childGroups.size(); i++){
-            Group g = childGroups[i];
-            drawGroup(g);
-        }
+    vector<Group> childGroups = fatherGroup.getGroups();
+    for(int i = 0; i < childGroups.size(); i++){
+        Group g = childGroups[i];
+        drawGroup(g);
+    }
     glPopMatrix();
 }
 
@@ -95,19 +99,12 @@ void draw(){
 
     glColor3f(1,1,1);
 
-    Group group = scene.getGroup();
-    drawGroup(group);
+    vector<Group> groups = scene.getGroups();
+    for(int i = 0; i < groups.size(); i++){
+        Group g = groups[i];
+        drawGroup(g);
+    }
 
-   /* vector<Model> models = scene.getModels();
-    for(auto model = models.begin(); model != models.end(); model++){
-        Model m = *model;
-        glBegin(GL_TRIANGLES);
-        for(int ponto = 0 ; ponto < m.getNumberOfPoints(); ponto++){
-            Ponto p = m.getPoint(ponto);
-            glVertex3f(p.getX(), p.getY(), p.getZ());
-        }
-        glEnd();
-    }*/
 }
 
 void renderScene(void) {
@@ -177,11 +174,10 @@ Model loadModel(XMLElement *model){
 
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
-    char *atrStr = atrXml == nullptr ? nullptr : (char*) atrXml->Value();
-    return atrStr == nullptr ? defaultValue : (float) atof(atrStr);
+    return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
 }
 
-Group loadGroup(XMLElement *group ){
+Group loadGroup(XMLElement *group){
     Group g;
     Group toAdd;
     XMLElement *child = group->FirstChildElement();
@@ -208,7 +204,6 @@ Group loadGroup(XMLElement *group ){
         } else if (strcmp(child->Value(), "group") == 0) {
             toAdd = loadGroup(child);
             g.addGroup(&toAdd);
-            printf("Hello");
         } else if (strcmp(child->Value(), "models") == 0) {
             XMLElement *model = child->FirstChildElement("model");
             while(model){
@@ -234,9 +229,10 @@ void loadScene() {
     doc.LoadFile( "../scene.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
-    if(child){
+    while(child){
         Group group = loadGroup(child);
-        scene.setGroup(group);
+        scene.addGroup(group);
+        child = child->NextSiblingElement( "group");
     }
     printf("Finished loading Scene!!!\n");
 }

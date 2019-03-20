@@ -34,6 +34,28 @@ Group::Group(Group *g) {
     this->models = g->models;
 }
 
+void Group::incrTranslate(float x, float y, float z) {
+    this->transX += x;
+    this->transY += y;
+    this->transZ += z;
+    this->priority[TRANSLATE] = this->numberOfTransformation++;
+}
+
+void Group::incrRotate(float ang, float x, float y, float z) {
+    this->ang += ang;
+    this->axisX += x;
+    this->axisY += y;
+    this->axisZ += z;
+    this->priority[ROTATE] = this->numberOfTransformation++;
+}
+
+void Group::incrScale(float scaleX, float scaleY, float scaleZ) {
+    this->scaleX += scaleX;
+    this->scaleY += scaleY;
+    this->scaleZ += scaleZ;
+    this->priority[SCALE] = this->numberOfTransformation++;
+}
+
 
 void Group::setTranslate(float x, float y, float z) {
     this->transX = x;
@@ -57,10 +79,18 @@ void Group::setScale(float scaleX, float scaleY, float scaleZ) {
     this->priority[SCALE] = this->numberOfTransformation++;
 }
 
+void Group::getTransform(float* x, float* y, float *z){
+    *x = this->transX;
+    *y = this->transY;
+    *z = this->transZ;
+}
+
 int Group::getTransformOrder(int ocurrence){
     if(ocurrence < 3 && ocurrence >= 0){
         int i;
         for(i = 0; i < 3 && this->priority[i] != ocurrence; i++);
+        if(i == 3)
+            return -1;
         return i;
     }
     else
