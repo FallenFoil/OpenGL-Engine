@@ -4,6 +4,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <tinyxml2.h>
 #include <math.h>
@@ -11,6 +13,7 @@
 #include "Scene.h"
 
 using namespace std;
+using namespace tinyxml2;
 
 #define HSPEED 0.05
 #define VSPEED 0.05
@@ -47,6 +50,29 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+
+void drawGroup(Group fatherGroup){
+    glPushMatrix();
+        fatherGroup.applyTransformations();
+        vector<Model> models = fatherGroup.getModels();
+        glBegin(GL_TRIANGLES);
+        for(auto model = models.begin(); model != models.end(); model++) {
+            Model m = *model;
+            for (int ponto = 0; ponto < m.getNumberOfPoints(); ponto++) {
+                Ponto p = m.getPoint(ponto);
+                glVertex3f(p.getX(), p.getY(), p.getZ());
+            }
+            glEnd();
+        }
+
+        vector<Group> childGroups = fatherGroup.getGroups();
+        for(int i = 0; i < childGroups.size(); i++){
+            Group g = childGroups[i];
+            drawGroup(g);
+        }
+    glPopMatrix();
+}
+
 /*
  * Desenha as figuras dentro da estrutura da scene
  */
@@ -69,7 +95,10 @@ void draw(){
 
     glColor3f(1,1,1);
 
-    vector<Model> models = scene.getModels();
+    Group group = scene.getGroup();
+    drawGroup(group);
+
+   /* vector<Model> models = scene.getModels();
     for(auto model = models.begin(); model != models.end(); model++){
         Model m = *model;
         glBegin(GL_TRIANGLES);
@@ -78,7 +107,7 @@ void draw(){
             glVertex3f(p.getX(), p.getY(), p.getZ());
         }
         glEnd();
-    }
+    }*/
 }
 
 void renderScene(void) {
@@ -141,25 +170,73 @@ void processKeys(unsigned char c, int xx, int yy) {
     glutPostRedisplay();
 }
 
+Model loadModel(XMLElement *model){
+    Model m = Model((char*) model->FindAttribute("file")->Value());
+    return m;
+}
+
+float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
+    const XMLAttribute *atrXml = element->FindAttribute(atr);
+    char *atrStr = atrXml == nullptr ? nullptr : (char*) atrXml->Value();
+    return atrStr == nullptr ? defaultValue : (float) atof(atrStr);
+}
+
+Group loadGroup(XMLElement *group ){
+    Group g;
+    Group toAdd;
+    XMLElement *child = group->FirstChildElement();
+    while(child) {
+        if (strcmp(child->Value(), "translate") == 0) {
+            float transX, transY, transZ;
+            transX = getAttributeOrDefault(child, "X", 0);
+            transY = getAttributeOrDefault(child, "Y", 0);
+            transZ = getAttributeOrDefault(child, "Z", 0);
+            g.setTranslate(transX, transY, transZ);
+        } else if (strcmp(child->Value(), "rotate") == 0) {
+            float ang, axisX, axisY, axisZ;
+            ang = getAttributeOrDefault(child, "ang", 0);
+            axisX = getAttributeOrDefault(child, "axisX", 0);
+            axisY = getAttributeOrDefault(child, "axisY", 0);
+            axisZ = getAttributeOrDefault(child, "axisZ", 0);
+            g.setRotate(ang, axisX, axisY, axisZ);
+        } else if (strcmp(child->Value(), "scale") == 0) {
+            float scaleX, scaleY, scaleZ;
+            scaleX = getAttributeOrDefault(child, "scaleX", 1);
+            scaleY = getAttributeOrDefault(child, "scaleY", 1);
+            scaleZ = getAttributeOrDefault(child, "scaleZ", 1);
+            g.setScale(scaleX, scaleY, scaleZ);
+        } else if (strcmp(child->Value(), "group") == 0) {
+            toAdd = loadGroup(child);
+            g.addGroup(&toAdd);
+            printf("Hello");
+        } else if (strcmp(child->Value(), "models") == 0) {
+            XMLElement *model = child->FirstChildElement("model");
+            while(model){
+                Model m = loadModel(model);
+                g.addModel(m);
+                model = model->NextSiblingElement("model");
+            }
+        } else {
+            printf("There is no default tag: %s", child->Value());
+        }
+        child = child->NextSiblingElement();
+    }
+    return g;
+}
+
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
 void loadScene() {
     printf("Loading Scene\n");
-    tinyxml2::XMLElement *child, *sibling;
-    tinyxml2::XMLDocument doc;
+    XMLElement *child;
+    XMLDocument doc;
     doc.LoadFile( "../scene.xml" );
 
-    child = doc.FirstChildElement( "Scene" )->FirstChildElement( "model");
-    Model toAdd;
+    child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     if(child){
-        toAdd = Model((char*) child->FindAttribute("file")->Value());
-        scene.addModel(toAdd);
-    }
-    while(child && (sibling = child->NextSiblingElement())){
-        toAdd = Model((char*) sibling->FindAttribute("file")->Value());
-        scene.addModel(toAdd);
-        child = sibling;
+        Group group = loadGroup(child);
+        scene.setGroup(group);
     }
     printf("Finished loading Scene!!!\n");
 }

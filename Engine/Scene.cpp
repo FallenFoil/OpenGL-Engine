@@ -4,14 +4,14 @@
 
 #include "Scene.h"
 
-void Scene::addModel(Model m){
-    this->models.push_back(m);
+Group Scene::getGroup(){
+    return this->root;
 }
 
-std::vector<Model> Scene::getModels(){
-    return this->models;
+void Scene::setGroup(Group g) {
+    this->root = g;
 }
 
 Scene::Scene(){
-    this->models;
+    this->root;
 }

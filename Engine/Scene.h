@@ -6,14 +6,15 @@
 #define CG_SCENE_H
 
 #include "Model.h"
+#include "group.h"
 #include <vector>
 
 class Scene {
-    std::vector<Model> models;
+    Group root;
 
 public:
-    void addModel(Model m);
-    std::vector<Model> getModels();
+    void setGroup(Group g);
+    Group getGroup();
     Scene();
 };
 
