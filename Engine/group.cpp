@@ -11,6 +11,9 @@
 #include "group.h"
 #include "Model.h"
 
+#define TRANSLATE 0
+#define ROTATE 1
+#define SCALE 2
 
 Group::Group() {
     this->numberOfTransformation = 0;
@@ -32,28 +35,6 @@ Group::Group(Group *g) {
     this->scaleX = g->scaleX; this->scaleY = g->scaleY; this->scaleZ = g->scaleZ;
     this->groups = g->groups;
     this->models = g->models;
-}
-
-void Group::incrTranslate(float x, float y, float z) {
-    this->transX += x;
-    this->transY += y;
-    this->transZ += z;
-    this->priority[TRANSLATE] = this->numberOfTransformation++;
-}
-
-void Group::incrRotate(float ang, float x, float y, float z) {
-    this->ang += ang;
-    this->axisX += x;
-    this->axisY += y;
-    this->axisZ += z;
-    this->priority[ROTATE] = this->numberOfTransformation++;
-}
-
-void Group::incrScale(float scaleX, float scaleY, float scaleZ) {
-    this->scaleX += scaleX;
-    this->scaleY += scaleY;
-    this->scaleZ += scaleZ;
-    this->priority[SCALE] = this->numberOfTransformation++;
 }
 
 

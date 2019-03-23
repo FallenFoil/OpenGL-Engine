@@ -10,10 +10,10 @@
 #include "Ponto.h"
 
 class Model {
-    //// Tornar o tamanho do buffer variavel mais tarde ////
     char *filePath;
-    Ponto* pontos;
+    Ponto* pontos;  
     int numberOfPoints;
+    float red, green, blue;
 public:
     Model(char* filePath);
     Model();
@@ -22,6 +22,8 @@ public:
     Ponto getPoint(int i);
     char* getFilePath();
     int getNumberOfPoints();
+    void setColour(float red, float green, float blue){this->red = red; this->green = green; this->blue = blue;};
+    void applyColour();
 private:
     void loadPoints();
 };

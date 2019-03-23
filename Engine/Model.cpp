@@ -2,6 +2,12 @@
 // Created by cesar on 2/25/19.
 //
 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 #include "Model.h"
 #include <cstring>
 #include <fstream>
@@ -16,9 +22,13 @@ Model::Model(char* filepath)  {
 Model::Model(Model *m){
     this->filePath = m->getFilePath();
     this->pontos = m->getPoints();
+    this->red = m->red;
+    this->blue = m->blue;
+    this->green = m->green;
 }
 
 Model::Model() {
+    this->red = this->blue = this->green = 1;
     this->pontos;
     this->filePath = (char*) malloc(1);
     std::strcpy(this->filePath, "\0");
@@ -58,4 +68,8 @@ int Model::getNumberOfPoints(){
 
 Ponto Model::getPoint(int i) {
     return this->pontos[i];
+}
+
+void Model::applyColour() {
+    glColor3f(this->red, this->green, this->blue);
 }

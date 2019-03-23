@@ -8,9 +8,6 @@
 #include <vector>
 #include "Model.h"
 
-#define TRANSLATE 0
-#define ROTATE 1
-#define SCALE 2
 
 class Group {
     int numberOfTransformation;
@@ -31,12 +28,8 @@ public:
     void setTranslate(float x, float y, float z);
     void setRotate(float ang, float x, float y, float z);
     void setScale(float scaleX, float scaleY, float scaleZ);
-    void incrTranslate(float x, float y, float z);
-    void incrRotate(float ang, float x, float y, float z);
-    void incrScale(float scaleX, float scaleY, float scaleZ);
     void applyTransformations();
     void getTransform(float* x, float* y, float *z);
-
 
         private:
     int getTransformOrder(int ocurrence);

@@ -25,6 +25,12 @@ double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
         camY = radius * sin(beta),
         camZ = radius * cos(beta) * cos(alpha);
 
+
+float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
+    const XMLAttribute *atrXml = element->FindAttribute(atr);
+    return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
+}
+
 void changeSize(int w, int h) {
 
     // Prevent a divide by zero, when window is too short
@@ -51,12 +57,14 @@ void changeSize(int w, int h) {
 }
 
 void drawModel(Model m){
+    m.applyColour();
     glBegin(GL_TRIANGLES);
     for (int ponto = 0; ponto < m.getNumberOfPoints(); ponto++) {
         Ponto p = m.getPoint(ponto);
         glVertex3f(p.getX(), p.getY(), p.getZ());
     }
     glEnd();
+    glColor3f(1,1,1);
 }
 
 void drawGroup(Group fatherGroup){
@@ -84,16 +92,16 @@ void draw(){
     glBegin(GL_LINES);
 
     glColor3f(1,0,0);
-    glVertex3f(10,0,0);
-    glVertex3f(-10,0,0);
+    glVertex3f(1000,0,0);
+    glVertex3f(-1000,0,0);
 
     glColor3f(0,1,0);
-    glVertex3f(0,10,0);
-    glVertex3f(0,-10,0);
+    glVertex3f(0,1000,0);
+    glVertex3f(0,-1000,0);
 
     glColor3f(0,0,1);
-    glVertex3f(0,0,10);
-    glVertex3f(0,0,-10);
+    glVertex3f(0,0,1000);
+    glVertex3f(0,0,-1000);
 
     glEnd();
 
@@ -169,12 +177,12 @@ void processKeys(unsigned char c, int xx, int yy) {
 
 Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
+    float red,green,blue;
+    red = getAttributeOrDefault(model, "R", 255);
+    green = getAttributeOrDefault(model, "G", 255);
+    blue = getAttributeOrDefault(model, "B", 255);
+    m.setColour(red/255, green/255, blue/255);
     return m;
-}
-
-float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
-    const XMLAttribute *atrXml = element->FindAttribute(atr);
-    return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
 }
 
 Group loadGroup(XMLElement *group){
@@ -197,9 +205,9 @@ Group loadGroup(XMLElement *group){
             g.setRotate(ang, axisX, axisY, axisZ);
         } else if (strcmp(child->Value(), "scale") == 0) {
             float scaleX, scaleY, scaleZ;
-            scaleX = getAttributeOrDefault(child, "scaleX", 1);
-            scaleY = getAttributeOrDefault(child, "scaleY", 1);
-            scaleZ = getAttributeOrDefault(child, "scaleZ", 1);
+            scaleX = getAttributeOrDefault(child, "X", 1);
+            scaleY = getAttributeOrDefault(child, "Y", 1);
+            scaleZ = getAttributeOrDefault(child, "Z", 1);
             g.setScale(scaleX, scaleY, scaleZ);
         } else if (strcmp(child->Value(), "group") == 0) {
             toAdd = loadGroup(child);
