@@ -7,30 +7,27 @@
     </group>
     <group class="Planets" distanceScale = "ln(1 + AU)*10" radiusScale="ln(1 + percentage)">
         <group class="Mercury">
-            <rotate ang="25" axisY="1"/>
-            <translate X="9.933" />
+            <translate X="13.579" />
             <scale X="0.322" Y="0.322" Z="0.322"/>
             <models>
                 <model file="sphere.3d" R="55" G="55" B="55"/>
             </models>
         </group>
         <group class="Venus">
-            <rotate ang="5" axisY="1"/>
-            <translate X="15.529" />
+            <translate X="30.367" />
             <scale X="0.667" Y="0.667" Z="0.667"/>
             <models>
                 <model file="sphere.3d" R="150" G="95" B="40"/>
             </models>
         </group>
         <group class="Earth">
-            <rotate ang="15" axisY="1"/>
-            <translate X="19.091" />
+            <translate X="41.053" />
             <scale X="1" Y="1" Z="1"/>
             <models>
                 <model file="sphere.3d" R="40" G="40" B="255" />
             </models>
             <group>
-                <translate X="1.74158" />
+                <translate X="1.295"/>
                 <scale X="0.239" Y="0.239" Z="0.239"/>
                 <models>
                     <model file="sphere.3d" R="30" G="30" B="30" />
@@ -38,38 +35,38 @@
             </group>
         </group>
         <group class="Mars">
-            <translate X="23.15" />
+            <translate X="52.23" />
             <scale X="0.425" Y="0.425" Z="0.425"/>
             <models>
                 <model file="sphere.3d" R="150" G="60" B="0"/>
             </models>
         </group>
         <group class="Jupiter">
-            <translate X="35.583" />
+            <translate X="90.529" />
             <scale X="2.49" Y="2.49" Z="2.49"/>
             <models>
-                <model file="sphere.3d" R="210" G="140" B="140"/>
+                <model file="sphere.3d" R="255" G="120" B="100"/>
             </models>
         </group>
         <group class="Saturn">
-            <translate X="41.609" />
+            <translate X="108.607" />
             <scale X="2.346" Y="2.346" Z="2.346"/>
             <models>
-                <model file="sphere.3d"/>
+                <model file="sphere.3d"  R="210" G="140" B="140"/>
             </models>
         </group>
         <group class="Uranus">
-            <translate X="48.542" />
+            <translate X="129.406" />
             <scale X="1.61" Y="1.61" Z="1.61"/>
             <models>
-                <model file="sphere.3d"/>
+                <model file="sphere.3d" R="100" G="100" B="200"/>
             </models>
         </group>
         <group class="Neptune">
-            <translate X="53.176" />
+            <translate X="143.308" />
             <scale X="1.585" Y="1.585" Z="1.585"/>
             <models>
-                <model file="sphere.3d" R="100" G="100" B="200"/>
+                <model file="sphere.3d"  R="50" G="50" B="200"/>
             </models>
         </group>
     </group>

@@ -20,6 +20,8 @@ using namespace tinyxml2;
 #define ZOOM 1
 
 Scene scene;
+int frame= 0, timebase = 0;
+char title[100];
 double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
         camX = radius * cos(beta) * sin(alpha),
         camY = radius * sin(beta),
@@ -115,6 +117,21 @@ void draw(){
 
 }
 
+void viewFramesPerSecond(){
+    int time;
+    float fps;
+    char buffer[100] ;
+    frame++;
+    time=glutGet(GLUT_ELAPSED_TIME);
+    if (time - timebase > 1000) {
+        fps = frame*1000.0/(time-timebase);
+        timebase = time;
+        frame = 0;
+        sprintf(title, "FPS - %f", fps);
+    }
+    glutSetWindowTitle(title);
+}
+
 void renderScene(void) {
 
     // clear buffers
@@ -123,10 +140,11 @@ void renderScene(void) {
     // set the camera
     glLoadIdentity();
     gluLookAt(camX,camY,camZ,
-              0.0,0.0,0.0,
+              0,0,0,
               0.0f,1.0f,0.0f);
 
     draw();
+    viewFramesPerSecond();
 
     // End of frame
     glutSwapBuffers();
@@ -258,6 +276,7 @@ int main(int argc, char** argv) {
     //Required callback registry
     glutDisplayFunc(renderScene);
     glutReshapeFunc(changeSize);
+    glutIdleFunc(renderScene);
 
     //Callback registration for keyboard processing
     glutKeyboardFunc(processKeys);
@@ -265,7 +284,7 @@ int main(int argc, char** argv) {
     //OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT , GL_LINE);
+    glPolygonMode(GL_FRONT , GL_FILL);
 
 
     //enter GLUT's main cycle

@@ -11,7 +11,7 @@
 
 class Model {
     char *filePath;
-    Ponto* pontos;  
+    Ponto* pontos;
     int numberOfPoints;
     float red, green, blue;
 public:
