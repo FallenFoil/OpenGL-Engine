@@ -91,7 +91,7 @@ void drawGroup(Group fatherGroup){
  * Desenha as figuras dentro da estrutura da scene
  */
 void draw(){
-    glBegin(GL_LINES);
+    /*glBegin(GL_LINES);
 
     glColor3f(1,0,0);
     glVertex3f(1000,0,0);
@@ -105,7 +105,7 @@ void draw(){
     glVertex3f(0,0,1000);
     glVertex3f(0,0,-1000);
 
-    glEnd();
+    glEnd();*/
 
     glColor3f(1,1,1);
 
