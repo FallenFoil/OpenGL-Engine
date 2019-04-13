@@ -11,10 +11,12 @@
 
 class Group {
     int numberOfTransformation;
-    float transX, transY, transZ;
+    bool usingCatmull, rotateWithTime;
+    float transX, transY, transZ, transTime;
     float ang, axisX, axisY, axisZ;
     float scaleX, scaleY, scaleZ;
     int priority[3];
+    std::vector<float> transPoints;
     std::vector<Model> models;
     std::vector<Group> groups;
 
@@ -23,6 +25,10 @@ public:
     Group(Group *p);
     std::vector<Model> getModels(){return this->models;};
     std::vector<Group> getGroups(){return this->groups;};
+    void setCatMull(bool catMull){this->usingCatmull = catMull;};
+    void setRotateWithTime(bool rotateWithTime){this->rotateWithTime = rotateWithTime;};
+    void setTransTime(float time){this->transTime = time;};
+    void addPointToTranslation(float x, float y, float z);
     void addGroup(Group *p){this->groups.push_back(std::move(p));};
     void addModel(Model m){this->models.push_back(m);};
     void setTranslate(float x, float y, float z);

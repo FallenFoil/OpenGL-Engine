@@ -10,6 +10,7 @@
 
 #include "group.h"
 #include "Model.h"
+#include "EngineException.h"
 
 #define TRANSLATE 0
 #define ROTATE 1
@@ -20,10 +21,18 @@ Group::Group() {
     this->ang = this->axisX = this->axisY = this->axisZ = 0;
     for(int i = 0; i < 3; i++)
         this->priority[i] = -1;
-    this->transX = this->transY = this->transZ = 0;
+    this->transX = this->transY = this->transZ = this->transTime = 0;
     this->scaleX = this->scaleY = this->scaleZ = 1;
     this->groups;
     this->models;
+    this->usingCatmull = this->rotateWithTime = false;
+    this->transPoints;
+}
+
+void Group::addPointToTranslation(float x, float y, float z){
+    this->transPoints.push_back(x);
+    this->transPoints.push_back(y);
+    this->transPoints.push_back(z);
 }
 
 Group::Group(Group *g) {
@@ -39,6 +48,8 @@ Group::Group(Group *g) {
 
 
 void Group::setTranslate(float x, float y, float z) {
+    if(this->priority[TRANSLATE] >= 0)
+        throw EngineException(std::string("Translate already set in a group"));
     this->transX = x;
     this->transY = y;
     this->transZ = z;
@@ -46,6 +57,8 @@ void Group::setTranslate(float x, float y, float z) {
 }
 
 void Group::setRotate(float ang, float x, float y, float z) {
+    if(this->priority[ROTATE] >= 0)
+        throw EngineException(std::string("Rotate already set in a group"));
     this->ang = ang;
     this->axisX = x;
     this->axisY = y;
@@ -54,11 +67,14 @@ void Group::setRotate(float ang, float x, float y, float z) {
 }
 
 void Group::setScale(float scaleX, float scaleY, float scaleZ) {
+    if(this->priority[SCALE] >= 0)
+        throw EngineException(std::string("Scale already set in a group"));
     this->scaleX = scaleX;
     this->scaleY = scaleY;
     this->scaleZ = scaleZ;
     this->priority[SCALE] = this->numberOfTransformation++;
 }
+
 
 void Group::getTransform(float* x, float* y, float *z){
     *x = this->transX;
@@ -81,10 +97,12 @@ int Group::getTransformOrder(int ocurrence){
 void Group::applyTransformations(){
     for(int i = 0, transform = getTransformOrder(0); transform >= 0; i++, transform = getTransformOrder(i)) {
         if(transform == TRANSLATE) {
-            glTranslatef(this->transX, this->transY, this->transZ);
+            if(usingCatmull) throw EngineException("Not implemented yet");
+            else glTranslatef(this->transX, this->transY, this->transZ);
         }
         if(transform == ROTATE){
-            glRotatef(this->ang, this->axisX, this->axisY, this->axisZ);
+            if(rotateWithTime) throw EngineException("Not implemented yet");
+            else glRotatef(this->ang, this->axisX, this->axisY, this->axisZ);
         }
         if(transform == SCALE){
             glScalef(this->scaleX, this->scaleY, this->scaleZ);

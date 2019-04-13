@@ -12,6 +12,7 @@
 #include <math.h>
 #include "Ponto.h"
 #include "Scene.h"
+#include "EngineException.h"
 
 using namespace std;
 using namespace tinyxml2;
@@ -211,42 +212,82 @@ Model loadModel(XMLElement *model){
     return m;
 }
 
+
+
+void loadTranslation(XMLElement *trans, Group *group){
+    if(trans->FindAttribute("time") != nullptr){
+        group->setCatMull(true);
+        group->setTransTime(getAttributeOrDefault(trans, "time", 0));
+        XMLElement *child = trans->FirstChildElement();
+        while(child){
+            if(strcmp(child->Value(), "point") == 0){
+                float transX, transY, transZ;
+                transX = getAttributeOrDefault(child, "X", 0);
+                transY = getAttributeOrDefault(child, "Y", 0);
+                transZ = getAttributeOrDefault(child, "Z", 0);
+                group->addPointToTranslation(transX, transY, transZ);
+            } else {
+                throw EngineException(string("There is no default tag in translation \"") + child->Value() + "\"");
+            }
+            child = child->NextSiblingElement();
+        }
+    } else {
+        group->setCatMull(false);
+        float transX, transY, transZ;
+        transX = getAttributeOrDefault(trans, "X", 0);
+        transY = getAttributeOrDefault(trans, "Y", 0);
+        transZ = getAttributeOrDefault(trans, "Z", 0);
+        group->setTranslate(transX, transY, transZ);
+    }
+}
+
+void loadRotate(XMLElement *rotate, Group *group){
+    float ang, axisX, axisY, axisZ;
+    if(rotate->FindAttribute("time") != nullptr){
+        group->setRotateWithTime(true);
+        ang = getAttributeOrDefault(rotate, "time", 0);
+    } else {
+        group->setRotateWithTime(false);
+        ang = getAttributeOrDefault(rotate, "ang", 0);
+    }
+    axisX = getAttributeOrDefault(rotate, "axisX", 0);
+    axisY = getAttributeOrDefault(rotate, "axisY", 0);
+    axisZ = getAttributeOrDefault(rotate, "axisZ", 0);
+    group->setRotate(ang, axisX, axisY, axisZ);
+}
+
 Group loadGroup(XMLElement *group){
     Group g;
     Group toAdd;
     XMLElement *child = group->FirstChildElement();
     while(child) {
-        if (strcmp(child->Value(), "translate") == 0) {
-            float transX, transY, transZ;
-            transX = getAttributeOrDefault(child, "X", 0);
-            transY = getAttributeOrDefault(child, "Y", 0);
-            transZ = getAttributeOrDefault(child, "Z", 0);
-            g.setTranslate(transX, transY, transZ);
-        } else if (strcmp(child->Value(), "rotate") == 0) {
-            float ang, axisX, axisY, axisZ;
-            ang = getAttributeOrDefault(child, "ang", 0);
-            axisX = getAttributeOrDefault(child, "axisX", 0);
-            axisY = getAttributeOrDefault(child, "axisY", 0);
-            axisZ = getAttributeOrDefault(child, "axisZ", 0);
-            g.setRotate(ang, axisX, axisY, axisZ);
-        } else if (strcmp(child->Value(), "scale") == 0) {
-            float scaleX, scaleY, scaleZ;
-            scaleX = getAttributeOrDefault(child, "X", 1);
-            scaleY = getAttributeOrDefault(child, "Y", 1);
-            scaleZ = getAttributeOrDefault(child, "Z", 1);
-            g.setScale(scaleX, scaleY, scaleZ);
-        } else if (strcmp(child->Value(), "group") == 0) {
-            toAdd = loadGroup(child);
-            g.addGroup(&toAdd);
-        } else if (strcmp(child->Value(), "models") == 0) {
-            XMLElement *model = child->FirstChildElement("model");
-            while(model){
-                Model m = loadModel(model);
-                g.addModel(m);
-                model = model->NextSiblingElement("model");
+        try {
+            if (strcmp(child->Value(), "translate") == 0) {
+                loadTranslation(child, &g);
+            } else if (strcmp(child->Value(), "rotate") == 0) {
+                loadRotate(child, &g);
+            } else if (strcmp(child->Value(), "scale") == 0) {
+                float scaleX, scaleY, scaleZ;
+                scaleX = getAttributeOrDefault(child, "X", 1);
+                scaleY = getAttributeOrDefault(child, "Y", 1);
+                scaleZ = getAttributeOrDefault(child, "Z", 1);
+                g.setScale(scaleX, scaleY, scaleZ);
+            } else if (strcmp(child->Value(), "group") == 0) {
+                toAdd = loadGroup(child);
+                g.addGroup(&toAdd);
+            } else if (strcmp(child->Value(), "models") == 0) {
+                XMLElement *model = child->FirstChildElement("model");
+                while (model) {
+                    Model m = loadModel(model);
+                    g.addModel(m);
+                    model = model->NextSiblingElement("model");
+                }
+            } else {
+                throw EngineException(string("There is no default tag \"") + child->Value() + "\"");
             }
-        } else {
-            printf("There is no default tag: %s", child->Value());
+        } catch (EngineException &e){
+            printf(e.what());
+            exit(1);
         }
         child = child->NextSiblingElement();
     }
@@ -260,7 +301,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene2.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
