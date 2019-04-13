@@ -5,7 +5,7 @@
             <model file="sphere.3d" R="255" G="140" B="0"/>
         </models>
     </group>
-    <group name="Planets" distanceScale = "ln(1 + AU)*10" radiusScale="ln(1 + percentage)">
+    <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
         <group name="Mercury">
             <translate X="13.579" />
             <scale X="0.322" Y="0.322" Z="0.322"/>

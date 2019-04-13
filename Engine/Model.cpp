@@ -5,13 +5,21 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
+#include <GL/glew.h>
 #include <GL/glut.h>
 #endif
 
-#include "Model.h"
 #include <cstring>
 #include <fstream>
+#include <stdlib.h>
+#include "Model.h"
 #include "Ponto.h"
+
+Model::Model() {
+    this->red = this->blue = this->green = 1;
+    this->filePath = (char*) malloc(1);
+    std::strcpy(this->filePath, "\0");
+}
 
 Model::Model(char* filepath)  {
     this->filePath = (char*) malloc(strlen(filepath) + 1);
@@ -21,21 +29,17 @@ Model::Model(char* filepath)  {
 
 Model::Model(Model *m){
     this->filePath = m->getFilePath();
-    this->pontos = m->getPoints();
     this->red = m->red;
     this->blue = m->blue;
     this->green = m->green;
 }
 
-Model::Model() {
-    this->red = this->blue = this->green = 1;
-    this->pontos;
-    this->filePath = (char*) malloc(1);
-    std::strcpy(this->filePath, "\0");
-}
-
 char* Model::getFilePath() {
     return this->filePath;
+}
+
+int Model::getNumberOfPoints(){
+    return this->numberOfPoints;
 }
 
 void Model::loadPoints(){
@@ -46,28 +50,29 @@ void Model::loadPoints(){
     file.open(this->filePath);
     file.getline(buffer, 99);
     n = atoi(buffer);
-    Ponto p;
     this->numberOfPoints = n;
-    this->pontos = (Ponto*) malloc(sizeof(Ponto) * n);
+
+    float *vertexB = (float*) malloc(sizeof(float) * 3 * n);
+    int vertexBSize = 0;
+
     for (int i = 0; i < n ; ++i) {
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f %f", &x, &y, &z);
-        p = Ponto(x,y,z);
-        this->pontos[i] = p;
+        vertexB[vertexBSize++] = x;
+        vertexB[vertexBSize++] = y;
+        vertexB[vertexBSize++] = z;
     }
     file.close();
+
+    glGenBuffers(1, &this->buffer);
+    glBindBuffer(GL_ARRAY_BUFFER,this->buffer);
+    glBufferData(GL_ARRAY_BUFFER,vertexBSize * sizeof(float), vertexB, GL_STATIC_DRAW);
+
+    free(vertexB);
 }
 
-Ponto* Model::getPoints(){
-    return this->pontos;
-}
-
-int Model::getNumberOfPoints(){
-    return this->numberOfPoints;
-}
-
-Ponto Model::getPoint(int i) {
-    return this->pontos[i];
+GLuint Model::getBuffer(){
+    return this->buffer;
 }
 
 void Model::applyColour() {

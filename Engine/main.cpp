@@ -1,6 +1,7 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
+#include <GL/glew.h>
 #include <GL/glut.h>
 #endif
 
@@ -20,6 +21,7 @@ using namespace tinyxml2;
 #define ZOOM 1
 
 Scene scene;
+
 int frame= 0, timebase = 0;
 char title[100];
 double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
@@ -60,12 +62,11 @@ void changeSize(int w, int h) {
 
 void drawModel(Model m){
     m.applyColour();
-    glBegin(GL_TRIANGLES);
-    for (int ponto = 0; ponto < m.getNumberOfPoints(); ponto++) {
-        Ponto p = m.getPoint(ponto);
-        glVertex3f(p.getX(), p.getY(), p.getZ());
-    }
-    glEnd();
+
+    glBindBuffer(GL_ARRAY_BUFFER,m.getBuffer());
+    glVertexPointer(3,GL_FLOAT,0,0);
+    glDrawArrays(GL_TRIANGLES, 0, m.getNumberOfPoints());
+
     glColor3f(1,1,1);
 }
 
@@ -87,11 +88,8 @@ void drawGroup(Group fatherGroup){
     glPopMatrix();
 }
 
-/*
- * Desenha as figuras dentro da estrutura da scene
- */
-void draw(){
-    /*glBegin(GL_LINES);
+void drawAxes(){
+    glBegin(GL_LINES);
 
     glColor3f(1,0,0);
     glVertex3f(1000,0,0);
@@ -105,9 +103,17 @@ void draw(){
     glVertex3f(0,0,1000);
     glVertex3f(0,0,-1000);
 
-    glEnd();*/
+    glEnd();
 
     glColor3f(1,1,1);
+}
+
+/*
+ * Desenha as figuras dentro da estrutura da scene
+ */
+void draw(){
+
+    drawAxes();
 
     vector<Group> groups = scene.getGroups();
     for(int i = 0; i < groups.size(); i++){
@@ -193,6 +199,7 @@ void processKeys(unsigned char c, int xx, int yy) {
     glutPostRedisplay();
 }
 
+
 Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
     float red,green,blue;
@@ -200,6 +207,7 @@ Model loadModel(XMLElement *model){
     green = getAttributeOrDefault(model, "G", 255);
     blue = getAttributeOrDefault(model, "B", 255);
     m.setColour(red/255, green/255, blue/255);
+
     return m;
 }
 
@@ -264,22 +272,27 @@ void loadScene() {
 }
 
 int main(int argc, char** argv) {
-    loadScene();
-
     //init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(1000,800);
     glutCreateWindow("MyWindow");
+    glEnableClientState(GL_VERTEX_ARRAY);
 
     //Required callback registry
     glutDisplayFunc(renderScene);
-    glutReshapeFunc(changeSize);
     glutIdleFunc(renderScene);
+    glutReshapeFunc(changeSize);
 
     //Callback registration for keyboard processing
     glutKeyboardFunc(processKeys);
+
+#ifndef __APPLE__
+    glewInit();
+#endif
+
+    loadScene();
 
     //OpenGL settings
     glEnable(GL_DEPTH_TEST);
@@ -290,5 +303,5 @@ int main(int argc, char** argv) {
     //enter GLUT's main cycle
     glutMainLoop();
 
-    return 1;
+    return 0;
 }
