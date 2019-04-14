@@ -7,7 +7,27 @@
 
 #include <vector>
 #include "Model.h"
+#include "EngineException.h"
 
+/*
+class Translate{
+public:
+    void applyTranslate(){};
+};
+
+class TranslateDefault : public Translate{
+    float transX, transY, transZ;
+public:
+    void applyTranslate(){glTranslatef(transX,transY,transZ);};
+    TranslateDefault(float x, float y, float z){this->transX = x; this->transY = y; this->transZ = z;};
+};
+
+class TranslateCatMull : public Translate{
+    float transTime;
+    std::vector<float> transPoints;
+public:
+    void applyTranslate(){throw EngineException("Not implemented yet");};
+};*/
 
 class Group {
     int numberOfTransformation;
@@ -37,7 +57,7 @@ public:
     void applyTransformations();
     void getTransform(float* x, float* y, float *z);
 
-        private:
+private:
     int getTransformOrder(int ocurrence);
 };
 

@@ -40,10 +40,13 @@ Group::Group(Group *g) {
     this->ang = g->ang; this->axisX = g->axisX; this->axisY = g->axisY; this->axisZ = g->axisZ;
     for(int i = 0; i < 3; i++)
         this->priority[i] = g->priority[i];
-    this->transX = g->transX; this->transY = g->transY; this->transZ = g->transZ;
+    this->transX = g->transX; this->transY = g->transY; this->transZ = g->transZ; this->transTime = g->transTime;
     this->scaleX = g->scaleX; this->scaleY = g->scaleY; this->scaleZ = g->scaleZ;
     this->groups = g->groups;
     this->models = g->models;
+    this->transPoints = g->transPoints;
+    this->usingCatmull = g->usingCatmull;
+    this->rotateWithTime = g->rotateWithTime;
 }
 
 
@@ -97,11 +100,11 @@ int Group::getTransformOrder(int ocurrence){
 void Group::applyTransformations(){
     for(int i = 0, transform = getTransformOrder(0); transform >= 0; i++, transform = getTransformOrder(i)) {
         if(transform == TRANSLATE) {
-            if(usingCatmull) throw EngineException("Not implemented yet");
+            if(this->usingCatmull) throw EngineException("Not implemented yet: Catmull");
             else glTranslatef(this->transX, this->transY, this->transZ);
         }
         if(transform == ROTATE){
-            if(rotateWithTime) throw EngineException("Not implemented yet");
+            if(this->rotateWithTime) throw EngineException("Not implemented yet: Rotation with time");
             else glRotatef(this->ang, this->axisX, this->axisY, this->axisZ);
         }
         if(transform == SCALE){
