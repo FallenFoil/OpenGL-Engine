@@ -8,6 +8,9 @@
 
 using namespace std;
 
+float *vertexSphere = new float[1024]();
+int vertexSize=0;
+
 
 string createBox(float width, float height, float depth,  int stacks, int slices, int depthDivisions){
     if(stacks < 1 && slices < 1) return string();
@@ -112,6 +115,8 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
     return ss.str();
 }
 
+
+
 /*
  * Transforma coordenadas esfericas em cartesianas
  *
@@ -140,6 +145,10 @@ string createSpherePoint(float alpha, float beta, float radius){
  * Recebe o raio da esfera, o numero de fatias da esfera e o numeros de andares da esfera.
  *
  * Retorna uma string com todos os pontos da esfera.
+ * 
+ * A - B
+ * |   |
+ * C - D
  */
 string createSphere(float radius, int slices, int stacks){
     stringstream ss;
@@ -152,22 +161,21 @@ string createSphere(float radius, int slices, int stacks){
 
     ss << nPontos << endl;
 
+    ss << "##Strips" << endl;
+
     float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
 
     for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
         for(int j = 0; j < slices; j++){
-            if(i != (stacks/2.0f)-1){
-                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
-                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
-            }
 
-            if(i != -(stacks/2.0f)){
-                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
-                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
-            }
+                //algoritmo da strip 
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);//A
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);//C
         }
+
+        ss << createSpherePoint(0, oneStack*(i+1), radius);//A
+        ss << createSpherePoint(0, oneStack*i, radius);//C
+            
     }
 
     return ss.str();
@@ -189,6 +197,7 @@ string createSphere(float radius, int slices, int stacks){
     z = radius * cos(alpha);
 
     Ponto a = Ponto(x,y,z);
+
     ss << a.toString() << endl;
 
     return ss.str();
@@ -210,40 +219,42 @@ string createCone(double radius, double height, int slices, int stacks){
     int nPontos = (6 * slices * stacks);
 
     ss << nPontos << endl;//Numero de vertices
-
+    
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
     int j = 0, i = 0;
 
-    for (int j = 0; j < stacks; ++j){
+    ss << "##FAN"
+    //Origem da base
+
+    //fan
+	ss << " 0 0 0" << endl;
+	for(i=0;i<slices;i++){
+		ss << createConePoint(oneSlice*i, radiusAux, 0);	
+	}
+	createConePoint(0,radiusAux,0);	
+
+    ss << "##STRIP"
+
+    for (int j = 0; j < stacks; j++){
         smallRadius= radiusAux-oneRadius;
         for(i = 0; i < slices; i++){
-            if(j == 0){
-                //Base
-                //A
-                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-                //Origem
-                ss << "0 0 0" << endl;
-                //B
-                ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
-            }
+           
             //Face
-            if(j!=stacks-1){
+            
                 //A
-                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-                //C
-                ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
-                //D
                 ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+                //C
+                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+
             }
-            //C
-            ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+           
             //A
-            ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+            ss << createConePoint(oneSlice*i, radiusAux, oneStack*(j+1));
             //B
-            ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+            ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+            
+            radiusAux = smallRadius;    
         }
-        radiusAux = smallRadius;
-    }
 
     return ss.str();
 }
