@@ -70,6 +70,9 @@ string createBox(float width, float height, float depth,  int stacks, int slices
  *
  * Retorna uma string com os vertice do plano
  */
+
+// A B
+// D C
 string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float sizeZ, int direction){
     float x, y=0, z;
     stringstream ss;
@@ -81,15 +84,17 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
 
 
     //Triangulo esquerdo
+    ss << "##FAN" << endl;
+
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
     Ponto a = Ponto(x,y,z);
     ss << a.toString() << endl;
     //C
-    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    Ponto c = Ponto(x,y,z);
-    ss << c.toString() << endl;
+    //x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
+    //Ponto c = Ponto(x,y,z);
+    //ss << c.toString() << endl;
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
@@ -98,19 +103,20 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
 
     //Triangulo direito
 
-    //C
-    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    c = Ponto(x,y,z);
-    ss << c.toString() << endl;
-    //A
-    x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    a = Ponto(x,y,z);
-    ss << a.toString() << endl;
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
     Ponto b = Ponto(x,y,z);
     ss << b.toString() << endl;
+    //C
+    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
+    c = Ponto(x,y,z);
+    ss << c.toString() << endl;
+    //A
+    //x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
+    //a = Ponto(x,y,z);
+    //ss << a.toString() << endl;
+   
 
     return ss.str();
 }
