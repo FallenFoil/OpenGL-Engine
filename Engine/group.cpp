@@ -201,7 +201,10 @@ void Group::applyTransformations(){
             else glTranslatef(this->transX, this->transY, this->transZ);
         }
         if(transform == ROTATE){
-            if(this->rotateWithTime) throw EngineException("Not implemented yet: Rotation with time");
+            if(this->rotateWithTime){
+                float relativeTime = fmod(glutGet(GLUT_ELAPSED_TIME)/ 1000.0f, ang) / ang;
+                glRotatef(360*relativeTime, this->axisX, this->axisY, this->axisZ);
+            }
             else glRotatef(this->ang, this->axisX, this->axisY, this->axisZ);
         }
         if(transform == SCALE){
