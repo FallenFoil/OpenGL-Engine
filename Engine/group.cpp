@@ -66,21 +66,12 @@ Group::Group() {
     this->ang = this->axisX = this->axisY = this->axisZ = 0;
     for(int i = 0; i < 3; i++)
         this->priority[i] = -1;
-    this->transX = this->transY = this->transZ = this->transTime = 0;
     this->scaleX = this->scaleY = this->scaleZ = 1;
     this->groups;
     this->models;
     this->usingCatmull = this->rotateWithTime = false;
-    this->transPoints;
-    this->oldYx = 0, this->oldYy = 1, this->oldYz = 0;
-}
-
-void Group::addPointToTranslation(float x, float y, float z){
-    float * point =  (float*)malloc(sizeof(float) * 3);
-    point[0] = x;
-    point[1] = y;
-    point[2] = z;
-    this->transPoints.push_back(point);
+    this->translateDefault;
+    this->translateCatMull;
 }
 
 Group::Group(Group *g) {
@@ -88,11 +79,9 @@ Group::Group(Group *g) {
     this->ang = g->ang; this->axisX = g->axisX; this->axisY = g->axisY; this->axisZ = g->axisZ;
     for(int i = 0; i < 3; i++)
         this->priority[i] = g->priority[i];
-    this->transX = g->transX; this->transY = g->transY; this->transZ = g->transZ; this->transTime = g->transTime;
     this->scaleX = g->scaleX; this->scaleY = g->scaleY; this->scaleZ = g->scaleZ;
     this->groups = g->groups;
     this->models = g->models;
-    this->transPoints = g->transPoints;
     this->usingCatmull = g->usingCatmull;
     this->rotateWithTime = g->rotateWithTime;
 }
@@ -101,9 +90,7 @@ Group::Group(Group *g) {
 void Group::setTranslate(float x, float y, float z) {
     if(this->priority[TRANSLATE] >= 0)
         throw EngineException(std::string("Translate already set in a group"));
-    this->transX = x;
-    this->transY = y;
-    this->transZ = z;
+    this->translateDefault = TranslateDefault(x,y,z);
     this->priority[TRANSLATE] = this->numberOfTransformation++;
 }
 
@@ -126,13 +113,6 @@ void Group::setScale(float scaleX, float scaleY, float scaleZ) {
     this->priority[SCALE] = this->numberOfTransformation++;
 }
 
-
-void Group::getTransform(float* x, float* y, float *z){
-    *x = this->transX;
-    *y = this->transY;
-    *z = this->transZ;
-}
-
 int Group::getTransformOrder(int ocurrence){
     if(ocurrence < 3 && ocurrence >= 0){
         int i;
@@ -148,57 +128,9 @@ int Group::getTransformOrder(int ocurrence){
 void Group::applyTransformations(){
     for(int i = 0, transform = getTransformOrder(0); transform >= 0; i++, transform = getTransformOrder(i)) {
         if(transform == TRANSLATE) {
-            if(this->usingCatmull){
-                renderCatmullRomCurve();
-                //Transformations
-                float pos[4];
-                float deriv[4];
-                float relativeTime = fmod(glutGet(GLUT_ELAPSED_TIME)/ 1000.0f, transTime) / transTime;
-                getGlobalCatmullRomPoint(relativeTime, pos, deriv);
-
-                float* m = (float*) malloc(sizeof(float) * 16);
-                float xi[3], zi[3], yi[3], yiOld[3];
-
-                yiOld[0]=oldYx;
-                yiOld[1]=oldYy;
-                yiOld[2]=oldYz;
-
-                xi[0]=deriv[0];
-                xi[1]=deriv[1];
-                xi[2]=deriv[2];
-
-                normalize(xi);
-                normalize(yiOld);
-
-                cross(xi,yiOld, zi);
-
-                normalize(zi);
-
-                cross(zi, xi, yi);
-
-                normalize(yi);
-
-                oldYx=yi[0];
-                oldYy=yi[1];
-                oldYz=yi[2];
-
-
-                buildRotMatrix(xi, yi, zi, m);
-
-                glPushMatrix();
-                glTranslatef(pos[0],pos[1],pos[2]);
-                glMultMatrixf(m);
-                //glutWireTeapot(0.1);
-                //glutWireCone(0.1, 0.2, 10, 1);
-
-                //glPopMatrix();
-
-                //free(m);
-
-                //glutSwapBuffers();
-                //grouptime += 0.001;
-            }
-            else glTranslatef(this->transX, this->transY, this->transZ);
+            if(this->usingCatmull)
+                translateCatMull.applyTranslate();
+            else translateDefault.applyTranslate();
         }
         if(transform == ROTATE){
             if(this->rotateWithTime){
@@ -213,8 +145,47 @@ void Group::applyTransformations(){
     }
 }
 
+void TranslateCatMull::applyTranslate() {
+    renderCatmullRomCurve();
+    //Transformations
+    float pos[4];
+    float deriv[4];
+    float relativeTime = fmod(glutGet(GLUT_ELAPSED_TIME)/ 1000.0f, transTime) / transTime;
+    getGlobalCatmullRomPoint(relativeTime, pos, deriv);
 
-void getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, float *pos, float *deriv) {
+    float* m = (float*) malloc(sizeof(float) * 16);
+    float xi[3] = {deriv[0], deriv[1], deriv[2]};
+    float zi[3], yi[3];
+    float yiOld[3] = {oldYx, oldYy, oldYz};
+
+    normalize(xi);
+    normalize(yiOld);
+    cross(xi,yiOld, zi);
+    normalize(zi);
+    cross(zi, xi, yi);
+    normalize(yi);
+
+    oldYx=yi[0];
+    oldYy=yi[1];
+    oldYz=yi[2];
+
+    buildRotMatrix(xi, yi, zi, m);
+
+    glPushMatrix();
+    glTranslatef(pos[0],pos[1],pos[2]);
+    glMultMatrixf(m);
+    //glutWireTeapot(0.1);
+    //glutWireCone(0.1, 0.2, 10, 1);
+
+    //glPopMatrix();
+
+    //free(m);
+
+    //glutSwapBuffers();
+    //grouptime += 0.001;
+}
+
+void TranslateCatMull::getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, float *pos, float *deriv) {
     // catmull-rom matrix
     float m[4][4] = {	{-0.5f,  1.5f, -1.5f,  0.5f},
                          { 1.0f, -2.5f,  2.0f, -0.5f},
@@ -250,7 +221,7 @@ void getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, flo
 
 
 // given  global t, returns the point in the curve
-void Group::getGlobalCatmullRomPoint(float gt, float *pos, float *deriv){
+void TranslateCatMull::getGlobalCatmullRomPoint(float gt, float *pos, float *deriv){
     int pointsCount =  (int) transPoints.size();
     float t = gt * pointsCount; // this is the real global t
     int index = floor(t);  // which segment
@@ -266,7 +237,7 @@ void Group::getGlobalCatmullRomPoint(float gt, float *pos, float *deriv){
     getCatmullRomPoint(t, transPoints[indices[0]], transPoints[indices[1]], transPoints[indices[2]], transPoints[indices[3]], pos, deriv);
 }
 
-void Group::renderCatmullRomCurve() {
+void TranslateCatMull::renderCatmullRomCurve() {
 
 // draw curve using line segments with GL_LINE_LOOP
     float pos[4];

@@ -198,7 +198,6 @@ void processKeys(unsigned char c, int xx, int yy) {
     glutPostRedisplay();
 }
 
-
 Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
     float red,green,blue;
@@ -209,8 +208,6 @@ Model loadModel(XMLElement *model){
 
     return m;
 }
-
-
 
 void loadTranslation(XMLElement *trans, Group *group){
     if(trans->FindAttribute("time") != nullptr){
