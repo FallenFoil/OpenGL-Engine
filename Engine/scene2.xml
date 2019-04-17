@@ -1,0 +1,15 @@
+<scene>
+        <group name="Mercury">
+            <translate time="13.579">
+                <point X="13" Y="0" Z="0"/>
+                <point X="0" Y="0" Z="-13"/>
+                <point X="-13" Y="0" Z="0"/>
+                <point X="0" Y="0" Z="13"/>
+            </translate>
+            <scale X="0.322" Y="0.322" Z="0.322"/>
+            <models>
+                <model file="sphere.3d" R="55" G="55" B="55"/>
+            </models>
+        </group>
+
+</scene>

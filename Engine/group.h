@@ -29,14 +29,16 @@ public:
     void applyTranslate(){throw EngineException("Not implemented yet");};
 };*/
 
+
 class Group {
     int numberOfTransformation;
     bool usingCatmull, rotateWithTime;
+    float oldYx, oldYy, oldYz;
     float transX, transY, transZ, transTime;
     float ang, axisX, axisY, axisZ;
     float scaleX, scaleY, scaleZ;
     int priority[3];
-    std::vector<float> transPoints;
+    std::vector<float*> transPoints;
     std::vector<Model> models;
     std::vector<Group> groups;
 
@@ -55,11 +57,12 @@ public:
     void setRotate(float ang, float x, float y, float z);
     void setScale(float scaleX, float scaleY, float scaleZ);
     void applyTransformations();
+    void getGlobalCatmullRomPoint(float gt, float *pos, float *deriv);
+    void renderCatmullRomCurve();
     void getTransform(float* x, float* y, float *z);
 
 private:
     int getTransformOrder(int ocurrence);
 };
-
 
 #endif //XML_GRAPHICS_GROUP_H

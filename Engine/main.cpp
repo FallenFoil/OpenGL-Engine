@@ -30,7 +30,6 @@ double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
         camY = radius * sin(beta),
         camZ = radius * cos(beta) * cos(alpha);
 
-
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
     return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
@@ -113,7 +112,6 @@ void drawAxes(){
  * Desenha as figuras dentro da estrutura da scene
  */
 void draw(){
-
     drawAxes();
 
     vector<Group> groups = scene.getGroups();
@@ -121,7 +119,7 @@ void draw(){
         Group g = groups[i];
         drawGroup(g);
     }
-
+    //Group::grouptime += 0.001;
 }
 
 void viewFramesPerSecond(){
@@ -231,6 +229,7 @@ void loadTranslation(XMLElement *trans, Group *group){
             }
             child = child->NextSiblingElement();
         }
+        group->setTranslate(0,0,0);
     } else {
         group->setCatMull(false);
         float transX, transY, transZ;
@@ -301,7 +300,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene2.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){

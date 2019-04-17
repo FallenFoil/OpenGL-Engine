@@ -2,6 +2,7 @@
 !*.cpp
 !*.h
 !scene.xml
+!scene2.xml
 !CMakeLists.txt
 !/tinyxml2-master
 !.gitignore
