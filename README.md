@@ -23,6 +23,6 @@ https://www.overleaf.com/9867978269qwnnzgnhxjsp
 
 ## Contributors
 
-[Cesar Borges]https://github.com/CesarAugustoBorges
-[Guilherme Viveiros]https://github.com/GuilhermeViveiros
-[Luis Macedo]https://github.com/FallenFoil
+[Cesar Borges](https://github.com/CesarAugustoBorges)
+[Guilherme Viveiros](https://github.com/GuilhermeViveiros)
+[Luis Macedo](https://github.com/FallenFoil)
