@@ -14,21 +14,22 @@
 #include "Scene.h"
 #include "EngineException.h"
 
+#define K 0.5f
+
 using namespace std;
 using namespace tinyxml2;
 
-#define HSPEED 0.05
-#define VSPEED 0.05
-#define ZOOM 1
-
 Scene scene;
+GLenum OPTION = GL_FILL;
 
-int frame= 0, timebase = 0;
-char title[100];
-double alpha=45*M_PI/180, beta=35.264389*M_PI/180, radius = sqrt(75.00),
-        camX = radius * cos(beta) * sin(alpha),
-        camY = radius * sin(beta),
-        camZ = radius * cos(beta) * cos(alpha);
+//Frames per second Variables
+int timebase = 0, frame = 0;
+
+//Camera Variables
+float camX = 50, camY = 3, camZ = 50;
+float lX = 0, lY = 3, lZ = 0;
+float camAngle = 225;
+
 
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
@@ -59,7 +60,6 @@ void changeSize(int w, int h) {
     // return to the model view matrix mode
     glMatrixMode(GL_MODELVIEW);
 }
-
 
 void drawAxes(){
     glBegin(GL_LINES);
@@ -95,18 +95,18 @@ void draw(){
 }
 
 void viewFramesPerSecond(){
-    int time;
     float fps;
-    char buffer[100] ;
+    char s[64];
+
     frame++;
-    time=glutGet(GLUT_ELAPSED_TIME);
+    int time=glutGet(GLUT_ELAPSED_TIME);
     if (time - timebase > 1000) {
         fps = frame*1000.0/(time-timebase);
         timebase = time;
         frame = 0;
-        sprintf(title, "FPS - %f", fps);
+        sprintf(s, "FPS: %f6.2", fps);
+        glutSetWindowTitle(s);
     }
-    glutSetWindowTitle(title);
 }
 
 void renderScene(void) {
@@ -114,10 +114,12 @@ void renderScene(void) {
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glPolygonMode(GL_FRONT_AND_BACK, OPTION);
+
     // set the camera
     glLoadIdentity();
     gluLookAt(camX,camY,camZ,
-              0,0,0,
+              lX,lY,lZ,
               0.0f,1.0f,0.0f);
 
     draw();
@@ -129,43 +131,122 @@ void renderScene(void) {
 
 /*
  * Teclas:
- *      w => a camara vai para cima;
- *      s => a camara vai para baixo;
- *      d => a camara vai para direita;
- *      a => a camara vai para esquerda;
- *      i => a camara da zoom in;
- *      o => a camara da zoom out;
+ *      up    => a camara vai para cima;
+ *      down  => a camara vai para baixo;
+ *      right  => a camara roda para direita;
+ *      left => a camara roda para esquerda;
  */
-void processKeys(unsigned char c, int xx, int yy) {
-// put code to process regular keys in here
-    switch (c) {
-        case 'w':
-            if(beta+VSPEED<=M_PI/2){beta+=VSPEED;}
-            else{beta=M_PI/2;}
+void processSpecialKeys(int key, int xx, int yy) {
+    float newPx, newPz, newLx, newLz;
+    newPx = camX;
+    newPz = camZ;
+
+    newLx = lX;
+    newLz = lZ;
+
+    switch (key) {
+        case GLUT_KEY_RIGHT:
+            camAngle -= 1.5;
+            newLx = camX + sin((camAngle * 3.14) / 180);
+            newLz = camZ + cos((camAngle * 3.14) / 180);
+            cout << "LX" << newLx << " LZ" << newLz << endl;
             break;
-        case 'a':
-            alpha-=HSPEED;
+        case GLUT_KEY_LEFT:
+            camAngle += 1.5;
+            newLx = camX + sin((camAngle * 3.14) / 180);
+            newLz = camZ + cos((camAngle * 3.14) / 180);
+            cout << "LX" << newLx << " LZ" << newLz << endl;
             break;
-        case 'd':
-            alpha+=HSPEED;
+        case GLUT_KEY_UP:
+            camY += K;
             break;
-        case 's':
-            if(beta-VSPEED>=-M_PI/2){beta-=VSPEED;}
-            else{beta=-M_PI/2;}
-            break;
-        case 'o':
-            radius += ZOOM;
-            break;
-        case 'i':
-            if(radius-ZOOM>0){radius -= ZOOM;}
+        case GLUT_KEY_DOWN:
+            camY -= K;
             break;
         default:
             break;
     }
 
-    camX = radius * cos(beta) * sin(alpha);
-    camY = radius * sin(beta);
-    camZ = radius * cos(beta) * cos(alpha);
+    camX = newPx;
+    camZ = newPz;
+    lX = newLx;
+    lZ = newLz;
+
+    lY=camY;
+
+    glutPostRedisplay();
+}
+
+/*
+ * Teclas:
+ *      w => a camara vai para frente;
+ *      s => a camara vai para tras;
+ *      d => a camara vai para direita;
+ *      a => a camara vai para esquerda;
+ *      1 => Muda opção de visualização para FILL
+ *      2 => Muda opção de visualização para LINE
+ *      3 => Muda opção de visualização para POINT
+ */
+void processKeys(unsigned char key, int xx, int yy) {
+    float newPx, newPz, newLx, newLz, dX, dZ, rX, rZ;
+    newPx = camX;
+    newPz = camZ;
+
+    newLx = lX;
+    newLz = lZ;
+
+    dX = lX - camX;
+    dZ = lZ - camZ;
+
+    switch(key){
+        case 'w':
+            newPx = camX + K*dX;
+            newPz = camZ + K*dZ;
+            newLx = lX + K*dX;
+            newLz = lZ + K*dZ;
+            break;
+        case 's':
+            newPx = camX - K*dX;
+            newPz = camZ - K*dZ;
+            newLx = lX - K*dX;
+            newLz = lZ - K*dZ;
+            break;
+        case 'a':
+            rX = -dZ;
+            rZ = dX;
+            newPx = camX - K*rX;
+            newPz = camZ - K*rZ;
+            newLx = lX - K*rX;
+            newLz = lZ - K*rZ;
+            break;
+        case 'd':
+            rX = -dZ;
+            rZ = dX;
+            newPx = camX + K*rX;
+            newPz = camZ + K*rZ;
+            newLx = lX + K*rX;
+            newLz = lZ + K*rZ;
+            break;
+        case '1':
+            OPTION = GL_FILL;
+            break;
+        case '2':
+            OPTION = GL_LINE;
+            break;
+        case '3':
+            OPTION = GL_POINT;
+            break;
+        default:
+            break;
+    }
+
+    camX = newPx;
+    camZ = newPz;
+    lX = newLx;
+    lZ = newLz;
+
+    //camY = hf(camX, camZ) + 3;
+    lY=camY;
 
     glutPostRedisplay();
 }
@@ -296,6 +377,7 @@ int main(int argc, char** argv) {
 
     //Callback registration for keyboard processing
     glutKeyboardFunc(processKeys);
+    glutSpecialFunc(processSpecialKeys);
 
 #ifndef __APPLE__
     glewInit();
@@ -306,7 +388,6 @@ int main(int argc, char** argv) {
     //OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT , GL_FILL);
 
 
     //enter GLUT's main cycle
