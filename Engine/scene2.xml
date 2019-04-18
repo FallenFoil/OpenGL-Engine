@@ -1,15 +1,16 @@
 <scene>
-        <group name="Mercury">
-            <translate time="13.579">
-                <point X="13" Y="0" Z="0"/>
-                <point X="0" Y="0" Z="-13"/>
-                <point X="-13" Y="0" Z="0"/>
-                <point X="0" Y="0" Z="13"/>
+    <group name="Comets">
+        <group name="Halley">
+            <translate time="50">
+                <point X="0" Y="0" Z="0"/>
+                <point X="125" Y="0" Z="-20"/>
+                <point X="250" Y="0" Z="0"/>
+                <point X="125" Y="0" Z="20"/>
             </translate>
-            <scale X="0.322" Y="0.322" Z="0.322"/>
+            <scale X="0.5" Y="0.5" Z="0.5"/>
             <models>
-                <model file="sphere.3d" R="55" G="55" B="55"/>
+                <model file="sphere.3d" R="30" G="30" B="30" />
             </models>
         </group>
-
+    </group>
 </scene>

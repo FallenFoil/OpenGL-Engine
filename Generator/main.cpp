@@ -110,7 +110,7 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
     ss << b.toString() << endl;
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    c = Ponto(x,y,z);
+    Ponto c = Ponto(x,y,z);
     ss << c.toString() << endl;
     //A
     //x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
@@ -229,7 +229,7 @@ string createCone(double radius, double height, int slices, int stacks){
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
     int j = 0, i = 0;
 
-    ss << "##FAN"
+    ss << "##FAN";
     //Origem da base
 
     //fan
@@ -239,7 +239,7 @@ string createCone(double radius, double height, int slices, int stacks){
 	}
 	createConePoint(0,radiusAux,0);	
 
-    ss << "##STRIP"
+    ss << "##STRIP";
 
     for (int j = 0; j < stacks; j++){
         smallRadius= radiusAux-oneRadius;

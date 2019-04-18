@@ -60,33 +60,6 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void drawModel(Model m){
-    m.applyColour();
-
-    glBindBuffer(GL_ARRAY_BUFFER,m.getBuffer());
-    glVertexPointer(3,GL_FLOAT,0,0);
-    glDrawArrays(GL_TRIANGLES, 0, m.getNumberOfPoints());
-
-    glColor3f(1,1,1);
-}
-
-void drawGroup(Group fatherGroup){
-    glPushMatrix();
-        fatherGroup.applyTransformations();
-        vector<Model> models = fatherGroup.getModels();
-
-        for(auto model = models.begin(); model != models.end(); model++) {
-            Model m = *model;
-            drawModel(m);
-        }
-
-    vector<Group> childGroups = fatherGroup.getGroups();
-    for(int i = 0; i < childGroups.size(); i++){
-        Group g = childGroups[i];
-        drawGroup(g);
-    }
-    glPopMatrix();
-}
 
 void drawAxes(){
     glBegin(GL_LINES);
@@ -117,9 +90,8 @@ void draw(){
     vector<Group> groups = scene.getGroups();
     for(int i = 0; i < groups.size(); i++){
         Group g = groups[i];
-        drawGroup(g);
+        g.draw();
     }
-    //Group::grouptime += 0.001;
 }
 
 void viewFramesPerSecond(){
@@ -297,7 +269,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene3.xml" );
+    doc.LoadFile( "../scene.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){

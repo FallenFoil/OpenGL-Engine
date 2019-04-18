@@ -13,14 +13,19 @@
 
 #include <vector>
 #include <string>
+#include <utility>
 #include "Ponto.h"
 
+#define DEFAULT 0
+#define STRIPS 1
+#define FANS 2
 
 class Model {
     char *filePath;
     int numberOfPoints;
     float red, green, blue;
     GLuint buffer;
+    std::vector<std::pair<int, int>> drawMode;
 
 public:
     Model();
@@ -31,6 +36,7 @@ public:
     void setColour(float red, float green, float blue){this->red = red; this->green = green; this->blue = blue;};
     void applyColour();
     GLuint getBuffer();
+    void draw();
 private:
     void loadPoints();
 };

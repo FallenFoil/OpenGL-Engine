@@ -44,8 +44,11 @@ int Model::getNumberOfPoints(){
 
 void Model::loadPoints(){
     char buffer[100];
+    char drawMode[20];
     int n;
     float x, y, z;
+
+    strcpy(drawMode, "Triangles");
     std::ifstream file;
     file.open(this->filePath);
     file.getline(buffer, 99);
@@ -55,12 +58,26 @@ void Model::loadPoints(){
     float *vertexB = (float*) malloc(sizeof(float) * 3 * n);
     int vertexBSize = 0;
 
-    for (int i = 0; i < n ; ++i) {
+    for (int i = 0; i < n ;) {
         file.getline(buffer, 99);
-        sscanf(buffer,"%f %f %f", &x, &y, &z);
-        vertexB[vertexBSize++] = x;
-        vertexB[vertexBSize++] = y;
-        vertexB[vertexBSize++] = z;
+        int scan = sscanf(buffer,"%f %f %f", &x, &y, &z);
+        if(scan == 0){
+            sscanf(buffer,"##%s", drawMode);
+        } else {
+            vertexB[vertexBSize++] = x;
+            vertexB[vertexBSize++] = y;
+            vertexB[vertexBSize++] = z;
+            i++;
+        }
+    /*
+        if()
+        if(strcmp(drawMode, "Triangles") == 0){
+
+        } else if(strcmp(drawMode, "Strips") == 0){
+
+        } else if (strcmp(drawMode, "Fans") == 0){
+
+        }*/
     }
     file.close();
 
@@ -77,4 +94,14 @@ GLuint Model::getBuffer(){
 
 void Model::applyColour() {
     glColor3f(this->red, this->green, this->blue);
+}
+
+void Model::draw(){
+    applyColour();
+
+    glBindBuffer(GL_ARRAY_BUFFER,getBuffer());
+    glVertexPointer(3,GL_FLOAT,0,0);
+    glDrawArrays(GL_TRIANGLES, 0,getNumberOfPoints());
+
+    glColor3f(1,1,1);
 }

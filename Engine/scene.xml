@@ -5,8 +5,21 @@
             <model file="sphere.3d" R="255" G="140" B="0"/>
         </models>
     </group>
+    <group name="Halley">
+        <translate time="50">
+            <point X="-20" Y="0" Z="0"/>
+            <point X="105" Y="0" Z="-30"/>
+            <point X="220" Y="0" Z="0"/>
+            <point X="105" Y="0" Z="30"/>
+        </translate>
+        <scale X="0.5" Y="0.5" Z="0.5"/>
+        <models>
+            <model file="sphere.3d" R="80" G="80" B="80" />
+        </models>
+    </group>
     <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
         <group name="Mercury">
+            <rotate time="-87.97" axisX="0" axisY="1" axisZ="0"/>
             <translate X="13.579" />
             <scale X="0.322" Y="0.322" Z="0.322"/>
             <models>
@@ -14,6 +27,7 @@
             </models>
         </group>
         <group name="Venus">
+            <rotate time="224.7" axisX="0" axisY="1" axisZ="0"/>
             <translate X="30.367" />
             <scale X="0.667" Y="0.667" Z="0.667"/>
             <models>
@@ -21,12 +35,14 @@
             </models>
         </group>
         <group name="Earth">
+            <rotate time="365.5" axisX="0" axisY="1" axisZ="0"/>
             <translate X="41.053" />
             <scale X="1" Y="1" Z="1"/>
             <models>
                 <model file="sphere.3d" R="40" G="40" B="255" />
             </models>
             <group>
+                <rotate time="29.53"  axisX="0" axisY="1" axisZ="0"/>
                 <translate X="1.407"/>
                 <scale X="0.239" Y="0.239" Z="0.239"/>
                 <models>
@@ -35,6 +51,7 @@
             </group>
         </group>
         <group name="Mars">
+            <rotate time="686.93" axisX="0" axisY="1" axisZ="0"/>
             <translate X="52.23" />
             <scale X="0.425" Y="0.425" Z="0.425"/>
             <models>
@@ -42,6 +59,7 @@
             </models>
         </group>
         <group name="Jupiter">
+            <rotate time="4328.9" axisX="0" axisY="1" axisZ="0"/>
             <translate X="90.529" />
             <scale X="2.49" Y="2.49" Z="2.49"/>
             <models>
@@ -49,6 +67,7 @@
             </models>
         </group>
         <group name="Saturn">
+            <rotate time="10752.9" axisX="0" axisY="1" axisZ="0"/>
             <translate X="108.607" />
             <scale X="2.346" Y="2.346" Z="2.346"/>
             <models>
@@ -56,6 +75,7 @@
             </models>
         </group>
         <group name="Uranus">
+            <rotate time="10752.9" axisX="0" axisY="1" axisZ="0"/>
             <translate X="129.406" />
             <scale X="1.61" Y="1.61" Z="1.61"/>
             <models>
@@ -63,6 +83,7 @@
             </models>
         </group>
         <group name="Neptune">
+            <rotate time="30568.75" axisX="0" axisY="1" axisZ="0"/>
             <translate X="143.308" />
             <scale X="1.585" Y="1.585" Z="1.585"/>
             <models>

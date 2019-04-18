@@ -20,6 +20,7 @@ class TranslateDefault : public Translate{
 public:
     TranslateDefault(){transX =0; transY = 0; transZ = 0;};
     TranslateDefault(float x, float y, float z){this->transX = x; this->transY = y; this->transZ = z;};
+    void set(float x, float y, float z){this->transX = x; this->transY = y; this->transZ = z;};
     void applyTranslate() override {glTranslatef(transX,transY,transZ);};
 };
 
@@ -60,6 +61,7 @@ public:
     Group(Group *p);
     std::vector<Model> getModels(){return this->models;};
     std::vector<Group> getGroups(){return this->groups;};
+    void draw();
     void setCatMull(bool catMull){this->usingCatmull = catMull;};
     void setRotateWithTime(bool rotateWithTime){this->rotateWithTime = rotateWithTime;};
     void addGroup(Group *p){this->groups.push_back(std::move(p));};

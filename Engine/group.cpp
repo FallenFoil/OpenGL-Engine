@@ -9,6 +9,7 @@
 #endif
 
 #include <math.h>
+#include <vector>
 
 #include "group.h"
 #include "Model.h"
@@ -82,6 +83,8 @@ Group::Group(Group *g) {
     this->scaleX = g->scaleX; this->scaleY = g->scaleY; this->scaleZ = g->scaleZ;
     this->groups = g->groups;
     this->models = g->models;
+    this->translateDefault = g->translateDefault;
+    this->translateCatMull = g->translateCatMull;
     this->usingCatmull = g->usingCatmull;
     this->rotateWithTime = g->rotateWithTime;
 }
@@ -90,7 +93,7 @@ Group::Group(Group *g) {
 void Group::setTranslate(float x, float y, float z) {
     if(this->priority[TRANSLATE] >= 0)
         throw EngineException(std::string("Translate already set in a group"));
-    this->translateDefault = TranslateDefault(x,y,z);
+    this->translateDefault.set(x,y,z);
     this->priority[TRANSLATE] = this->numberOfTransformation++;
 }
 
@@ -130,12 +133,19 @@ void Group::applyTransformations(){
         if(transform == TRANSLATE) {
             if(this->usingCatmull)
                 translateCatMull.applyTranslate();
-            else translateDefault.applyTranslate();
+            else
+                translateDefault.applyTranslate();
         }
         if(transform == ROTATE){
             if(this->rotateWithTime){
                 float relativeTime = fmod(glutGet(GLUT_ELAPSED_TIME)/ 1000.0f, ang) / ang;
                 glRotatef(360*relativeTime, this->axisX, this->axisY, this->axisZ);
+                /*glBegin(GL_LINE_LOOP);
+                int pointCount = 100;
+                for (int i = 0; i < pointCount; i++) {
+                    glVertex3f(cos(), 0, sin());
+                }
+                glEnd();*/
             }
             else glRotatef(this->ang, this->axisX, this->axisY, this->axisZ);
         }
@@ -143,6 +153,25 @@ void Group::applyTransformations(){
             glScalef(this->scaleX, this->scaleY, this->scaleZ);
         }
     }
+}
+
+
+void Group::draw(){
+    glPushMatrix();
+    applyTransformations();
+    std::vector<Model> models = getModels();
+
+    for(auto model = models.begin(); model != models.end(); model++) {
+        Model m = *model;
+        m.draw();
+    }
+
+    std::vector<Group> childGroups = getGroups();
+    for(int i = 0; i < childGroups.size(); i++){
+        Group g = childGroups[i];
+        g.draw();
+    }
+    glPopMatrix();
 }
 
 void TranslateCatMull::applyTranslate() {
