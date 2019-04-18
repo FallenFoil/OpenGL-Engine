@@ -20,3 +20,9 @@ https://www.overleaf.com/9867978269qwnnzgnhxjsp
 **3º fase:**
 
 **4º fase:**
+
+## Contributors
+
+[Cesar Borges]https://github.com/CesarAugustoBorges
+[Guilherme Viveiros]https://github.com/GuilhermeViveiros
+[Luis Macedo]https://github.com/FallenFoil
