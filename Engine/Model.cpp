@@ -9,11 +9,16 @@
 #include <GL/glut.h>
 #endif
 
+#include <unordered_map>
 #include <cstring>
 #include <fstream>
 #include <stdlib.h>
+#include <string>
 #include "Model.h"
 #include "Ponto.h"
+
+//std::unordered_map<std::string, Model*> Model::modelsLoaded;
+
 
 Model::Model() {
     this->red = this->blue = this->green = 1;

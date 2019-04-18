@@ -11,9 +11,12 @@
 #include <GL/glut.h>
 #endif
 
+#include <unordered_map>
 #include <vector>
 #include <string>
 #include <utility>
+#include <string>
+#include <map>
 #include "Ponto.h"
 
 #define DEFAULT 0
@@ -25,9 +28,11 @@ class Model {
     int numberOfPoints;
     float red, green, blue;
     GLuint buffer;
-    std::vector<std::pair<int, int>> drawMode;
+    //std::vector<std::pair<int, int>> drawMode;
 
 public:
+    //static std::unordered_map<std::string, Model*> modelsLoaded;
+
     Model();
     Model(char* filePath);
     Model(Model *m);
@@ -40,6 +45,5 @@ public:
 private:
     void loadPoints();
 };
-
 
 #endif //CG_MODEL_H
