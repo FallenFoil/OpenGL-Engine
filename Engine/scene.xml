@@ -14,7 +14,7 @@
         </translate>
         <scale X="0.3" Y="0.3" Z="0.3"/>
         <models>
-            <model file="sphere.3d" R="80" G="80" B="80" />
+            <model file="teapot.3d" R="80" G="80" B="80" />
         </models>
     </group>
     <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
