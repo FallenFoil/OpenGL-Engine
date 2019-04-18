@@ -19,7 +19,7 @@
     </group>
     <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
         <group name="Mercury">
-            <rotate time="-87.97" axisX="0" axisY="1" axisZ="0"/>
+            <rotate time="87.97" axisX="0" axisY="1" axisZ="0"/>
             <translate X="13.579" />
             <scale X="0.322" Y="0.322" Z="0.322"/>
             <models>
@@ -27,7 +27,7 @@
             </models>
         </group>
         <group name="Venus">
-            <rotate time="224.7" axisX="0" axisY="1" axisZ="0"/>
+            <rotate time="-224.7" axisX="0" axisY="1" axisZ="0"/>
             <translate X="30.367" />
             <scale X="0.667" Y="0.667" Z="0.667"/>
             <models>
