@@ -175,7 +175,7 @@ void Group::draw(){
 }
 
 void TranslateCatMull::applyTranslate() {
-    renderCatmullRomCurve();
+    //renderCatmullRomCurve();
     //Transformations
     float pos[4];
     float deriv[4];
