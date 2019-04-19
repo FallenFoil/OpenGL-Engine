@@ -85,7 +85,7 @@ void drawAxes(){
  * Desenha as figuras dentro da estrutura da scene
  */
 void draw(){
-    drawAxes();
+   // drawAxes();
 
     vector<Group> groups = scene.getGroups();
     for(int i = 0; i < groups.size(); i++){
