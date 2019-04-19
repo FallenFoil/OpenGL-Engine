@@ -11,16 +11,13 @@
 
 ## Relatório – Overleaf
 
-**1º fase:**
-https://pt.overleaf.com/7212787832wtmrngvqfntd
+[1º fase](https://pt.overleaf.com/7212787832wtmrngvqfntd)
 
-**2º fase:**
-https://www.overleaf.com/9867978269qwnnzgnhxjsp
+[2º fase](https://www.overleaf.com/9867978269qwnnzgnhxjsp)
 
-**3º fase:**
-https://www.overleaf.com/4864235325khxcdxtvwqrj
+[3º fase:](https://www.overleaf.com/4864235325khxcdxtvwqrj)
 
-**4º fase:**
+[4º fase:]()
 
 ## Contributors
 
