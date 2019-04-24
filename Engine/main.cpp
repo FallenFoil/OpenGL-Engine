@@ -149,13 +149,11 @@ void processSpecialKeys(int key, int xx, int yy) {
             camAngle -= 1.5;
             newLx = camX + sin((camAngle * 3.14) / 180);
             newLz = camZ + cos((camAngle * 3.14) / 180);
-            cout << "LX" << newLx << " LZ" << newLz << endl;
             break;
         case GLUT_KEY_LEFT:
             camAngle += 1.5;
             newLx = camX + sin((camAngle * 3.14) / 180);
             newLz = camZ + cos((camAngle * 3.14) / 180);
-            cout << "LX" << newLx << " LZ" << newLz << endl;
             break;
         case GLUT_KEY_UP:
             camY += K;
