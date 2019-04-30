@@ -50,8 +50,6 @@ class Group {
     bool usingCatmull, rotateWithTime;
     float ang, axisX, axisY, axisZ;
     float scaleX, scaleY, scaleZ;
-    float camX, camY, camZ;
-    float lX, lY, lZ;
     int priority[3];
     TranslateDefault translateDefault;
     TranslateCatMull translateCatMull;
