@@ -25,10 +25,10 @@ int timebase = 0, frame = 0;
 
 //Camera Variables
 #define K 0.2f
-float camX = 0, camY=0, camZ = 0;
-float lX=0, lY=0, lZ=5;
+float camX = 0, camY=0, camZ = 50;
+float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
-float alpha = 0, beta = 0, radius = 5;
+float alpha = 3.1415, beta = 0, radius = 50;
 
 
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
@@ -119,7 +119,7 @@ void renderScene(void) {
     glLoadIdentity();
     gluLookAt(camX,camY,camZ,
               lX,lY,lZ,
-              0.0f,1.0f,0.0f);
+              upX,upY,upZ);
 
     drawAxes();
     draw();
@@ -305,7 +305,7 @@ Group loadGroup(XMLElement *group){
                 throw EngineException(string("There is no default tag \"") + child->Value() + "\"");
             }
         } catch (EngineException &e){
-            printf(e.what());
+            printf("%s", e.what());
             exit(1);
         }
         child = child->NextSiblingElement();
@@ -320,7 +320,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene3.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
