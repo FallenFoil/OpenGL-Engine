@@ -14,8 +14,6 @@
 #include "Scene.h"
 #include "EngineException.h"
 
-#define K 0.5f
-
 using namespace std;
 using namespace tinyxml2;
 
@@ -26,9 +24,11 @@ GLenum OPTION = GL_FILL;
 int timebase = 0, frame = 0;
 
 //Camera Variables
-float camX = 50, camY = 3, camZ = 50;
-float lX = 0, lY = 3, lZ = 0;
-float camAngle = 225;
+#define K 0.2f
+float camX = 0, camY=0, camZ = 50;
+float lX=0, lY=0, lZ=0;
+float upX=0, upY=1, upZ=0;
+float alpha = 3.1415, beta = 0, radius = 50;
 
 
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
@@ -110,8 +110,7 @@ void viewFramesPerSecond(){
 }
 
 void renderScene(void) {
-
-    // clear buffers
+        // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glPolygonMode(GL_FRONT_AND_BACK, OPTION);
@@ -120,8 +119,9 @@ void renderScene(void) {
     glLoadIdentity();
     gluLookAt(camX,camY,camZ,
               lX,lY,lZ,
-              0.0f,1.0f,0.0f);
+              upX,upY,upZ);
 
+    drawAxes();
     draw();
     viewFramesPerSecond();
 
@@ -129,124 +129,94 @@ void renderScene(void) {
     glutSwapBuffers();
 }
 
-/*
- * Teclas:
- *      up    => a camara vai para cima;
- *      down  => a camara vai para baixo;
- *      right  => a camara roda para direita;
- *      left => a camara roda para esquerda;
- */
+void sphericalToCartesian(int type){
+    if(type==1){
+        camX = lX + (radius * cos(beta) * sin(alpha));
+        camY = lY + (radius * sin(beta));
+        camZ = lZ + (radius * cos(beta) * cos(alpha));
+    }
+    if(type==2){
+        lX = camX + (5 * cos(beta) * sin(alpha));
+        lY = camY + (5 * sin(beta));
+        lZ = camZ + (5 * cos(beta) * cos(alpha));
+    }
+}
+
 void processSpecialKeys(int key, int xx, int yy) {
-    float newPx, newPz, newLx, newLz;
-    newPx = camX;
-    newPz = camZ;
-
-    newLx = lX;
-    newLz = lZ;
-
     switch (key) {
         case GLUT_KEY_RIGHT:
-            camAngle -= 1.5;
-            newLx = camX + sin((camAngle * 3.14) / 180);
-            newLz = camZ + cos((camAngle * 3.14) / 180);
-            cout << "LX" << newLx << " LZ" << newLz << endl;
+            alpha -= 0.1;
+            sphericalToCartesian(2);
             break;
         case GLUT_KEY_LEFT:
-            camAngle += 1.5;
-            newLx = camX + sin((camAngle * 3.14) / 180);
-            newLz = camZ + cos((camAngle * 3.14) / 180);
-            cout << "LX" << newLx << " LZ" << newLz << endl;
+            alpha += 0.1;
+            sphericalToCartesian(2);
             break;
         case GLUT_KEY_UP:
-            camY += K;
+            beta += 0.1f;
+            if (beta >= 1.57f){beta = 1.57f;}
+            sphericalToCartesian(2);
             break;
         case GLUT_KEY_DOWN:
-            camY -= K;
+            beta -= 0.1f;
+            if (beta <= -1.57f){beta = -1.57f;}
+            sphericalToCartesian(2);
             break;
         default:
             break;
     }
-
-    camX = newPx;
-    camZ = newPz;
-    lX = newLx;
-    lZ = newLz;
-
-    lY=camY;
 
     glutPostRedisplay();
 }
 
-/*
- * Teclas:
- *      w => a camara vai para frente;
- *      s => a camara vai para tras;
- *      d => a camara vai para direita;
- *      a => a camara vai para esquerda;
- *      1 => Muda opção de visualização para FILL
- *      2 => Muda opção de visualização para LINE
- *      3 => Muda opção de visualização para POINT
- */
 void processKeys(unsigned char key, int xx, int yy) {
-    float newPx, newPz, newLx, newLz, dX, dZ, rX, rZ;
-    newPx = camX;
-    newPz = camZ;
-
-    newLx = lX;
-    newLz = lZ;
-
-    dX = lX - camX;
-    dZ = lZ - camZ;
+    float dX = lX - camX;
+    float dY = lY - camY;
+    float dZ = lZ - camZ;
+    float rX,rY,rZ;
 
     switch(key){
         case 'w':
-            newPx = camX + K*dX;
-            newPz = camZ + K*dZ;
-            newLx = lX + K*dX;
-            newLz = lZ + K*dZ;
+            camX = camX + K*dX;
+            camY = camY + K*dY;
+            camZ = camZ + K*dZ;
+            lX = lX + K*dX;
+            lY = lY + K*dY;
+            lZ = lZ + K*dZ;
             break;
         case 's':
-            newPx = camX - K*dX;
-            newPz = camZ - K*dZ;
-            newLx = lX - K*dX;
-            newLz = lZ - K*dZ;
+            camX = camX - K*dX;
+            camY = camY - K*dY;
+            camZ = camZ - K*dZ;
+            lX = lX - K*dX;
+            lY = lY - K*dY;
+            lZ = lZ - K*dZ;
             break;
         case 'a':
             rX = -dZ;
+            rY = 0;
             rZ = dX;
-            newPx = camX - K*rX;
-            newPz = camZ - K*rZ;
-            newLx = lX - K*rX;
-            newLz = lZ - K*rZ;
+            camX = camX - K*rX;
+            camY = camY - K*rY;
+            camZ = camZ - K*rZ;
+            lX = lX - K*rX;
+            lY = lY - K*rY;
+            lZ = lZ - K*rZ;
             break;
         case 'd':
             rX = -dZ;
+            rY = 0;
             rZ = dX;
-            newPx = camX + K*rX;
-            newPz = camZ + K*rZ;
-            newLx = lX + K*rX;
-            newLz = lZ + K*rZ;
-            break;
-        case '1':
-            OPTION = GL_FILL;
-            break;
-        case '2':
-            OPTION = GL_LINE;
-            break;
-        case '3':
-            OPTION = GL_POINT;
+            camX = camX + K*rX;
+            camY = camY + K*rY;
+            camZ = camZ + K*rZ;
+            lX = lX + K*rX;
+            lY = lY + K*rY;
+            lZ = lZ + K*rZ;
             break;
         default:
             break;
     }
-
-    camX = newPx;
-    camZ = newPz;
-    lX = newLx;
-    lZ = newLz;
-
-    //camY = hf(camX, camZ) + 3;
-    lY=camY;
 
     glutPostRedisplay();
 }
@@ -335,7 +305,7 @@ Group loadGroup(XMLElement *group){
                 throw EngineException(string("There is no default tag \"") + child->Value() + "\"");
             }
         } catch (EngineException &e){
-            printf(e.what());
+            printf("%s", e.what());
             exit(1);
         }
         child = child->NextSiblingElement();
@@ -350,7 +320,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene3.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){

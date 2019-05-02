@@ -182,6 +182,8 @@ void TranslateCatMull::applyTranslate() {
     float relativeTime = fmod(glutGet(GLUT_ELAPSED_TIME)/ 1000.0f, transTime) / transTime;
     getGlobalCatmullRomPoint(relativeTime, pos, deriv);
 
+
+
     float* m = (float*) malloc(sizeof(float) * 16);
     float xi[3] = {deriv[0], deriv[1], deriv[2]};
     float zi[3], yi[3];
