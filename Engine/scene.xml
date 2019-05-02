@@ -86,7 +86,7 @@
             <translate X="108.607" />
             <scale X="2.346" Y="2.346" Z="2.346"/>
             <group>
-                <rotate time="0.41" axisX="0" axisY="1" axisZ="0"/>
+                <rotate time="0.43" axisX="0" axisY="1" axisZ="0"/>
                 <models>
                     <model file="sphere.3d"  R="210" G="140" B="140"/>
                 </models>
