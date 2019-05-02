@@ -234,8 +234,8 @@ Model loadModel(XMLElement *model){
 
 void loadTranslation(XMLElement *trans, Group *group){
     if(trans->FindAttribute("time") != nullptr){
-        group->setCatMull(true);
-        group->setTransTime(getAttributeOrDefault(trans, "time", 0));
+        auto *t = new TranslateCatMull();
+        t->setTransTime(getAttributeOrDefault(trans, "time", 0));
         XMLElement *child = trans->FirstChildElement();
         while(child){
             if(strcmp(child->Value(), "point") == 0){
@@ -243,36 +243,37 @@ void loadTranslation(XMLElement *trans, Group *group){
                 transX = getAttributeOrDefault(child, "X", 0);
                 transY = getAttributeOrDefault(child, "Y", 0);
                 transZ = getAttributeOrDefault(child, "Z", 0);
-                group->addPointToTranslation(transX, transY, transZ);
+                t->addPointToTranslation(transX, transY, transZ);
             } else {
                 throw EngineException(string("There is no default tag in translation \"") + child->Value() + "\"");
             }
             child = child->NextSiblingElement();
         }
-        group->setTranslate(0,0,0);
+        group->setTranslate(t);
     } else {
-        group->setCatMull(false);
         float transX, transY, transZ;
         transX = getAttributeOrDefault(trans, "X", 0);
         transY = getAttributeOrDefault(trans, "Y", 0);
         transZ = getAttributeOrDefault(trans, "Z", 0);
-        group->setTranslate(transX, transY, transZ);
+        auto *t = new TranslateDefault(transX, transY, transZ);
+        group->setTranslate(t);
     }
 }
 
 void loadRotate(XMLElement *rotate, Group *group){
     float ang, axisX, axisY, axisZ;
-    if(rotate->FindAttribute("time") != nullptr){
-        group->setRotateWithTime(true);
-        ang = getAttributeOrDefault(rotate, "time", 0);
-    } else {
-        group->setRotateWithTime(false);
-        ang = getAttributeOrDefault(rotate, "ang", 0);
-    }
     axisX = getAttributeOrDefault(rotate, "axisX", 0);
     axisY = getAttributeOrDefault(rotate, "axisY", 0);
     axisZ = getAttributeOrDefault(rotate, "axisZ", 0);
-    group->setRotate(ang, axisX, axisY, axisZ);
+    if(rotate->FindAttribute("time") != nullptr){
+        ang = getAttributeOrDefault(rotate, "time", 0);
+        RotateWithTime *r = new RotateWithTime(ang, axisX, axisY, axisZ);
+        group->setRotate(r);
+    } else {
+        ang = getAttributeOrDefault(rotate, "ang", 0);
+        RotateDefault *r = new RotateDefault(ang, axisX, axisY, axisZ);
+        group->setRotate(r);
+    }
 }
 
 Group loadGroup(XMLElement *group){
@@ -290,7 +291,8 @@ Group loadGroup(XMLElement *group){
                 scaleX = getAttributeOrDefault(child, "X", 1);
                 scaleY = getAttributeOrDefault(child, "Y", 1);
                 scaleZ = getAttributeOrDefault(child, "Z", 1);
-                g.setScale(scaleX, scaleY, scaleZ);
+                auto *s = new Scale(scaleX, scaleY, scaleZ);
+                g.setScale(s);
             } else if (strcmp(child->Value(), "group") == 0) {
                 toAdd = loadGroup(child);
                 g.addGroup(&toAdd);
@@ -320,7 +322,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene3.xml" );
+    doc.LoadFile( "../scene.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
