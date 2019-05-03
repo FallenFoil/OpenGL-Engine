@@ -30,6 +30,10 @@ Model::Model(char* filepath)  {
     this->filePath = (char*) malloc(strlen(filepath) + 1);
     std::strcpy(this->filePath, filepath);
     loadPoints();
+    dColor = nullptr;
+    sColor = nullptr;
+    eColor = nullptr;
+    aColor = nullptr;
 }
 
 Model::Model(Model *m){
@@ -37,6 +41,10 @@ Model::Model(Model *m){
     this->red = m->red;
     this->blue = m->blue;
     this->green = m->green;
+    this->dColor = m->dColor;
+    this->sColor = m->sColor;
+    this->eColor = m->eColor;
+    this->aColor = m->aColor;
 }
 
 char* Model::getFilePath() {
@@ -103,6 +111,10 @@ void Model::applyColour() {
 
 void Model::draw(){
     applyColour();
+    if(dColor != nullptr) dColor->applyColor();
+    if(sColor != nullptr) sColor->applyColor();
+    if(eColor != nullptr)eColor->applyColor();
+    if(aColor != nullptr) aColor->applyColor();
 
     glBindBuffer(GL_ARRAY_BUFFER,getBuffer());
     glVertexPointer(3,GL_FLOAT,0,0);

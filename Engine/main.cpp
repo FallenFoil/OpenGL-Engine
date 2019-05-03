@@ -36,6 +36,10 @@ float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultV
     return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
 }
 
+float getAttributeOrDefault(XMLElement *element, std::string atr, float defaultValue){
+    return getAttributeOrDefault(element, atr.c_str(), defaultValue);
+}
+
 void changeSize(int w, int h) {
 
     // Prevent a divide by zero, when window is too short
@@ -224,11 +228,20 @@ void processKeys(unsigned char key, int xx, int yy) {
 Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
     float red,green,blue;
-    red = getAttributeOrDefault(model, "R", 255);
-    green = getAttributeOrDefault(model, "G", 255);
-    blue = getAttributeOrDefault(model, "B", 255);
-    m.setColour(red/255, green/255, blue/255);
-
+    std::string colors[] = {"", "diff", "spec", "emiss", "ambi"};
+    for(int i = 0; i < colors->length(); i++){
+        red = getAttributeOrDefault(model, colors[i] + "R", 0);
+        green = getAttributeOrDefault(model, colors[i] + "G", 0);
+        blue = getAttributeOrDefault(model, colors[i] + "B", 0);
+        switch(i){
+            case 0: m.setColour(red, green, blue); break;
+            case 1: m.setDiffuseColor(red, green, blue); break;
+            case 2: m.setSpecularColor(red, green, blue); break;
+            case 3: m.setEmissiveColor(red, green, blue); break;
+            case 4: m.setAmbientColor(red, green, blue); break;
+            default: break;
+        }
+    }
     return m;
 }
 
@@ -322,7 +335,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene3.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
