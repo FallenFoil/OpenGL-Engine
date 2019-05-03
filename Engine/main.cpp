@@ -29,6 +29,7 @@ float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
 float alpha = 3.1415, beta = 0, radius = 50;
+int mode=0;
 
 
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
@@ -133,16 +134,16 @@ void renderScene(void) {
     glutSwapBuffers();
 }
 
-void sphericalToCartesian(int type){
-    if(type==1){
+void sphericalToCartesian(){
+    if(mode==1){
         camX = lX + (radius * cos(beta) * sin(alpha));
         camY = lY + (radius * sin(beta));
         camZ = lZ + (radius * cos(beta) * cos(alpha));
     }
-    if(type==2){
-        lX = camX + (5 * cos(beta) * sin(alpha));
-        lY = camY + (5 * sin(beta));
-        lZ = camZ + (5 * cos(beta) * cos(alpha));
+    if(mode==0){
+        lX = camX + (radius * cos(beta) * sin(alpha));
+        lY = camY + (radius * sin(beta));
+        lZ = camZ + (radius * cos(beta) * cos(alpha));
     }
 }
 
@@ -150,21 +151,21 @@ void processSpecialKeys(int key, int xx, int yy) {
     switch (key) {
         case GLUT_KEY_RIGHT:
             alpha -= 0.1;
-            sphericalToCartesian(2);
+            sphericalToCartesian();
             break;
         case GLUT_KEY_LEFT:
             alpha += 0.1;
-            sphericalToCartesian(2);
+            sphericalToCartesian();
             break;
         case GLUT_KEY_UP:
             beta += 0.1f;
             if (beta >= 1.57f){beta = 1.57f;}
-            sphericalToCartesian(2);
+            sphericalToCartesian();
             break;
         case GLUT_KEY_DOWN:
             beta -= 0.1f;
             if (beta <= -1.57f){beta = -1.57f;}
-            sphericalToCartesian(2);
+            sphericalToCartesian();
             break;
         default:
             break;
@@ -217,6 +218,29 @@ void processKeys(unsigned char key, int xx, int yy) {
             lX = lX + K*rX;
             lY = lY + K*rY;
             lZ = lZ + K*rZ;
+            break;
+        case 'i':
+            camY += K;
+            lY += K;
+            break;
+        case 'j':
+            camY -= K;
+            lY -= K;
+            break;
+        case 'm':
+            //if(mode==0){mode=1;}
+            //else{mode=0;}
+            //alpha=0;
+            //beta=0;
+            break;
+        case '1':
+            OPTION = GL_FILL;
+            break;
+        case '2':
+            OPTION = GL_LINE;
+            break;
+        case '3':
+            OPTION = GL_POINT;
             break;
         default:
             break;
@@ -335,7 +359,7 @@ void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
     XMLDocument doc;
-    doc.LoadFile( "../scene.xml" );
+    doc.LoadFile( "../scene2.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
