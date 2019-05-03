@@ -86,39 +86,34 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
 
 
     //Triangulo esquerdo
-    ss << "##Strips" << endl;
-
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    Ponto a = Ponto(x,y,z);
-    ss << a.toString() << endl;
+    ss << x << " " << y << " " << z << endl;
+
     //C
-    //x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    //Ponto c = Ponto(x,y,z);
-    //ss << c.toString() << endl;
+    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
+    ss << x << " " << y << " " << z << endl;
+
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
-    Ponto d = Ponto(x,y,z);
-    ss << d.toString() << endl;
+    ss << x << " " << y << " " << z << endl;
 
     //Triangulo direito
+
+    //C
+    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
+    ss << x << " " << y << " " << z << endl;
+
+    //A
+    x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
+    ss << x << " " << y << " " << z << endl;
 
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
-    Ponto b = Ponto(x,y,z);
-    ss << b.toString() << endl;
-    //C
-    x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
-    Ponto c = Ponto(x,y,z);
-    ss << c.toString() << endl;
-    //A
-    //x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
-    //a = Ponto(x,y,z);
-    //ss << a.toString() << endl;
-   
+    ss << x << " " << y << " " << z << endl;
 
     return ss.str();
 }
@@ -137,9 +132,7 @@ string createSpherePoint(float alpha, float beta, float radius){
     z = radius * cos(beta) * cos(alpha);
     x = radius * cos(beta) * sin(alpha);
     y = radius * sin(beta);
-    Ponto a = Ponto(x,y,z);
 
-    //ss << a.toString() << endl;
     ss << x << " " << y << " " << z << endl;
 
     return ss.str();
@@ -167,21 +160,22 @@ string createSphere(float radius, int slices, int stacks){
 
     ss << nPontos << endl;
 
-    ss << "##Strips" << endl;
-
     float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
 
     for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
         for(int j = 0; j < slices; j++){
+            if(i != (stacks/2.0f)-1){
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
+            }
 
-                //algoritmo da strip 
-                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);//A
-                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);//C
+            if(i != -(stacks/2.0f)){
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
+            }
         }
-
-        ss << createSpherePoint(0, oneStack*(i+1), radius);//A
-        ss << createSpherePoint(0, oneStack*i, radius);//C
-            
     }
 
     return ss.str();
@@ -202,9 +196,7 @@ string createConePoint(float alpha, float radius, float height){
     y = height;
     z = radius * cos(alpha);
 
-    Ponto a = Ponto(x,y,z);
-
-    ss << a.toString() << endl;
+    ss << x << " " << y << " " << z << endl;
 
     return ss.str();
 }
@@ -223,42 +215,40 @@ string createCone(double radius, double height, int slices, int stacks){
     int nPontos = (6 * slices * stacks);
 
     ss << nPontos << endl;//Numero de vertices
-    
+
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
     int j = 0, i = 0;
 
-    ss << "##FAN";
-    //Origem da base
-
-    //fan
-	ss << " 0 0 0" << endl;
-	for(i=0;i<slices;i++){
-		ss << createConePoint(oneSlice*i, radiusAux, 0);	
-	}
-	createConePoint(0,radiusAux,0);	
-
-    ss << "##STRIP";
-
-    for (int j = 0; j < stacks; j++){
+    for (int j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
         for(i = 0; i < slices; i++){
-           
-            //Face
-            
+            if(j == 0){
+                //Base
                 //A
-                ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
-                //C
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-
+                //Origem
+                ss << "0 0 0" << endl;
+                //B
+                ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
             }
-           
+            //Face
+            if(j!=stacks-1){
+                //A
+                ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                //C
+                ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+                //D
+                ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+            }
+            //C
+            ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
             //A
-            ss << createConePoint(oneSlice*i, radiusAux, oneStack*(j+1));
-            //B
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
-            
-            radiusAux = smallRadius;    
+            //B
+            ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
         }
+        radiusAux = smallRadius;
+    }
 
     return ss.str();
 }
@@ -347,7 +337,6 @@ string createBezierPatches(){
     stringstream ss1;
     stringstream ss2;
     int pointscount = 0;
-    ss2 << "##Triangles" << endl;
 
     for (int p = 0; p < nPatches; p++) {
         for (int u = 0; u < resU-1; u++) {
