@@ -77,6 +77,7 @@ public:
     Model(Model *m);
     char* getFilePath();
     int getNumberOfPoints();
+    void setTexture(std::string *texture){this->texturePath = texture;};
     void setColour(float red, float green, float blue){this->red = red; this->green = green; this->blue = blue;};
     void setDiffuseColor(float red, float green, float blue){dColor = new DiffuseColor(red, green, blue);};
     void setSpecularColor(float red, float green, float blue){sColor = new SpecularColor(red, green, blue);};

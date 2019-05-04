@@ -32,6 +32,11 @@ float alpha = 3.1415, beta = 0, radius = 50;
 int mode=0;
 
 
+std::string getAttributeOrDefault(XMLElement *element, const char* atr, std::string defaultValue){
+    const XMLAttribute *atrXml = element->FindAttribute(atr);
+    return atrXml == nullptr ? defaultValue : atrXml->Value();
+}
+
 float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
     return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
@@ -251,19 +256,26 @@ void processKeys(unsigned char key, int xx, int yy) {
 
 Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
+    std::string *texturePath = new std::string(getAttributeOrDefault(model, "texture", ""));
+    m.setTexture(texturePath);
     float red,green,blue;
     std::string colors[] = {"", "diff", "spec", "emiss", "ambi"};
     for(int i = 0; i < 5; i++){
-        red = getAttributeOrDefault(model, colors[i] + "R", 0);
-        green = getAttributeOrDefault(model, colors[i] + "G", 0);
-        blue = getAttributeOrDefault(model, colors[i] + "B", 0);
-        switch(i){
-            case 0: m.setColour(red, green, blue); break;
-            case 1: m.setDiffuseColor(red, green, blue); break;
-            case 2: m.setSpecularColor(red, green, blue); break;
-            case 3: m.setEmissiveColor(red, green, blue); break;
-            case 4: m.setAmbientColor(red, green, blue); break;
-            default: break;
+        red = getAttributeOrDefault(model, colors[i] + "R", -1);
+        green = getAttributeOrDefault(model, colors[i] + "G", -1);
+        blue = getAttributeOrDefault(model, colors[i] + "B", -1);
+
+        if(red >= 0 && green >= 0 && blue >= 0)
+            switch(i){
+                case 0: m.setColour(red, green, blue); break;
+                case 1: m.setDiffuseColor(red, green, blue); break;
+                case 2: m.setSpecularColor(red, green, blue); break;
+                case 3: m.setEmissiveColor(red, green, blue); break;
+                case 4: m.setAmbientColor(red, green, blue); break;
+                default: break;
+            }
+        else if(red >= 0 || green >= 0 || blue >= 0) {
+            throw EngineException("R, G and B attributes are all required to define color: " + colors[i]);
         }
     }
     return m;
