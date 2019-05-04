@@ -161,19 +161,85 @@ string createSphere(float radius, int slices, int stacks){
     ss << nPontos << endl;
 
     float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
+    float textSlice = 1.0f / slices, textStack = 1.0f / stacks;
 
     for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
         for(int j = 0; j < slices; j++){
             if(i != (stacks/2.0f)-1){
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << j*textSlice << " " << i*textStack << endl;
+
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
+                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), 1);
+                ss << j*textSlice << " " << (i+1)*textStack << endl;
             }
 
             if(i != -(stacks/2.0f)){
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
+                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << (j)*textSlice << " " << (i)*textStack << endl;
+
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, 1);
+                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+            }
+        }
+    }
+
+    return ss.str();
+}
+
+string createReverseSphere(float radius, int slices, int stacks){
+    stringstream ss;
+
+    if(slices < 3 || stacks < 2){
+        return string();
+    }
+
+    int nPontos = (6 * slices * stacks) - (6 * slices);
+
+    ss << nPontos << endl;
+
+    float oneSlice = (float) (2 * M_PI)/slices, oneStack = (float) (M_PI)/stacks;
+    float textSlice = 1.0f / slices, textStack = 1.0f / stacks;
+
+    for(float i = -(stacks/2.0f); i < (stacks/2.0f); i++){
+        for(int j = 0; j < slices; j++){
+            if(i != (stacks/2.0f)-1){
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
+                ss << (j)*textSlice << " " << (i)*textStack << endl;
+
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*(j), oneStack*(i+1), 1);
+                ss << (j)*textSlice << " " << (i+1)*textStack << endl;
+
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
+                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+            }
+
+            if(i != -(stacks/2.0f)){
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
+                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i), 1);
+                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+
+                ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
+                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
+                ss << (j)*textSlice << " " << (i)*textStack << endl;
             }
         }
     }
@@ -291,19 +357,22 @@ void fillBigP(int p, float bigPX[], float bigPY[], float bigPZ[]){
 string getBezier(float ru, float rv, int p){
     float v = 1.0 * rv / (resV-1);
     float u = 1.0 * ru / (resU-1);
+
     float bigPX[4*4];
     float bigPY[4*4];
     float bigPZ[4*4];
+
     float bigBX[1];
     float bigBY[1];
     float bigBZ[1];
+
     float part1[4], part2[4];
     float bigU[] = {1, u, u*u, u*u*u};
     float bigV[] = {1, v, v*v, v*v*v};
 
-    float bigM[] = {  1, 0, 0,0,
+    float bigM[] = {   1, 0, 0,0,
                       -3, 3, 0,0,
-                      3,-6, 3,0,
+                       3,-6, 3,0,
                       -1, 3,-3,1};
     float bigMTrans[] = {  1,-3, 3,-1,
                            0, 3,-6, 3,
@@ -466,6 +535,21 @@ int main(int argc, char** argv){
 
         file.open(argv[5]);
         file << createSphere(atof(argv[2]), atof(argv[3]), atof(argv[4]));
+
+        return 0;
+    }
+    if(shape.compare("ReverseSphere")==0 || shape.compare("reversesphere")==0){
+        if(argc<5){
+            printf("Required Radius, Slices and Stacks.\n");
+            exit(EXIT_FAILURE);
+        }
+        if(argc<6){
+            printf("Required file name.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        file.open(argv[5]);
+        file << createReverseSphere(atof(argv[2]), atof(argv[3]), atof(argv[4]));
 
         return 0;
     }
