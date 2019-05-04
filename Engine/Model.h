@@ -61,12 +61,13 @@ class Model {
     char *filePath;
     int numberOfPoints;
     float red, green, blue;
-    GLuint buffer;
+    std::string *texturePath;
+    unsigned int texture;
+    GLuint buffer[3];
     DiffuseColor *dColor;
     SpecularColor *sColor;
     EmissiveColor *eColor;
     AmbientColor *aColor;
-    //std::vector<std::pair<int, int>> drawMode;
 
 public:
     //static std::unordered_map<std::string, Model*> modelsLoaded;
@@ -82,10 +83,10 @@ public:
     void setEmissiveColor(float red, float green, float blue){eColor = new EmissiveColor(red, green, blue);};
     void setAmbientColor(float red, float green, float blue){aColor = new AmbientColor(red, green, blue);};
     void applyColour();
-    GLuint getBuffer();
     void draw();
 private:
     void loadPoints();
+    void loadTexture();
 };
 
 #endif //CG_MODEL_H

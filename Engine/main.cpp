@@ -253,7 +253,7 @@ Model loadModel(XMLElement *model){
     Model m = Model((char*) model->FindAttribute("file")->Value());
     float red,green,blue;
     std::string colors[] = {"", "diff", "spec", "emiss", "ambi"};
-    for(int i = 0; i < colors->length(); i++){
+    for(int i = 0; i < 5; i++){
         red = getAttributeOrDefault(model, colors[i] + "R", 0);
         green = getAttributeOrDefault(model, colors[i] + "G", 0);
         blue = getAttributeOrDefault(model, colors[i] + "B", 0);
@@ -378,6 +378,8 @@ int main(int argc, char** argv) {
     glutInitWindowSize(1000,800);
     glutCreateWindow("MyWindow");
     glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     //Required callback registry
     glutDisplayFunc(renderScene);

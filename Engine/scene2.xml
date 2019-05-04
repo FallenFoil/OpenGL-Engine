@@ -3,7 +3,7 @@
         <group name="Halley">
             <translate X="0.5" Y="0.5" Z="0.5"/>
             <models>
-                <model file="sphere.3d" R="30" G="30" B="30" />
+                <model file="../3d_Models/sphere.3d" R="255" G="0" B="0" />
             </models>
         </group>
     </group>
