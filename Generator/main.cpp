@@ -74,6 +74,10 @@ string createBox(float width, float height, float depth,  int stacks, int slices
  * direction é a direção do plano, varia entre 1 e -1. 1 é um plano normal e -1 é o inverso.
  *
  * Retorna uma string com os vertice do plano
+ *
+ * D - C
+ * |   |
+ * A - B
  */
 string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float sizeZ, int direction){
     float x, y=0, z;
@@ -90,30 +94,42 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 0 << endl;
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 1 << endl;
 
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 1 << endl;
 
     //Triangulo direito
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 1 << endl;
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 0 << endl;
 
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 0 << endl;
 
     return ss.str();
 }
@@ -168,29 +184,29 @@ string createSphere(float radius, int slices, int stacks){
             if(i != (stacks/2.0f)-1){
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
-                ss << j*textSlice << " " << i*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), 1);
-                ss << j*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
             }
 
             if(i != -(stacks/2.0f)){
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, 1);
-                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
             }
         }
     }
@@ -216,30 +232,30 @@ string createReverseSphere(float radius, int slices, int stacks){
         for(int j = 0; j < slices; j++){
             if(i != (stacks/2.0f)-1){
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i+1), 1);
-                ss << (j)*textSlice << " " << (i+1)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), 1);
+                ss << (j)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
             }
 
             if(i != -(stacks/2.0f)){
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i), 1);
-                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, 1);
+                ss << (j+1)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
             }
         }
     }
@@ -267,15 +283,56 @@ string createConePoint(float alpha, float radius, float height){
     return ss.str();
 }
 
+void normalize(float *a) {
+
+    float l = sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+    a[0] = a[0]/l;
+    a[1] = a[1]/l;
+    a[2] = a[2]/l;
+}
+
+void cross(float *a, float *b, float *res) {
+
+    res[0] = a[1]*b[2] - a[2]*b[1];
+    res[1] = a[2]*b[0] - a[0]*b[2];
+    res[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+string createConeNormal(int i, int j, double oneSlice, double oneStack, float radius, float smallRadius){
+    float a[3] = {0,0,0};
+    float v1[3] = {0,0,0};
+    float v2[3] = {0,0,0};
+    stringstream ss;
+
+    v1[0] = radius*sin(oneSlice*(i+1)) - radius*sin(oneSlice*(i-1));
+    v1[1] = 0;
+    v1[2] = radius*cos(oneSlice*(i+1)) - radius*cos(oneSlice*(i-1));
+
+    v2[0] = smallRadius*sin(oneSlice*i) - radius*sin(oneSlice*i);
+    v2[1] = oneStack*(j+1)-oneStack*j;
+    v2[2] = smallRadius*cos(oneSlice*i) - radius*cos(oneSlice*i);
+
+    cross(v1,v2,a);
+
+    normalize(a);
+    ss << a[0] << " " << a[1] << " " << a[2] << endl;
+
+    return ss.str();
+}
+
 /*
  * Calcula os pontos de um cone construido por triangulos
  *
  * Recebe o raio da base, a altura, o numero de fatias e o numero de andares do cone.
  *
  * Retorna uma string com todos os pontos do cone.
+ *
+ * D--C
+ * |  |
+ * A--B
  */
 string createCone(double radius, double height, int slices, int stacks){
-    if(slices < 3 || stacks < 3) return string();
+    if(slices < 3 || stacks < 1) return string();
 
     stringstream ss;
     int nPontos = (6 * slices * stacks);
@@ -283,35 +340,61 @@ string createCone(double radius, double height, int slices, int stacks){
     ss << nPontos << endl;//Numero de vertices
 
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
+    float textSlice = 1.0f / slices, textStack = 1.0f / (stacks+1);
     int j = 0, i = 0;
 
-    for (int j = 0; j < stacks; ++j){
+    for (j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
         for(i = 0; i < slices; i++){
             if(j == 0){
                 //Base
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                ss << "0 -1 0" << endl;
+                ss << i*textSlice << " " << (j+1)*textStack << endl;
+
                 //Origem
                 ss << "0 0 0" << endl;
+                ss << "0 -1 0" << endl;
+                ss << "0 0" << endl;
+
                 //B
                 ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+                ss << "0 -1 0" << endl;
+                ss << (i+1)*textSlice << " " << (j+1)*textStack << endl;
             }
             //Face
             if(j!=stacks-1){
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << i*textSlice << " " << (j+1)*textStack << endl;
+
+
                 //C
                 ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i+1)*textSlice << " " << (j+2)*textStack << endl;
+
                 //D
                 ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i)*textSlice << " " << (j+2)*textStack << endl;
             }
             //C
             ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << (j+2)*textStack << endl;
+
             //A
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << i*textSlice << " " << (j+1)*textStack << endl;
+
             //B
             ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << (j+1)*textStack << endl;
         }
         radiusAux = smallRadius;
     }
