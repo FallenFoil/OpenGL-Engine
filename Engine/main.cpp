@@ -18,6 +18,7 @@ using namespace std;
 using namespace tinyxml2;
 
 Scene scene;
+XMLDocument doc;
 GLenum OPTION = GL_FILL;
 
 //Frames per second Variables
@@ -364,13 +365,57 @@ Group loadGroup(XMLElement *group){
     return g;
 }
 
+void loadLights(){
+    XMLElement *child;
+    child = doc.FirstChildElement( "scene" )->FirstChildElement( "lights");
+    if(child) child = child->FirstChildElement();
+    while(child){
+        short id = 0;
+        if(strcmp(child->Value(), "light") == 0){
+            string type = getAttributeOrDefault(child, "type", "");
+
+            if(type == string("")) throw EngineException("type attribute is required in a light");
+
+            if(type == string("POINT")){
+                float posX, posY, posZ;
+                posX = getAttributeOrDefault(child, "posX", 0);
+                posY = getAttributeOrDefault(child, "posY", 0);
+                posZ = getAttributeOrDefault(child, "posZ", 0);
+                auto *l = new PointLight(id, posX, posY, posZ);
+                scene.addLight(l);
+            } else if(type == string("DIRECTIONAL")){
+                float dirX, dirY, dirZ;
+                dirX = getAttributeOrDefault(child, "dirX", 0);
+                dirY = getAttributeOrDefault(child, "dirY", 0);
+                dirZ = getAttributeOrDefault(child, "dirZ", 0);
+                auto *l = new DiretionalLight(id, dirX, dirY, dirZ);
+                scene.addLight(l);
+            } else if (type == string("SPOT")){
+                float posX, posY, posZ, dirX, dirY, dirZ;
+                posX = getAttributeOrDefault(child, "posX", 0);
+                posY = getAttributeOrDefault(child, "posY", 0);
+                posZ = getAttributeOrDefault(child, "posZ", 0);
+                dirX = getAttributeOrDefault(child, "dirX", 0);
+                dirY = getAttributeOrDefault(child, "dirY", 0);
+                dirZ = getAttributeOrDefault(child, "dirZ", 0);
+                auto *l = new SpotLight(id, posX, posY, posZ, dirX, dirY, dirZ);
+                scene.addLight(l);
+            } else{
+                throw EngineException(string("There is no default type: ") + type);
+            }
+        }
+        else throw EngineException(string("tag") + child->Value() + string("not recognized in <lights> </lights>"));
+    }
+}
+
+
+
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
 void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
-    XMLDocument doc;
     doc.LoadFile( "../scene2.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
@@ -379,6 +424,7 @@ void loadScene() {
         scene.addGroup(group);
         child = child->NextSiblingElement( "group");
     }
+    loadLights();
     printf("Finished loading Scene!!!\n");
 }
 
