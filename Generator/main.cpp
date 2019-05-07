@@ -480,7 +480,62 @@ string getBezier(float ru, float rv, int p){
     multMatrixVector(part1, 1, auxZ, bigBZ);
 
     stringstream ss;
-    ss << bigBX[0] << " " << bigBY[0] << " " << bigBZ[0];
+    ss << bigBX[0] << " " << bigBY[0] << " " << bigBZ[0] << endl;
+
+    //Normal
+    float bigUDeriv[] = {0, 1, 2*u, 3*u*u};
+    float bigVDeriv[] = {0, 1, 2*v, 3*v*v};
+
+    //Derivada U
+    float bigBXDerivU[1];
+    float bigBYDerivU[1];
+    float bigBZDerivU[1];
+
+    multVectorMatrix(bigUDeriv, bigM, part1);
+    multMatrixVector(bigMTrans, 4, bigV, part2);
+
+    multMatrixVector(bigPX, 4, part2, auxX);
+    multMatrixVector(bigPY, 4, part2, auxY);
+    multMatrixVector(bigPZ, 4, part2, auxZ);
+
+    multMatrixVector(part1, 1, auxX, bigBXDerivU);
+    multMatrixVector(part1, 1, auxY, bigBYDerivU);
+    multMatrixVector(part1, 1, auxZ, bigBZDerivU);
+
+    //Derivada V
+    float bigBXDerivV[1];
+    float bigBYDerivV[1];
+    float bigBZDerivV[1];
+
+    multVectorMatrix(bigU, bigM, part1);
+    multMatrixVector(bigMTrans, 4, bigVDeriv, part2);
+
+    multMatrixVector(bigPX, 4, part2, auxX);
+    multMatrixVector(bigPY, 4, part2, auxY);
+    multMatrixVector(bigPZ, 4, part2, auxZ);
+
+    multMatrixVector(part1, 1, auxX, bigBXDerivV);
+    multMatrixVector(part1, 1, auxY, bigBYDerivV);
+    multMatrixVector(part1, 1, auxZ, bigBZDerivV);
+
+    //Cross
+    float bigBDeriv[3];
+    float derivU[3];
+    float derivV[3];
+
+    derivU[0] = bigBXDerivU[0];
+    derivU[1] = bigBYDerivU[0];
+    derivU[2] = bigBZDerivU[0];
+
+    derivV[0] = bigBXDerivV[0];
+    derivV[1] = bigBYDerivV[0];
+    derivV[2] = bigBZDerivV[0];
+
+    cross(derivU,derivV, bigBDeriv);
+    ss << bigBDeriv[0] << " " << bigBDeriv[1] << " " << bigBDeriv[2] << endl;
+
+    //Textura
+    ss << 0 << " " << 0 << endl;
 
     return ss.str();
 }
@@ -493,13 +548,14 @@ string createBezierPatches(){
     for (int p = 0; p < nPatches; p++) {
         for (int u = 0; u < resU-1; u++) {
             for (int v = 0; v < resV-1; v++) {
-                ss2 << getBezier(u, v, p) << endl;
-                ss2 << getBezier(u, v+1, p) << endl;
-                ss2 << getBezier(u+1, v, p) << endl;
+                ss2 << getBezier(u, v, p);
+                ss2 << getBezier(u, v+1, p);
+                ss2 << getBezier(u+1, v, p);
 
-                ss2 << getBezier(u, v+1, p) << endl;
-                ss2 << getBezier(u+1, v+1, p) << endl;
-                ss2 << getBezier(u+1, v, p) << endl;
+                ss2 << getBezier(u, v+1, p);
+                ss2 << getBezier(u+1, v+1, p);
+                ss2 << getBezier(u+1, v, p);
+
                 pointscount += 6;
             }
         }
