@@ -81,7 +81,7 @@ void Model::loadPoints(){
         vertexB[vertexBSize++] = x;
         vertexB[vertexBSize++] = y;
         vertexB[vertexBSize++] = z;
-    /*
+
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f %f", &x, &y, &z);
         normal.push_back(x);
@@ -91,7 +91,7 @@ void Model::loadPoints(){
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f", &x, &y);
         texCoord.push_back(x);
-        texCoord.push_back(y);*/
+        texCoord.push_back(y);
     }
 
     file.close();

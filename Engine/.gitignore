@@ -3,8 +3,9 @@
 !*.h
 !scene.xml
 !scene2.xml
+!scene3.xml
 !CMakeLists.txt
 !/tinyxml2-master
 !.gitignore
 !*.3d
-!/3d_Models
+!/3d_Models/*

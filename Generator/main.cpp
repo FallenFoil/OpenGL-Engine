@@ -535,7 +535,7 @@ string getBezier(float ru, float rv, int p){
     ss << bigBDeriv[0] << " " << bigBDeriv[1] << " " << bigBDeriv[2] << endl;
 
     //Textura
-    ss << 0 << " " << 0 << endl;
+    ss << u << " " << v << endl;
 
     return ss.str();
 }
@@ -604,12 +604,11 @@ string loadPatch(char* file, int tessLevel){
         return createBezierPatches();
     }
     else{
-        cout << "Unable to open patch file";
+        cout << "Unable to open patch file" << endl;
     }
 
     return "";
 }
-
 
 /*
  *   C-D
@@ -681,6 +680,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("Box")==0 || shape.compare("box") ==0 ){
         if(argc == 6){
             file.open(argv[5]);
@@ -705,8 +705,10 @@ int main(int argc, char** argv){
                 }
             }
         }
+
         return 0;
     }
+
     if(shape.compare("Sphere")==0 || shape.compare("sphere")==0){
         if(argc<5){
             printf("Required Radius, Slices and Stacks.\n");
@@ -722,6 +724,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("ReverseSphere")==0 || shape.compare("reversesphere")==0){
         if(argc<5){
             printf("Required Radius, Slices and Stacks.\n");
@@ -737,6 +740,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("Cone")==0 || shape.compare("cone")==0){
         if(argc<6){
             printf("Required Radius, Height, Slices and Stacks.\n");
@@ -749,7 +753,10 @@ int main(int argc, char** argv){
 
         file.open(argv[6]);
         file << createCone(atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
+
+        return 0;
     }
+
     if(shape.compare("Bezier")==0 || shape.compare("bezier")==0){
         if(argc<4){
             printf("Required Bezier Patches file and tessellation level.\n");
@@ -762,7 +769,10 @@ int main(int argc, char** argv){
         }
         file.open(argv[4]);
         file << loadPatch(argv[2], atoi(argv[3]));
+
+        return 0;
     }
+
     if(shape.compare("Ring")==0 || shape.compare("ring")==0){ //.Generator ring inner outter slices file
         if(argc<5){
             printf("Required inner Radius, outer radius and Slices.\n");
@@ -776,10 +786,11 @@ int main(int argc, char** argv){
 
         file.open(argv[5]);
         file << createRing(atof(argv[2]), atof(argv[3]), atof(argv[4]));
+
+        return 0;
     }
     else{
         printf("Unrecognized shape type.\n");
         exit(EXIT_FAILURE);
     }
-    return 0;
 }

@@ -19,17 +19,17 @@ using namespace tinyxml2;
 
 Scene scene;
 XMLDocument doc;
-GLenum OPTION = GL_FILL;
 
 //Frames per second Variables
 int timebase = 0, frame = 0;
 
 //Camera Variables
-#define K 0.2f
+#define K 0.05f
 float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
 float alpha = 3.1415, beta = 0, radius = 50;
+GLenum OPTION = GL_FILL;
 int mode=0;
 
 
@@ -154,13 +154,15 @@ void sphericalToCartesian(){
 }
 
 void processSpecialKeys(int key, int xx, int yy) {
+    int modeMult=-1;
+    if(mode==1){modeMult=1;}
     switch (key) {
         case GLUT_KEY_RIGHT:
-            alpha -= 0.1;
+            alpha += modeMult*0.1;
             sphericalToCartesian();
             break;
         case GLUT_KEY_LEFT:
-            alpha += 0.1;
+            alpha -= modeMult*0.1;
             sphericalToCartesian();
             break;
         case GLUT_KEY_UP:
@@ -176,6 +178,8 @@ void processSpecialKeys(int key, int xx, int yy) {
         default:
             break;
     }
+
+    radius = sqrt(pow((lX-camX),2) + pow((lY-camY),2) + pow((lZ-camZ),2));
 
     glutPostRedisplay();
 }
@@ -226,18 +230,18 @@ void processKeys(unsigned char key, int xx, int yy) {
             lZ = lZ + K*rZ;
             break;
         case 'i':
-            camY += K;
-            lY += K;
+            camY += 0.5f;
+            lY += 0.5f;
             break;
         case 'j':
-            camY -= K;
-            lY -= K;
+            camY -= 0.5f;
+            lY -= 0.5f;
             break;
         case 'm':
-            //if(mode==0){mode=1;}
-            //else{mode=0;}
-            //alpha=0;
-            //beta=0;
+            if(mode==0){mode=1;}
+            else{mode=0;}
+            alpha+=3.1415;
+            beta = 0 - beta;
             break;
         case '1':
             OPTION = GL_FILL;
@@ -408,15 +412,13 @@ void loadLights(){
     }
 }
 
-
-
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
 void loadScene() {
     printf("Loading Scene\n");
     XMLElement *child;
-    doc.LoadFile( "../scene2.xml" );
+    doc.LoadFile( "../scene3.xml" );
 
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
