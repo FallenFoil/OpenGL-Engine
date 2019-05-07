@@ -193,19 +193,14 @@
 	            <point X="54.304"  Y="0" Z="94.056"/>
 	            <point X="94.056"  Y="0" Z="54.304"/>
         	</translate>
-        	<rotate time="3.1" axisX="0" axisY="1" axisZ="0" />
+            <rotate ang="26.0" axisX="0" axisY="0" axisZ="1"/>
             <group>
-            	<rotate ang="26.0" axisX="0" axisY="0" axisZ="1"/>
+                <rotate time="3.1" axisX="0" axisY="1" axisZ="0" />
             	<scale X="2.346" Y="2.346" Z="2.346"/>
                 <models>
                     <model file="../3d_Models/sphere.3d"  R="210" G="140" B="140"/>
+                    <model file="../3d_Models/ring.3d"  R="210" G="140" B="71"/>
                 </models>
-            </group>
-            <group>
-            	<models>
-            		<scale X="2.346" Y="2.346" Z="2.346"/>
-            		<model file="../3d_Models/ring.3d"  R="210" G="140" B="71"/>
-            	</models>
             </group>
         </group>
         <group name="Uranus">
@@ -223,12 +218,13 @@
 	            <point X="64.703"  Y="0" Z="112.069"/>
 	            <point X="112.069"  Y="0" Z="64.703"/>
         	</translate>
-        	<rotate time="4.6" axisX="0" axisY="1" axisZ="0" />
+            <rotate ang="97.0" axisX="0" axisY="0" axisZ="1"/>
             <group>
-            	<rotate ang="97.0" axisX="0" axisY="0" axisZ="1"/>
+                <rotate time="4.6" axisX="0" axisY="1" axisZ="0" />
                 <scale X="1.61" Y="1.61" Z="1.61"/>
                 <models>
                     <model file="../3d_Models/sphere.3d" R="100" G="100" B="200"/>
+                    <model file="../3d_Models/ring.3d"  R="210" G="140" B="71"/>
                 </models>
             </group>
         </group>
