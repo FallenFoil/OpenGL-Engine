@@ -1,7 +1,3 @@
-//
-// Created by cesar on 2/25/19.
-//
-
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -110,12 +106,9 @@ void Model::loadPoints(){
     free(vertexB);
 }
 
-
 void Model::applyColour() {
     glColor3f(this->red, this->green, this->blue);
 }
-
-
 
 void Model::loadTexture() {
 

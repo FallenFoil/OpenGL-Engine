@@ -1,7 +1,3 @@
-//
-// Created by cesar on 3/6/19.
-//
-
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -39,7 +35,6 @@ Group::Group(Group *g) {
     this->models = g->models;
     this->translate = g->translate;
 }
-
 
 void Group::setTranslate(Transformation* t) {
     if(this->priority[TRANSLATE] >= 0)
@@ -84,7 +79,6 @@ void Group::applyTransformations(){
             scale->applyTransformation();
     }
 }
-
 
 void Group::draw(){
     glPushMatrix();

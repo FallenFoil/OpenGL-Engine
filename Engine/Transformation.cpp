@@ -77,15 +77,13 @@ void TranslateCatMull::applyTransformation() {
 
     buildRotMatrix(xi, yi, zi, m);
 
-    glPushMatrix();
+    //glPushMatrix();
     glTranslatef(pos[0],pos[1],pos[2]);
     glMultMatrixf(m);
-    //glutWireTeapot(0.1);
-    //glutWireCone(0.1, 0.2, 10, 1);
 
     //glPopMatrix();
 
-    //free(m);
+    free(m);
 
     //glutSwapBuffers();
     //grouptime += 0.001;
