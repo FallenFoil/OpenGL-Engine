@@ -29,6 +29,7 @@ Model::Model(char* filepath)  {
     this->filePath = (char*) malloc(strlen(filepath) + 1);
     std::strcpy(this->filePath, filepath);
     loadPoints();
+    this->red = this->blue = this->green = -1;
     dColor = nullptr;
     sColor = nullptr;
     eColor = nullptr;
@@ -105,9 +106,11 @@ void Model::loadPoints(){
 
     free(vertexB);
 }
-
+#include <iostream>
 void Model::applyColour() {
-    glColor3f(this->red, this->green, this->blue);
+    if(red >= 0 && green >= 0 && blue >= 0){
+        glColor3f(this->red, this->green, this->blue);
+    }
 }
 
 void Model::loadTexture() {
@@ -134,28 +137,35 @@ void Model::loadTexture() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 }
 
+void Model::setTexture(std::string *texture){
+    this->texturePath = texture;
+    if(!this->texturePath->empty()){
+        loadTexture();
+    }
+}
+
 void Model::draw(){
     applyColour();
     if(dColor != nullptr) dColor->applyColor();
     if(sColor != nullptr) sColor->applyColor();
     if(eColor != nullptr) eColor->applyColor();
     if(aColor != nullptr) aColor->applyColor();
-    if(texturePath !=nullptr && texturePath == new std::string("") != 0){
-        glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);
-        glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
-        glNormalPointer(GL_FLOAT, 0, 0);
-
+    if(texturePath != nullptr && !texturePath->empty()){
         glBindTexture(GL_TEXTURE_2D, texture);
     }
-
     glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
     glVertexPointer(3,GL_FLOAT,0,0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
+    glNormalPointer(GL_FLOAT, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
     glDrawArrays(GL_TRIANGLES, 0, getNumberOfPoints());
 
-    if(texturePath != nullptr && texturePath == new std::string("") != 0){
+    if(texturePath != nullptr && !texturePath->empty()){
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

@@ -2,7 +2,7 @@
     <group name="Sun">
         <scale X="8.11" Y="8.11" Z="8.11"/>
         <models>
-            <model file="../3d_Models/sphere.3d" R="255" G="140" B="0"/>
+            <model file="../3d_Models/sphere.3d" texture="../Textures/sun.jpg"/>
         </models>
     </group>
     <group name="Halley">
@@ -38,7 +38,7 @@
             	<rotate ang="2" axisX="0" axisY="0" axisZ="1"/>
             	<scale X="0.322" Y="0.322" Z="0.322"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="55" G="55" B="55"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/mercury.jpg"/>
                 </models>
             </group>
         </group>
@@ -62,7 +62,7 @@
             	<rotate ang="177.0" axisX="0" axisY="0" axisZ="1"/>
                 <scale X="0.667" Y="0.667" Z="0.667"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="150" G="95" B="40"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/venus_atmosphere.jpg"/>
                 </models>
             </group>
         </group>
@@ -81,12 +81,12 @@
 		        <point X="20.527"  Y="0" Z="35.553"/>
 		        <point X="35.553"  Y="0" Z="20.527"/>
 	        </translate>
-            <rotate time="30" axisX="0" axisY="1" axisZ="0" />
+            <rotate ang="23.5" axisX="0" axisY="0" axisZ="1" />
             <group>
-            	<rotate time="23.5" axisX="0" axisY="0" axisZ="1" />
+            	<rotate time="30" axisX="0" axisY="1" axisZ="0" />
                 <scale X="1" Y="1" Z="1"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="40" G="40" B="255" />
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/earth.jpg"/>
                 </models>
             </group>
             <group name="Lua">
@@ -107,29 +107,10 @@
 	        	<rotate time="28" axisX="0" axisY="1" axisZ="0" />
                 <scale X="0.239" Y="0.239" Z="0.239"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="255" G="255" B="255" />
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/moon.jpg"/>
                 </models>
             </group>
         </group>
-        <!--group name="Earth">
-        	<rotate time="36.5" axisX="0" axisY="1" axisZ="0"/>
-            <translate X="41.053" />
-            <group>
-            	<rotate time="23.5" axisX="0" axisY="0" axisZ="1" />
-                <scale X="1" Y="1" Z="1"/>
-                <models>
-                    <model file="../3d_Models/sphere.3d" R="40" G="40" B="255" />
-                </models>
-            </group>
-            <group name="Lua">
-	        	<rotate time="2.8" axisX="0" axisY="1" axisZ="0" />
-	        	<translate X="1.407"/>
-                <scale X="0.239" Y="0.239" Z="0.239"/>
-                <models>
-                    <model file="../3d_Models/sphere.3d" R="30" G="30" B="30" />
-                </models>
-            </group>
-        </group-->
        	<group name="Mars">
             <translate time="68.7" drawOrbit="true">
 	            <point X="52.230"  Y="0" Z="0"/>
@@ -150,7 +131,7 @@
                 <rotate ang="25.0" axisX="0" axisY="0" axisZ="1"/>
                 <scale X="0.425" Y="0.425" Z="0.425"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="150" G="60" B="0"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/mars.jpg"/>
                 </models>
             </group>
         </group>
@@ -174,7 +155,7 @@
                 <rotate ang="3.0" axisX="0" axisY="0" axisZ="1"/>
                 <scale X="2.49" Y="2.49" Z="2.49"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="255" G="120" B="100"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/jupiter.jpg"/>
                 </models>
             </group>
         </group>
@@ -198,9 +179,15 @@
                 <rotate time="3.1" axisX="0" axisY="1" axisZ="0" />
             	<scale X="2.346" Y="2.346" Z="2.346"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d"  R="210" G="140" B="140"/>
-                    <model file="../3d_Models/ring.3d"  R="210" G="140" B="71"/>
+                    <model file="../3d_Models/sphere.3d"  texture="../Textures/saturn.jpg"/>
+                    <model file="../3d_Models/saturn_ring.3d"  texture="../Textures/saturn_ring_alpha.png"/>
                 </models>
+                <group name="Anel Invertido">
+                	<rotate ang="180" axisX="1" axisY="0" axisZ="0"/>
+                	<models>
+                		<model file="../3d_Models/saturn_ring.3d"  texture="../Textures/saturn_ring_alpha.png"/>
+                	</models>
+                </group>
             </group>
         </group>
         <group name="Uranus">
@@ -223,9 +210,15 @@
                 <rotate time="4.6" axisX="0" axisY="1" axisZ="0" />
                 <scale X="1.61" Y="1.61" Z="1.61"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" R="100" G="100" B="200"/>
-                    <model file="../3d_Models/ring.3d"  R="210" G="140" B="71"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/uranus.jpg"/>
+                    <model file="../3d_Models/uranus_ring.3d"  texture="../Textures/uranos_ring.png"/>
                 </models>
+                <group name="Anel Invertido">
+                	<rotate ang="180" axisX="1" axisY="0" axisZ="0"/>
+                	<models>
+                		<model file="../3d_Models/uranus_ring.3d"  texture="../Textures/uranos_ring.png"/>
+                	</models>
+                </group>
             </group>
         </group>
         <group name="Neptune">
@@ -248,7 +241,7 @@
             	<rotate ang="29.6" axisX="0" axisY="0" axisZ="1"/>
             	<scale X="1.585" Y="1.585" Z="1.585"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d"  R="50" G="50" B="200"/>
+                    <model file="../3d_Models/sphere.3d"  texture="../Textures/neptune.jpg"/>
                 </models>
             </group>
         </group>

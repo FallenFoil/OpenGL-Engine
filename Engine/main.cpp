@@ -10,6 +10,7 @@
 #include <iostream>
 #include <tinyxml2.h>
 #include <math.h>
+#include <IL/il.h>
 #include "Ponto.h"
 #include "Scene.h"
 #include "EngineException.h"
@@ -24,7 +25,7 @@ XMLDocument doc;
 int timebase = 0, frame = 0;
 
 //Camera Variables
-#define K 0.05f
+#define K 0.03f
 float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
@@ -45,6 +46,11 @@ float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultV
 
 float getAttributeOrDefault(XMLElement *element, std::string atr, float defaultValue){
     return getAttributeOrDefault(element, atr.c_str(), defaultValue);
+}
+
+char* getAttributeOrDefault3(XMLElement *element, const char* atr, char* defaultValue){
+    const XMLAttribute *atrXml = element->FindAttribute(atr);
+    return atrXml == nullptr ? defaultValue : (char*)atrXml->Value();
 }
 
 void changeSize(int w, int h) {
@@ -265,18 +271,18 @@ Model loadModel(XMLElement *model){
     m.setTexture(texturePath);
     float red,green,blue;
     std::string colors[] = {"", "diff", "spec", "emiss", "ambi"};
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 1; i++){
         red = getAttributeOrDefault(model, colors[i] + "R", -1);
         green = getAttributeOrDefault(model, colors[i] + "G", -1);
         blue = getAttributeOrDefault(model, colors[i] + "B", -1);
 
         if(red >= 0 && green >= 0 && blue >= 0)
             switch(i){
-                case 0: m.setColour(red, green, blue); break;
-                case 1: m.setDiffuseColor(red, green, blue); break;
-                case 2: m.setSpecularColor(red, green, blue); break;
-                case 3: m.setEmissiveColor(red, green, blue); break;
-                case 4: m.setAmbientColor(red, green, blue); break;
+                case 0: m.setColour(red/255, green/255, blue/255); break;
+                case 1: m.setDiffuseColor(red/255, green/255, blue/255); break;
+                case 2: m.setSpecularColor(red/255, green/255, blue/255); break;
+                case 3: m.setEmissiveColor(red/255, green/255, blue/255); break;
+                case 4: m.setAmbientColor(red/255, green/255, blue/255); break;
                 default: break;
             }
         else if(red >= 0 || green >= 0 || blue >= 0) {
@@ -454,9 +460,12 @@ int main(int argc, char** argv) {
     glewInit();
 #endif
 
+    ilInit();
+
     loadScene();
 
     //OpenGL settings
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 

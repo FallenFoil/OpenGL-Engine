@@ -6,12 +6,16 @@
 #define XML_GRAPHICS_GROUP_H
 
 #include <vector>
+#include <string.h>
 #include "Model.h"
 #include "EngineException.h"
 #include "Transformation.h"
 
 
 class Group {
+    float x;
+    float y;
+    float z;
     int numberOfTransformation;
     int priority[3];
     Transformation *rotate;

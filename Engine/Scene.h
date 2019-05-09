@@ -64,6 +64,7 @@ public:
     void addLight(Light *l);
     std::vector<Group> getGroups();
     Scene();
+    Group getGroup(char* name);
 };
 
 
