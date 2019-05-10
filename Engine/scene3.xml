@@ -1,4 +1,10 @@
 <scene>
+	<group name="Univere">
+		<scale X="240" Y="240" Z="240"/>
+        <models>
+            <model file="../3d_Models/universe.3d" texture="../Textures/stars2.jpg"/>
+        </models>
+    </group>
     <group name="Sun">
         <scale X="8.11" Y="8.11" Z="8.11"/>
         <models>
@@ -86,7 +92,7 @@
             	<rotate time="30" axisX="0" axisY="1" axisZ="0" />
                 <scale X="1" Y="1" Z="1"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" texture="../Textures/earth.jpg"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/earth_with_clouds.jpg"/>
                 </models>
             </group>
             <group name="Lua">
