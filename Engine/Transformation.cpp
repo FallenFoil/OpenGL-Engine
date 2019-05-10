@@ -49,8 +49,10 @@ void multMatrixVector(float *m, float *v, float *res) {
 }
 
 
-void TranslateCatMull::applyTransformation() {
-    renderCatmullRomCurve();
+void TranslateCatMull::applyTransformation(){
+    if(this->draw){
+        renderCatmullRomCurve();
+    }
     //Transformations
     float pos[4];
     float deriv[4];

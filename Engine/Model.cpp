@@ -12,12 +12,11 @@
 #include <stdlib.h>
 #include <string>
 #include "Model.h"
-#include "Ponto.h"
 
 //std::unordered_map<std::string, Model*> Model::modelsLoaded;
 
 
-Model::Model() {
+Model::Model(){
     this->red = this->blue = this->green = 1;
     this->filePath = (char*) malloc(1);
     std::strcpy(this->filePath, "\0");
@@ -25,11 +24,11 @@ Model::Model() {
     texturePath = new std::string("");
 }
 
-Model::Model(char* filepath)  {
+Model::Model(char* filepath){
     this->filePath = (char*) malloc(strlen(filepath) + 1);
     std::strcpy(this->filePath, filepath);
     loadPoints();
-    this->red = this->blue = this->green = -1;
+    this->red = this->blue = this->green = 1;
     dColor = nullptr;
     sColor = nullptr;
     eColor = nullptr;
@@ -49,7 +48,7 @@ Model::Model(Model *m){
     this->aColor = m->aColor;
 }
 
-char* Model::getFilePath() {
+char* Model::getFilePath(){
     return this->filePath;
 }
 
@@ -106,14 +105,12 @@ void Model::loadPoints(){
 
     free(vertexB);
 }
-#include <iostream>
-void Model::applyColour() {
-    if(red >= 0 && green >= 0 && blue >= 0){
-        glColor3f(this->red, this->green, this->blue);
-    }
+
+void Model::applyColour(){
+    glColor3f(this->red, this->green, this->blue);
 }
 
-void Model::loadTexture() {
+void Model::loadTexture(){
 
     unsigned int t, tw, th;
     unsigned char *texData;

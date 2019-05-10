@@ -25,14 +25,24 @@ XMLDocument doc;
 int timebase = 0, frame = 0;
 
 //Camera Variables
-#define K 0.03f
+
 float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
 float alpha = 3.1415, beta = 0, radius = 50;
-GLenum OPTION = GL_FILL;
-int mode=0;
 
+//Controller Variables
+/*
+ *|--------------------------------------------------|
+ *| RIGHT | LEFT | UP | DOWN | w | s | a | d | i | j |
+ *|-------|------|----|------|---|---|---|---|---|---|
+ *|   0   |   1  |  2 |  3   | 4 | 5 | 6 | 7 | 8 | 9 |
+ *|--------------------------------------------------|
+ */
+int keys[10] = {0,0,0,0,0,0,0,0,0,0};
+int mode=0, axes=0;
+GLenum OPTION = GL_FILL;
+#define K 0.03f
 
 std::string getAttributeOrDefault(XMLElement *element, const char* atr, std::string defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
@@ -44,16 +54,26 @@ float getAttributeOrDefault(XMLElement *element, const char* atr, float defaultV
     return atrXml == nullptr ? defaultValue : (float) atof((char*)atrXml->Value());
 }
 
+bool getAttributeOrDefaultBool(XMLElement *element, const char* atr, bool defaultValue){
+    const XMLAttribute *atrXml = element->FindAttribute(atr);
+    if(atrXml == nullptr){
+        return defaultValue;
+    }
+    else{
+        if(strcmp((char*) atrXml->Value(), "True") == 0 || strcmp((char*) atrXml->Value(), "true") == 0){
+            return (bool) true;
+        }
+        else{
+            return (bool) false;
+        }
+    }
+}
+
 float getAttributeOrDefault(XMLElement *element, std::string atr, float defaultValue){
     return getAttributeOrDefault(element, atr.c_str(), defaultValue);
 }
 
-char* getAttributeOrDefault3(XMLElement *element, const char* atr, char* defaultValue){
-    const XMLAttribute *atrXml = element->FindAttribute(atr);
-    return atrXml == nullptr ? defaultValue : (char*)atrXml->Value();
-}
-
-void changeSize(int w, int h) {
+void changeSize(int w, int h){
 
     // Prevent a divide by zero, when window is too short
     // (you cant make a window with zero width).
@@ -102,8 +122,6 @@ void drawAxes(){
  * Desenha as figuras dentro da estrutura da scene
  */
 void draw(){
-   // drawAxes();
-
     vector<Group> groups = scene.getGroups();
     for(int i = 0; i < groups.size(); i++){
         Group g = groups[i];
@@ -126,26 +144,6 @@ void viewFramesPerSecond(){
     }
 }
 
-void renderScene(void) {
-        // clear buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glPolygonMode(GL_FRONT_AND_BACK, OPTION);
-
-    // set the camera
-    glLoadIdentity();
-    gluLookAt(camX,camY,camZ,
-              lX,lY,lZ,
-              upX,upY,upZ);
-
-    drawAxes();
-    draw();
-    viewFramesPerSecond();
-
-    // End of frame
-    glutSwapBuffers();
-}
-
 void sphericalToCartesian(){
     if(mode==1){
         camX = lX + (radius * cos(beta) * sin(alpha));
@@ -159,89 +157,112 @@ void sphericalToCartesian(){
     }
 }
 
-void processSpecialKeys(int key, int xx, int yy) {
+void controllers(){
     int modeMult=-1;
     if(mode==1){modeMult=1;}
-    switch (key) {
-        case GLUT_KEY_RIGHT:
-            alpha += modeMult*0.1;
-            sphericalToCartesian();
-            break;
-        case GLUT_KEY_LEFT:
-            alpha -= modeMult*0.1;
-            sphericalToCartesian();
-            break;
-        case GLUT_KEY_UP:
-            beta += 0.1f;
-            if (beta >= 1.57f){beta = 1.57f;}
-            sphericalToCartesian();
-            break;
-        case GLUT_KEY_DOWN:
-            beta -= 0.1f;
-            if (beta <= -1.57f){beta = -1.57f;}
-            sphericalToCartesian();
-            break;
-        default:
-            break;
-    }
+    if(keys[0]==1){alpha += modeMult*0.015;sphericalToCartesian();}
+    if(keys[1]==1){alpha -= modeMult*0.015;sphericalToCartesian();}
+    if(keys[2]==1){beta += 0.015f;if(beta >=  1.57f){beta =  1.57f;}sphericalToCartesian();}
+    if(keys[3]==1){beta -= 0.015f;if(beta <= -1.57f){beta = -1.57f;}sphericalToCartesian();}
 
     radius = sqrt(pow((lX-camX),2) + pow((lY-camY),2) + pow((lZ-camZ),2));
 
-    glutPostRedisplay();
-}
-
-void processKeys(unsigned char key, int xx, int yy) {
     float dX = lX - camX;
     float dY = lY - camY;
     float dZ = lZ - camZ;
     float rX,rY,rZ;
 
+    if(keys[4]==1){camX = camX + K*dX;camY = camY + K*dY;camZ = camZ + K*dZ;lX = lX + K*dX;lY = lY + K*dY;lZ = lZ + K*dZ;}
+    if(keys[5]==1){camX = camX - K*dX;camY = camY - K*dY;camZ = camZ - K*dZ;lX = lX - K*dX;lY = lY - K*dY;lZ = lZ - K*dZ;}
+    if(keys[6]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX - K*rX;camY = camY - K*rY;camZ = camZ - K*rZ;lX = lX - K*rX;lY = lY - K*rY;lZ = lZ - K*rZ;}
+    if(keys[7]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX + K*rX;camY = camY + K*rY;camZ = camZ + K*rZ;lX = lX + K*rX;lY = lY + K*rY;lZ = lZ + K*rZ;}
+
+    if(keys[8]==1){camY += 0.2f;lY += 0.2f;}
+    if(keys[9]==1){camY -= 0.2f;lY -= 0.2f;}
+}
+
+void renderScene(void){
+        // clear buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glPolygonMode(GL_FRONT_AND_BACK, OPTION);
+
+    // set the camera
+    glLoadIdentity();
+    gluLookAt(camX,camY,camZ,
+              lX,lY,lZ,
+              upX,upY,upZ);
+
+    controllers();
+    viewFramesPerSecond();
+    if(axes){drawAxes();}
+    draw();
+
+    // End of frame
+    glutSwapBuffers();
+}
+
+void processSpecialKeys(int key, int xx, int yy){
+    switch (key) {
+        case GLUT_KEY_RIGHT:
+            keys[0]=1;
+            break;
+        case GLUT_KEY_LEFT:
+            keys[1]=1;
+            break;
+        case GLUT_KEY_UP:
+            keys[2]=1;
+            break;
+        case GLUT_KEY_DOWN:
+            keys[3]=1;
+            break;
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void processUpSpecialKeys(int key, int xx, int yy){
+    switch (key) {
+        case GLUT_KEY_RIGHT:
+            keys[0]=0;
+            break;
+        case GLUT_KEY_LEFT:
+            keys[1]=0;
+            break;
+        case GLUT_KEY_UP:
+            keys[2]=0;
+            break;
+        case GLUT_KEY_DOWN:
+            keys[3]=0;
+            break;
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void processKeys(unsigned char key, int xx, int yy){
     switch(key){
         case 'w':
-            camX = camX + K*dX;
-            camY = camY + K*dY;
-            camZ = camZ + K*dZ;
-            lX = lX + K*dX;
-            lY = lY + K*dY;
-            lZ = lZ + K*dZ;
+            keys[4]=1;
             break;
         case 's':
-            camX = camX - K*dX;
-            camY = camY - K*dY;
-            camZ = camZ - K*dZ;
-            lX = lX - K*dX;
-            lY = lY - K*dY;
-            lZ = lZ - K*dZ;
+            keys[5]=1;
             break;
         case 'a':
-            rX = -dZ;
-            rY = 0;
-            rZ = dX;
-            camX = camX - K*rX;
-            camY = camY - K*rY;
-            camZ = camZ - K*rZ;
-            lX = lX - K*rX;
-            lY = lY - K*rY;
-            lZ = lZ - K*rZ;
+            keys[6]=1;
             break;
         case 'd':
-            rX = -dZ;
-            rY = 0;
-            rZ = dX;
-            camX = camX + K*rX;
-            camY = camY + K*rY;
-            camZ = camZ + K*rZ;
-            lX = lX + K*rX;
-            lY = lY + K*rY;
-            lZ = lZ + K*rZ;
+            keys[7]=1;
             break;
         case 'i':
-            camY += 0.5f;
-            lY += 0.5f;
+            keys[8]=1;
             break;
         case 'j':
-            camY -= 0.5f;
-            lY -= 0.5f;
+            keys[9]=1;
             break;
         case 'm':
             if(mode==0){mode=1;}
@@ -257,6 +278,37 @@ void processKeys(unsigned char key, int xx, int yy) {
             break;
         case '3':
             OPTION = GL_POINT;
+            break;
+        case '0':
+            if(axes==0){axes=1;}
+            else{axes=0;}
+            break;
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void processUpKeys(unsigned char key, int xx, int yy){
+    switch(key){
+        case 'w':
+            keys[4]=0;
+            break;
+        case 's':
+            keys[5]=0;
+            break;
+        case 'a':
+            keys[6]=0;
+            break;
+        case 'd':
+            keys[7]=0;
+            break;
+        case 'i':
+            keys[8]=0;
+            break;
+        case 'j':
+            keys[9]=0;
             break;
         default:
             break;
@@ -296,6 +348,7 @@ void loadTranslation(XMLElement *trans, Group *group){
     if(trans->FindAttribute("time") != nullptr){
         auto *t = new TranslateCatMull();
         t->setTransTime(getAttributeOrDefault(trans, "time", 0));
+        t->setDrawOrbit(getAttributeOrDefaultBool(trans, "drawOrbit", false));
         XMLElement *child = trans->FirstChildElement();
         while(child){
             if(strcmp(child->Value(), "point") == 0){
@@ -312,10 +365,12 @@ void loadTranslation(XMLElement *trans, Group *group){
         group->setTranslate(t);
     } else {
         float transX, transY, transZ;
+        float drawOrbit;
         transX = getAttributeOrDefault(trans, "X", 0);
         transY = getAttributeOrDefault(trans, "Y", 0);
         transZ = getAttributeOrDefault(trans, "Z", 0);
-        auto *t = new TranslateDefault(transX, transY, transZ);
+        drawOrbit = getAttributeOrDefaultBool(trans, "drawOrbit", false);
+        auto *t = new TranslateDefault(transX, transY, transZ, drawOrbit);
         group->setTranslate(t);
     }
 }
@@ -421,7 +476,7 @@ void loadLights(){
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
-void loadScene() {
+void loadScene(){
     printf("Loading Scene\n");
     XMLElement *child;
     doc.LoadFile( "../scene3.xml" );
@@ -433,10 +488,11 @@ void loadScene() {
         child = child->NextSiblingElement( "group");
     }
     loadLights();
+    scene.turnOnLights();
     printf("Finished loading Scene!!!\n");
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv){
     //init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
@@ -454,7 +510,9 @@ int main(int argc, char** argv) {
 
     //Callback registration for keyboard processing
     glutKeyboardFunc(processKeys);
+    glutKeyboardUpFunc(processUpKeys);
     glutSpecialFunc(processSpecialKeys);
+    glutSpecialUpFunc(processUpSpecialKeys);
 
 #ifndef __APPLE__
     glewInit();

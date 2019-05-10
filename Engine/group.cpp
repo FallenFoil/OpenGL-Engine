@@ -20,7 +20,7 @@ Group::Group() {
     for(int i = 0; i < 3; i++)
         this->priority[i] = -1;
     Scale s(1,1,1);
-    TranslateDefault t(0,0,0);
+    TranslateDefault t(0,0,0,0);
     scale = &s;
     translate = &t;
 }

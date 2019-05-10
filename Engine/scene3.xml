@@ -12,7 +12,7 @@
         </models>
     </group>
     <group name="Halley">
-        <translate time="100" drawOrbit="true">
+        <translate time="100" drawOrbit="false">
             <point X="-20" Y="0" Z="0"/>
             <point X="105" Y="30" Z="-30"/>
             <point X="220" Y="0" Z="0"/>
@@ -25,7 +25,7 @@
     </group>
     <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
         <group name="Mercury">
-            <translate time="8.8" drawOrbit="true">
+            <translate time="8.8" drawOrbit="false">
 	            <point X="13.579" Y="0" Z="0"/>
 	            <point X="11.760" Y="0" Z="-6.790"/>
 	            <point X="6.790" Y="0" Z="-11.760"/>
@@ -49,7 +49,7 @@
             </group>
         </group>
         <group name="Venus">
-            <translate time="24" drawOrbit="true">
+            <translate time="24" drawOrbit="false">
 	            <point X="30.367"  Y="0" Z="0"/>
 	            <point X="26.299"  Y="0" Z="-15.184"/>
 	            <point X="15.184"  Y="0" Z="-26.299"/>
@@ -73,7 +73,7 @@
             </group>
         </group>
         <group name="Earth">
-        	<translate time="36.5" drawOrbit="true">
+        	<translate time="36.5" drawOrbit="false">
 		        <point X="41.053"  Y="0" Z="0"/>
 		        <point X="35.553"  Y="0" Z="-20.527"/>
 		        <point X="20.527"  Y="0" Z="-35.553"/>
@@ -96,7 +96,7 @@
                 </models>
             </group>
             <group name="Lua">
-                <translate time="28" drawOrbit="true">
+                <translate time="28" drawOrbit="false">
 			        <point X="1.407"  Y="0" Z="0"/>
 			        <point X="1.218"  Y="0" Z="-0.704"/>
 			        <point X="0.704"  Y="0" Z="-1.218"/>
@@ -118,7 +118,7 @@
             </group>
         </group>
        	<group name="Mars">
-            <translate time="68.7" drawOrbit="true">
+            <translate time="68.7" drawOrbit="false">
 	            <point X="52.230"  Y="0" Z="0"/>
 	            <point X="45.2325"  Y="0" Z="-26.115"/>
 	            <point X="26.115"  Y="0" Z="-45.2325"/>
@@ -142,7 +142,7 @@
             </group>
         </group>
         <group name="Jupiter">
-            <translate time="216.5" drawOrbit="true">
+            <translate time="216.5" drawOrbit="false">
 	            <point X="90.529"  Y="0" Z="0"/>
 	            <point X="78.400"  Y="0" Z="-45.265"/>
 	            <point X="45.265"  Y="0" Z="-78.400"/>
@@ -166,7 +166,7 @@
             </group>
         </group>
         <group name="Saturn">
-        	<translate time="538.25" drawOrbit="true">
+        	<translate time="538.25" drawOrbit="false">
 	            <point X="108.607"  Y="0" Z="0"/>
 	            <point X="94.056"  Y="0" Z="-54.304"/>
 	            <point X="54.304"  Y="0" Z="-94.056"/>
@@ -197,7 +197,7 @@
             </group>
         </group>
         <group name="Uranus">
-        	<translate time="1533.2" drawOrbit="true">
+        	<translate time="1533.2" drawOrbit="false">
 	            <point X="129.406"  Y="0" Z="0"/>
 	            <point X="112.069"  Y="0" Z="-64.703"/>
 	            <point X="64.703"  Y="0" Z="-112.069"/>
@@ -228,7 +228,7 @@
             </group>
         </group>
         <group name="Neptune">
-        	<translate time="3011" drawOrbit="true">
+        	<translate time="3011" drawOrbit="false">
 	            <point X="143.308"  Y="0" Z="0"/>
 	            <point X="124.108"  Y="0" Z="-71.654"/>
 	            <point X="71.654"  Y="0" Z="-124.108"/>

@@ -40,9 +40,10 @@ public:
 
 class TranslateDefault : public Transformation{
     float transX, transY, transZ;
+    bool draw;
 public:
-    TranslateDefault(){transX =0; transY = 0; transZ = 0;};
-    TranslateDefault(float x, float y, float z){this->transX = x; this->transY = y; this->transZ = z;};
+    TranslateDefault(){transX =0; transY = 0; transZ = 0; draw = 0;};
+    TranslateDefault(float x, float y, float z, bool draw){this->transX = x; this->transY = y; this->transZ = z; this->draw = draw;};
     void applyTransformation() override {glTranslatef(transX,transY,transZ);};
 };
 
@@ -50,13 +51,15 @@ class TranslateCatMull : public Transformation{
     float transTime;
     std::vector<float* > transPoints;
     float oldYx, oldYy, oldYz;
+    bool draw;
 public:
-    TranslateCatMull(){oldYx = 0; oldYy = 1; oldYz = 0; transTime = 0;}
+    TranslateCatMull(){oldYx = 0; oldYy = 1; oldYz = 0; transTime = 0; draw = 0;}
     void renderCatmullRomCurve();
     void getGlobalCatmullRomPoint(float gt, float *pos, float *deriv);
     void getCatmullRomPoint(float t, float *p0, float *p1, float *p2, float *p3, float *pos, float *deriv);
     void applyTransformation() override;
     void setTransTime(float time){this->transTime = time;};
+    void setDrawOrbit(bool drawOrbit){this->draw = drawOrbit;};
     void addPointToTranslation(float x, float y, float z){
         float * point =  (float*)malloc(sizeof(float) * 3);
         point[0] = x;
