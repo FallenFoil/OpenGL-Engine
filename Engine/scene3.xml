@@ -1,4 +1,7 @@
 <scene>
+	<lights>
+		<light type="POINT" posX="0" posY="0" posZ="0" />
+	</lights>
 	<group name="Univere">
 		<scale X="240" Y="240" Z="240"/>
         <models>
@@ -20,7 +23,7 @@
         </translate>
     	<scale X="0.3" Y="0.3" Z="0.3"/>
         <models>
-            <model file="../3d_Models/comet.3d" R="80" G="80" B="80" />
+            <model file="../3d_Models/comet.3d" texture="../Textures/comet.jpg" />
         </models>
     </group>
     <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
@@ -247,7 +250,7 @@
             	<rotate ang="29.6" axisX="0" axisY="0" axisZ="1"/>
             	<scale X="1.585" Y="1.585" Z="1.585"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d"  texture="../Textures/neptune.jpg"/>
+                    <model file="../3d_Models/sphere.3d" emissR="255" emissG="255" emissB="255" texture="../Textures/neptune.jpg"/>
                 </models>
             </group>
         </group>

@@ -28,28 +28,28 @@ protected:
 class DiffuseColor : public Color {
 public:
     DiffuseColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
-    DiffuseColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;};
+    DiffuseColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_DIFFUSE, colors);}
 };
 
 class SpecularColor : public Color {
 public:
     SpecularColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
-    SpecularColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;};
+    SpecularColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_SPECULAR, colors);}
 };
 
 class EmissiveColor : public Color {
 public:
     EmissiveColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
-    EmissiveColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;};
+    EmissiveColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_EMISSION, colors);}
 };
 
 class AmbientColor : public Color {
 public:
     AmbientColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
-    AmbientColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;};
+    AmbientColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_AMBIENT, colors);}
 };
 

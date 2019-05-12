@@ -351,50 +351,50 @@ string createCone(double radius, double height, int slices, int stacks){
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
                 ss << "0 -1 0" << endl;
-                ss << i*textSlice << " " << (j+1)*textStack << endl;
+                ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
 
                 //Origem
                 ss << "0 0 0" << endl;
                 ss << "0 -1 0" << endl;
-                ss << "0 0" << endl;
+                ss << i*textSlice << " 1" << endl;
 
                 //B
                 ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
                 ss << "0 -1 0" << endl;
-                ss << (i+1)*textSlice << " " << (j+1)*textStack << endl;
+                ss << (i+1)*textSlice << " " << 1-(j+1)*textStack << endl;
             }
             //Face
             if(j!=stacks-1){
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
                 ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-                ss << i*textSlice << " " << (j+1)*textStack << endl;
+                ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
 
 
                 //C
                 ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
-                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-                ss << (i+1)*textSlice << " " << (j+2)*textStack << endl;
+                ss << createConeNormal(i+1, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i+1)*textSlice << " " << 1-(j+2)*textStack << endl;
 
                 //D
                 ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
-                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-                ss << (i)*textSlice << " " << (j+2)*textStack << endl;
+                ss << createConeNormal(i, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i)*textSlice << " " << 1-(j+2)*textStack << endl;
             }
             //C
             ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
-            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-            ss << (i+1)*textSlice << " " << (j+2)*textStack << endl;
+            ss << createConeNormal(i+1, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << 1-(j+2)*textStack << endl;
 
             //A
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
             ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-            ss << i*textSlice << " " << (j+1)*textStack << endl;
+            ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
 
             //B
             ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
-            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
-            ss << (i+1)*textSlice << " " << (j+1)*textStack << endl;
+            ss << createConeNormal(i+1, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << 1-(j+1)*textStack << endl;
         }
         radiusAux = smallRadius;
     }

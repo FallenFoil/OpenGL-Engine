@@ -42,7 +42,7 @@ float alpha = 3.1415, beta = 0, radius = 50;
 int keys[10] = {0,0,0,0,0,0,0,0,0,0};
 int mode=0, axes=0;
 GLenum OPTION = GL_FILL;
-#define K 0.03f
+#define K 0.015f
 
 std::string getAttributeOrDefault(XMLElement *element, const char* atr, std::string defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
@@ -193,6 +193,8 @@ void renderScene(void){
               lX,lY,lZ,
               upX,upY,upZ);
 
+    scene.turnOnLights();
+
     controllers();
     viewFramesPerSecond();
     if(axes){drawAxes();}
@@ -323,18 +325,18 @@ Model loadModel(XMLElement *model){
     m.setTexture(texturePath);
     float red,green,blue;
     std::string colors[] = {"", "diff", "spec", "emiss", "ambi"};
-    for(int i = 0; i < 1; i++){
+    for(int i = 0; i < 4; i++){
         red = getAttributeOrDefault(model, colors[i] + "R", -1);
         green = getAttributeOrDefault(model, colors[i] + "G", -1);
         blue = getAttributeOrDefault(model, colors[i] + "B", -1);
 
         if(red >= 0 && green >= 0 && blue >= 0)
             switch(i){
-                case 0: m.setColour(red/255, green/255, blue/255); break;
-                case 1: m.setDiffuseColor(red/255, green/255, blue/255); break;
-                case 2: m.setSpecularColor(red/255, green/255, blue/255); break;
-                case 3: m.setEmissiveColor(red/255, green/255, blue/255); break;
-                case 4: m.setAmbientColor(red/255, green/255, blue/255); break;
+                case 0: m.setColour(red/255.0f, green/255.0f, blue/255.0f); break;
+                case 1: m.setDiffuseColor(red/255.0f, green/255.0f, blue/255.0f); break;
+                case 2: m.setSpecularColor(red/255.0f, green/255.0f, blue/255.0f); break;
+                case 3: m.setEmissiveColor(red/255.0f, green/255.0f, blue/255.0f); break;
+                case 4: m.setAmbientColor(red/255.0f, green/255.0f, blue/255.0f); break;
                 default: break;
             }
         else if(red >= 0 || green >= 0 || blue >= 0) {
@@ -433,7 +435,8 @@ Group loadGroup(XMLElement *group){
 void loadLights(){
     XMLElement *child;
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "lights");
-    if(child) child = child->FirstChildElement();
+    if(child){child = child->FirstChildElement();glEnable(GL_LIGHTING);}
+
     while(child){
         short id = 0;
         if(strcmp(child->Value(), "light") == 0){
@@ -470,6 +473,7 @@ void loadLights(){
             }
         }
         else throw EngineException(string("tag") + child->Value() + string("not recognized in <lights> </lights>"));
+        child = child->NextSiblingElement();
     }
 }
 
@@ -488,7 +492,7 @@ void loadScene(){
         child = child->NextSiblingElement( "group");
     }
     loadLights();
-    scene.turnOnLights();
+
     printf("Finished loading Scene!!!\n");
 }
 
