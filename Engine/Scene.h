@@ -12,7 +12,9 @@
 class Light{
 protected:
     short id;
-    float pos[4] = {0};
+    float colorDiff[4] = {1,1,1,1};
+    float colorAmb[4] = {1,1,1,1};
+    float pos[4] = {0,0,0,0};
 public:
     short getID(){return id;};
     virtual void turnOn() = 0;
@@ -25,7 +27,12 @@ public:
         this->id = id;
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 1;
     }
-    void turnOn() override{ glEnable(GL_LIGHT0 + id); glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);}
+    void turnOn() override{
+        glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
+        glEnable(GL_LIGHT0 + id);
+    }
 };
 
 class DiretionalLight : public Light{
@@ -34,7 +41,12 @@ public:
         this->id = id;
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 0;
     }
-    void turnOn() override{ glEnable(GL_LIGHT0 + id); glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);}
+    void turnOn() override{
+        glEnable(GL_LIGHT0 + id);
+        glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
+    }
 };
 
 class SpotLight : public Light{
@@ -51,6 +63,8 @@ public:
         glLightfv(GL_LIGHT0 + id, GL_SPOT_DIRECTION, spotDir);
         glLightf(GL_LIGHT0 + id, GL_SPOT_CUTOFF, 45.0);
         glLightf(GL_LIGHT0 + id ,GL_SPOT_EXPONENT, 0.0);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
+        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
     }
 };
 

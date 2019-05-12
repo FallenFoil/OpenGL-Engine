@@ -18,9 +18,11 @@ void Scene::addLight(Light *l) {
 }
 
 void Scene::turnOnLights() {
-    for(int i = 0; i < lights.size(); i++){
+    int i;
+    for(i = 0; i < lights.size(); i++){
         lights[i]->turnOn();
     }
+    if(i != 0) 	glEnable(GL_LIGHTING);
 }
 
 void Scene::turnOffLights() {

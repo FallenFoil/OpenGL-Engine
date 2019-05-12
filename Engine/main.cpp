@@ -405,6 +405,7 @@ void loadLights(){
             }
         }
         else throw EngineException(string("tag") + child->Value() + string("not recognized in <lights> </lights>"));
+        child = child->NextSiblingElement();
     }
 }
 
@@ -418,13 +419,14 @@ void loadScene() {
     XMLElement *child;
     doc.LoadFile( "../scene2.xml" );
 
+    loadLights();
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
     while(child){
         Group group = loadGroup(child);
         scene.addGroup(group);
         child = child->NextSiblingElement( "group");
     }
-    loadLights();
+    //loadLights();
     printf("Finished loading Scene!!!\n");
 }
 
@@ -439,6 +441,7 @@ int main(int argc, char** argv) {
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+    scene.turnOnLights();
     //Required callback registry
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);
@@ -453,7 +456,7 @@ int main(int argc, char** argv) {
 #endif
 
     loadScene();
-
+    Scene s = scene;
     //OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
