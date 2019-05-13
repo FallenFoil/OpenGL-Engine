@@ -494,7 +494,7 @@ void loadScene(){
     printf("Loading Scene\n");
     ilInit();
     XMLElement *child;
-    doc.LoadFile( "../scene4.xml" );
+    doc.LoadFile( "../scene3.xml" );
 
     loadLights();
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
@@ -503,7 +503,7 @@ void loadScene(){
         scene.addGroup(group);
         child = child->NextSiblingElement( "group");
     }
-    loadLights();
+
     printf("Finished loading Scene!!!\n");
 }
 
@@ -518,7 +518,7 @@ void cartesianToSpherical(){
        beta=asin((camY-lY)/radius);
    }
    if(mode==0){
-       alpha=atan((lX-camX)/(lZ-camZ));
+       alpha= 3.1415 + atan((lX-camX)/(lZ-camZ));
        beta=asin((lY-camY)/radius);
    }
 }
@@ -665,7 +665,6 @@ int main(int argc, char** argv){
     glutInitWindowSize(1000,800);
     glutCreateWindow("MyWindow");
 
-    scene.turnOnLights();
     //Required callback registry
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);
@@ -684,11 +683,6 @@ int main(int argc, char** argv){
 #endif
 
     loadScene();
-<<<<<<< HEAD
-=======
-    Scene s = scene;
-    //OpenGL settings
->>>>>>> 5871c29dd361af5b623f8370a4632a8e963d7006
     glEnable(GL_TEXTURE_2D);
 
     TwBar *bar;

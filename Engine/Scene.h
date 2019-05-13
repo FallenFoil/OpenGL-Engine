@@ -28,7 +28,7 @@ public:
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 1;
         glEnable(GL_LIGHT0 + id);
     }
-    void turnOn() override{ amb[2]=0.6; diff[2]=1; glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);}
+    void turnOn() override{ glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);}
 };
 
 class DiretionalLight : public Light{

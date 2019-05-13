@@ -22,7 +22,6 @@ void Scene::turnOnLights() {
     for(i = 0; i < lights.size(); i++){
         lights[i]->turnOn();
     }
-    if(i != 0) 	glEnable(GL_LIGHTING);
 }
 
 void Scene::turnOffLights() {
