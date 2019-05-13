@@ -17,7 +17,6 @@
 #include <utility>
 #include <string>
 #include <map>
-#include "Ponto.h"
 
 class Color {
     virtual void applyColor() = 0;
@@ -27,28 +26,28 @@ protected:
 
 class DiffuseColor : public Color {
 public:
-    DiffuseColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
+    DiffuseColor(){ colors[0] = 0.8; colors[1] = 0.8; colors[2] = 0.8; colors[3] = 1.0; };
     DiffuseColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_DIFFUSE, colors);}
 };
 
 class SpecularColor : public Color {
 public:
-    SpecularColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
+    SpecularColor(){ colors[0] = 0.0; colors[1] = 0.0; colors[2] = 0.0; colors[3] = 1.0; };
     SpecularColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_SPECULAR, colors);}
 };
 
 class EmissiveColor : public Color {
 public:
-    EmissiveColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
+    EmissiveColor(){ colors[0] = 0.0; colors[1] = 0.0; colors[2] = 0.0; colors[3] = 1.0; };
     EmissiveColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_EMISSION, colors);}
 };
 
 class AmbientColor : public Color {
 public:
-    AmbientColor(){for(int i = 0; i < 4; i++) colors[i] = 0;};
+    AmbientColor(){ colors[0] = 0.2; colors[1] = 0.2; colors[2] = 0.2; colors[3] = 1.0; };
     AmbientColor(float r, float g, float b){colors[0] = r; colors[1] = g; colors[2] = b;colors[3]=1.0f;};
     void applyColor() override {glMaterialfv(GL_FRONT, GL_AMBIENT, colors);}
 };

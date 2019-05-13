@@ -5,13 +5,13 @@
 	<group name="Univere">
 		<scale X="240" Y="240" Z="240"/>
         <models>
-            <model file="../3d_Models/universe.3d" texture="../Textures/stars2.jpg"/>
+            <model file="../3d_Models/universe.3d" emissR="55" emissG="55" emissB="55" texture="../Textures/stars2.jpg"/>
         </models>
     </group>
     <group name="Sun">
         <scale X="8.11" Y="8.11" Z="8.11"/>
         <models>
-            <model file="../3d_Models/sphere.3d" texture="../Textures/sun.jpg"/>
+            <model file="../3d_Models/sphere.3d" emissR="155" emissG="155" emissB="155" texture="../Textures/sun.jpg"/>
         </models>
     </group>
     <group name="Halley">
@@ -250,7 +250,7 @@
             	<rotate ang="29.6" axisX="0" axisY="0" axisZ="1"/>
             	<scale X="1.585" Y="1.585" Z="1.585"/>
                 <models>
-                    <model file="../3d_Models/sphere.3d" emissR="255" emissG="255" emissB="255" texture="../Textures/neptune.jpg"/>
+                    <model file="../3d_Models/sphere.3d" texture="../Textures/neptune.jpg"/>
                 </models>
             </group>
         </group>
