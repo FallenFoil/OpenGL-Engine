@@ -25,42 +25,185 @@ string createBox(float width, float height, float depth,  int stacks, int slices
     ss << (slices * stacks * 2 + stacks * depthDivisions * 2 + depthDivisions * slices * 2) * 6 << "\n";
     float boxWidth, boxHeight, boxDepth;
     boxWidth = width/slices; boxHeight = height/stacks; boxDepth = depth/depthDivisions;
-    Ponto t1(-width/2, height/2, -depth/2);
-    Ponto t2, t3, t4, b1, b2, b3, b4;
+    float t1x, t1y, t1z, t2Savedx, t2Savedy, t2Savedz, b1Savedx, b1Savedy, b1Savedz;
+    t1x = -width/2; t1y = height/2; t1z = -depth/2;
 
     for(int i = 0; i < stacks; i++){
-        b1 = t1.translate(0,-boxHeight, 0);
-        Ponto b1Saved(b1);
+        b1Savedx = t1x; b1Savedy = t1y - boxHeight; b1Savedz = t1z;
         for(int k = 0; k < depthDivisions; k++){
-            t2 = t1.translate(0, 0, boxDepth);
-            Ponto t2Saved(t2);
+            t2Savedx = t1x; t2Savedy = t1y; t2Savedz = t1z + boxDepth;
             for(int j = 0; j < slices; j++){
-                t2 = t1.translate(0, 0, boxDepth);
-                t3 = t1.translate(boxWidth, 0, boxDepth);
-                t4 = t1.translate(boxWidth, 0, 0);
-                b1 = t1.translate(0,-boxHeight, 0);
-                b2 = t1.translate(0,-boxHeight, boxDepth);
-                b3 = t1.translate(boxWidth,-boxHeight, boxDepth);
-                b4 = t1.translate(boxWidth,-boxHeight, 0);
 
-                if(i == 0)
-                    ss << toStringPlane(t1,t2,t3,t4);
-                if(i == stacks-1)
-                    ss << toStringPlane(b3,b2,b1,b4);
-                if(k == 0)
-                    ss << toStringPlane(b4,b1,t1,t4);
-                if(k == depthDivisions-1)
-                    ss << toStringPlane(t2,b2,b3,t3);
-                if(j == 0)
-                    ss << toStringPlane(b2,t2,t1,b1);
-                if(j == slices-1)
-                    ss << toStringPlane(t3,b3,b4,t4);
+                if(i == 0){
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
 
-                t1 = t1.translate(boxWidth,0,0);
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
+
+                }
+                if(i == stacks-1){
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices +0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices + 0.5<< " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5  << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices + 0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+
+                }
+
+                if(k == 0){
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                }
+
+                if(k == depthDivisions-1){
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                }
+
+                if(j == 0){
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                }
+
+                if(j == slices-1){
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                }
+                t1x += boxWidth;
             }
-            t1 = Ponto(t2Saved);
+            t1x = t2Savedx; t1y = t2Savedy; t1z = t2Savedz;
         }
-        t1 = Ponto(b1Saved);
+        t1x = b1Savedx; t1y = b1Savedy; t1z = b1Savedz;
     }
     return ss.str();
 }
@@ -74,6 +217,10 @@ string createBox(float width, float height, float depth,  int stacks, int slices
  * direction é a direção do plano, varia entre 1 e -1. 1 é um plano normal e -1 é o inverso.
  *
  * Retorna uma string com os vertice do plano
+ *
+ * D - C
+ * |   |
+ * A - B
  */
 string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float sizeZ, int direction){
     float x, y=0, z;
@@ -90,30 +237,42 @@ string createPlane(float oX, float oY, float oZ, float sizeX, float sizeY, float
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 0 << endl;
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 1 << endl;
 
     //D
     x = oX-sizeX/2; y = oY+sizeY/2; z = oZ-sizeZ/2;
     if(sizeX==0){z = sizeZ/2;}
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 1 << endl;
 
     //Triangulo direito
 
     //C
     x = (oX+sizeX/2)*dirX; y = (oY+sizeY/2)*dirY; z = (oZ-sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 1 << endl;
 
     //A
     x = (oX-sizeX/2)*dirX; y = (oY-sizeY/2)*dirY; z = (oZ+sizeZ/2)*dirZ;
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 0 << " " << 0 << endl;
 
     //B
     x = oX+sizeX/2; y = oY-sizeY/2; z = oZ+sizeZ/2;
     if(sizeX==0){z = -sizeZ/2;}
     ss << x << " " << y << " " << z << endl;
+    ss << x << " " << direction << " " << z << endl;
+    ss << 1 << " " << 0 << endl;
 
     return ss.str();
 }
@@ -168,29 +327,29 @@ string createSphere(float radius, int slices, int stacks){
             if(i != (stacks/2.0f)-1){
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
-                ss << j*textSlice << " " << i*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), 1);
-                ss << j*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
             }
 
             if(i != -(stacks/2.0f)){
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, 1);
-                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
             }
         }
     }
@@ -216,30 +375,30 @@ string createReverseSphere(float radius, int slices, int stacks){
         for(int j = 0; j < slices; j++){
             if(i != (stacks/2.0f)-1){
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*(i+1), radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i+1), 1);
-                ss << (j)*textSlice << " " << (i+1)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*(i+1), 1);
+                ss << (j)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
             }
 
             if(i != -(stacks/2.0f)){
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), radius);
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*(i+1), 1);
-                ss << (j+1)*textSlice << " " << (i+1)*textStack << endl;
+                ss << (j+1)*textSlice << " " << 1-(i+1+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*(j+1), oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j+1), oneStack*(i), 1);
-                ss << (j+1)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*(j+1), oneStack*i, 1);
+                ss << (j+1)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
 
                 ss << createSpherePoint(oneSlice*j, oneStack*i, radius);
-                ss << createSpherePoint(oneSlice*(j), oneStack*(i), 1);
-                ss << (j)*textSlice << " " << (i)*textStack << endl;
+                ss << createSpherePoint(oneSlice*j, oneStack*i, 1);
+                ss << (j)*textSlice << " " << 1-(i+(stacks/2.0f))*textStack << endl;
             }
         }
     }
@@ -267,15 +426,56 @@ string createConePoint(float alpha, float radius, float height){
     return ss.str();
 }
 
+void normalize(float *a) {
+
+    float l = sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+    a[0] = a[0]/l;
+    a[1] = a[1]/l;
+    a[2] = a[2]/l;
+}
+
+void cross(float *a, float *b, float *res) {
+
+    res[0] = a[1]*b[2] - a[2]*b[1];
+    res[1] = a[2]*b[0] - a[0]*b[2];
+    res[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+string createConeNormal(int i, int j, double oneSlice, double oneStack, float radius, float smallRadius){
+    float a[3] = {0,0,0};
+    float v1[3] = {0,0,0};
+    float v2[3] = {0,0,0};
+    stringstream ss;
+
+    v1[0] = radius*sin(oneSlice*(i+1)) - radius*sin(oneSlice*(i-1));
+    v1[1] = 0;
+    v1[2] = radius*cos(oneSlice*(i+1)) - radius*cos(oneSlice*(i-1));
+
+    v2[0] = smallRadius*sin(oneSlice*i) - radius*sin(oneSlice*i);
+    v2[1] = oneStack*(j+1)-oneStack*j;
+    v2[2] = smallRadius*cos(oneSlice*i) - radius*cos(oneSlice*i);
+
+    cross(v1,v2,a);
+
+    normalize(a);
+    ss << a[0] << " " << a[1] << " " << a[2] << endl;
+
+    return ss.str();
+}
+
 /*
  * Calcula os pontos de um cone construido por triangulos
  *
  * Recebe o raio da base, a altura, o numero de fatias e o numero de andares do cone.
  *
  * Retorna uma string com todos os pontos do cone.
+ *
+ * D--C
+ * |  |
+ * A--B
  */
 string createCone(double radius, double height, int slices, int stacks){
-    if(slices < 3 || stacks < 3) return string();
+    if(slices < 3 || stacks < 1) return string();
 
     stringstream ss;
     int nPontos = (6 * slices * stacks);
@@ -283,35 +483,61 @@ string createCone(double radius, double height, int slices, int stacks){
     ss << nPontos << endl;//Numero de vertices
 
     double oneSlice=(2*M_PI)/slices, oneStack=height/stacks, oneRadius=radius/stacks, smallRadius, radiusAux=radius;
+    float textSlice = 1.0f / slices, textStack = 1.0f / (stacks+1);
     int j = 0, i = 0;
 
-    for (int j = 0; j < stacks; ++j){
+    for (j = 0; j < stacks; ++j){
         smallRadius= radiusAux-oneRadius;
         for(i = 0; i < slices; i++){
             if(j == 0){
                 //Base
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                ss << "0 -1 0" << endl;
+                ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
+
                 //Origem
                 ss << "0 0 0" << endl;
+                ss << "0 -1 0" << endl;
+                ss << i*textSlice << " 1" << endl;
+
                 //B
                 ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+                ss << "0 -1 0" << endl;
+                ss << (i+1)*textSlice << " " << 1-(j+1)*textStack << endl;
             }
             //Face
             if(j!=stacks-1){
                 //A
                 ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+                ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
+
+
                 //C
                 ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+                ss << createConeNormal(i+1, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i+1)*textSlice << " " << 1-(j+2)*textStack << endl;
+
                 //D
                 ss << createConePoint(oneSlice*i, smallRadius, oneStack*(j+1));
+                ss << createConeNormal(i, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+                ss << (i)*textSlice << " " << 1-(j+2)*textStack << endl;
             }
             //C
             ss << createConePoint(oneSlice*(i+1), smallRadius, oneStack*(j+1));
+            ss << createConeNormal(i+1, j+1, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << 1-(j+2)*textStack << endl;
+
             //A
             ss << createConePoint(oneSlice*i, radiusAux, oneStack*j);
+            ss << createConeNormal(i, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << i*textSlice << " " << 1-(j+1)*textStack << endl;
+
             //B
             ss << createConePoint(oneSlice*(i+1), radiusAux, oneStack*j);
+            ss << createConeNormal(i+1, j, oneSlice, oneStack, radiusAux, smallRadius);
+            ss << (i+1)*textSlice << " " << 1-(j+1)*textStack << endl;
         }
         radiusAux = smallRadius;
     }
@@ -397,7 +623,62 @@ string getBezier(float ru, float rv, int p){
     multMatrixVector(part1, 1, auxZ, bigBZ);
 
     stringstream ss;
-    ss << bigBX[0] << " " << bigBY[0] << " " << bigBZ[0];
+    ss << bigBX[0] << " " << bigBY[0] << " " << bigBZ[0] << endl;
+
+    //Normal
+    float bigUDeriv[] = {0, 1, 2*u, 3*u*u};
+    float bigVDeriv[] = {0, 1, 2*v, 3*v*v};
+
+    //Derivada U
+    float bigBXDerivU[1];
+    float bigBYDerivU[1];
+    float bigBZDerivU[1];
+
+    multVectorMatrix(bigUDeriv, bigM, part1);
+    multMatrixVector(bigMTrans, 4, bigV, part2);
+
+    multMatrixVector(bigPX, 4, part2, auxX);
+    multMatrixVector(bigPY, 4, part2, auxY);
+    multMatrixVector(bigPZ, 4, part2, auxZ);
+
+    multMatrixVector(part1, 1, auxX, bigBXDerivU);
+    multMatrixVector(part1, 1, auxY, bigBYDerivU);
+    multMatrixVector(part1, 1, auxZ, bigBZDerivU);
+
+    //Derivada V
+    float bigBXDerivV[1];
+    float bigBYDerivV[1];
+    float bigBZDerivV[1];
+
+    multVectorMatrix(bigU, bigM, part1);
+    multMatrixVector(bigMTrans, 4, bigVDeriv, part2);
+
+    multMatrixVector(bigPX, 4, part2, auxX);
+    multMatrixVector(bigPY, 4, part2, auxY);
+    multMatrixVector(bigPZ, 4, part2, auxZ);
+
+    multMatrixVector(part1, 1, auxX, bigBXDerivV);
+    multMatrixVector(part1, 1, auxY, bigBYDerivV);
+    multMatrixVector(part1, 1, auxZ, bigBZDerivV);
+
+    //Cross
+    float bigBDeriv[3];
+    float derivU[3];
+    float derivV[3];
+
+    derivU[0] = bigBXDerivU[0];
+    derivU[1] = bigBYDerivU[0];
+    derivU[2] = bigBZDerivU[0];
+
+    derivV[0] = bigBXDerivV[0];
+    derivV[1] = bigBYDerivV[0];
+    derivV[2] = bigBZDerivV[0];
+
+    cross(derivU,derivV, bigBDeriv);
+    ss << bigBDeriv[0] << " " << bigBDeriv[1] << " " << bigBDeriv[2] << endl;
+
+    //Textura
+    ss << u << " " << v << endl;
 
     return ss.str();
 }
@@ -410,13 +691,14 @@ string createBezierPatches(){
     for (int p = 0; p < nPatches; p++) {
         for (int u = 0; u < resU-1; u++) {
             for (int v = 0; v < resV-1; v++) {
-                ss2 << getBezier(u, v, p) << endl;
-                ss2 << getBezier(u, v+1, p) << endl;
-                ss2 << getBezier(u+1, v, p) << endl;
+                ss2 << getBezier(u, v, p);
+                ss2 << getBezier(u, v+1, p);
+                ss2 << getBezier(u+1, v, p);
 
-                ss2 << getBezier(u, v+1, p) << endl;
-                ss2 << getBezier(u+1, v+1, p) << endl;
-                ss2 << getBezier(u+1, v, p) << endl;
+                ss2 << getBezier(u, v+1, p);
+                ss2 << getBezier(u+1, v+1, p);
+                ss2 << getBezier(u+1, v, p);
+
                 pointscount += 6;
             }
         }
@@ -465,10 +747,54 @@ string loadPatch(char* file, int tessLevel){
         return createBezierPatches();
     }
     else{
-        cout << "Unable to open patch file";
+        cout << "Unable to open patch file" << endl;
     }
 
     return "";
+}
+
+/*
+ *   C-D
+ *  /   \
+ * A-----B
+ */
+string createRing(float innerRadius, float outerRadius, int slices){
+    stringstream ss;
+
+    ss << 6*slices << endl;
+
+    double oneSlice=(2*M_PI)/slices;
+    float textSlice = 1.0f / slices;
+
+    for (int i = 0; i < slices; ++i){
+        //A
+        ss << createConePoint(oneSlice*i, outerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "1 0" << endl;
+        //D
+        ss << createConePoint(oneSlice*(i+1), innerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "0 1" << endl;
+        //C
+        ss << createConePoint(oneSlice*i, innerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "0 0" << endl;
+
+        //A
+        ss << createConePoint(oneSlice*i, outerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "1 0" << endl;
+        //B
+        ss << createConePoint(oneSlice*(i+1), outerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "1 1" << endl;
+        //D
+        ss << createConePoint(oneSlice*(i+1), innerRadius, 0);
+        ss << "0 1 0" << endl;
+        ss << "0 1" << endl;
+    }
+
+    return ss.str();
 }
 
 int main(int argc, char** argv){
@@ -497,6 +823,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("Box")==0 || shape.compare("box") ==0 ){
         if(argc == 6){
             file.open(argv[5]);
@@ -521,8 +848,10 @@ int main(int argc, char** argv){
                 }
             }
         }
+
         return 0;
     }
+
     if(shape.compare("Sphere")==0 || shape.compare("sphere")==0){
         if(argc<5){
             printf("Required Radius, Slices and Stacks.\n");
@@ -538,6 +867,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("ReverseSphere")==0 || shape.compare("reversesphere")==0){
         if(argc<5){
             printf("Required Radius, Slices and Stacks.\n");
@@ -553,6 +883,7 @@ int main(int argc, char** argv){
 
         return 0;
     }
+
     if(shape.compare("Cone")==0 || shape.compare("cone")==0){
         if(argc<6){
             printf("Required Radius, Height, Slices and Stacks.\n");
@@ -565,19 +896,44 @@ int main(int argc, char** argv){
 
         file.open(argv[6]);
         file << createCone(atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
+
+        return 0;
     }
-    else{
-        if(argc<3){
+
+    if(shape.compare("Bezier")==0 || shape.compare("bezier")==0){
+        if(argc<4){
             printf("Required Bezier Patches file and tessellation level.\n");
             exit(EXIT_FAILURE);
         }
 
-        if(argc<4){
+        if(argc<5){
             printf("Required output file name.\n");
             exit(EXIT_FAILURE);
         }
-        file.open(argv[3]);
-        file << loadPatch(argv[1], atoi(argv[2]));
+        file.open(argv[4]);
+        file << loadPatch(argv[2], atoi(argv[3]));
+
+        return 0;
     }
-    return 0;
+
+    if(shape.compare("Ring")==0 || shape.compare("ring")==0){ //.Generator ring inner outter slices file
+        if(argc<5){
+            printf("Required inner Radius, outer radius and Slices.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        if(argc<6){
+            printf("Required output file name.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        file.open(argv[5]);
+        file << createRing(atof(argv[2]), atof(argv[3]), atof(argv[4]));
+
+        return 0;
+    }
+    else{
+        printf("Unrecognized shape type.\n");
+        exit(EXIT_FAILURE);
+    }
 }

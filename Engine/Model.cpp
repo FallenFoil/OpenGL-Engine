@@ -1,7 +1,3 @@
-//
-// Created by cesar on 2/25/19.
-//
-
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -16,12 +12,11 @@
 #include <stdlib.h>
 #include <string>
 #include "Model.h"
-#include "Ponto.h"
 
 //std::unordered_map<std::string, Model*> Model::modelsLoaded;
 
 
-Model::Model() {
+Model::Model(){
     this->red = this->blue = this->green = 1;
     this->filePath = (char*) malloc(1);
     std::strcpy(this->filePath, "\0");
@@ -29,10 +24,11 @@ Model::Model() {
     texturePath = new std::string("");
 }
 
-Model::Model(char* filepath)  {
+Model::Model(char* filepath){
     this->filePath = (char*) malloc(strlen(filepath) + 1);
     std::strcpy(this->filePath, filepath);
     loadPoints();
+    this->red = this->blue = this->green = 1;
     dColor = nullptr;
     sColor = nullptr;
     eColor = nullptr;
@@ -52,7 +48,7 @@ Model::Model(Model *m){
     this->aColor = m->aColor;
 }
 
-char* Model::getFilePath() {
+char* Model::getFilePath(){
     return this->filePath;
 }
 
@@ -81,7 +77,7 @@ void Model::loadPoints(){
         vertexB[vertexBSize++] = x;
         vertexB[vertexBSize++] = y;
         vertexB[vertexBSize++] = z;
-    /*
+
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f %f", &x, &y, &z);
         normal.push_back(x);
@@ -91,7 +87,7 @@ void Model::loadPoints(){
         file.getline(buffer, 99);
         sscanf(buffer,"%f %f", &x, &y);
         texCoord.push_back(x);
-        texCoord.push_back(y);*/
+        texCoord.push_back(y);
     }
 
     file.close();
@@ -110,14 +106,11 @@ void Model::loadPoints(){
     free(vertexB);
 }
 
-
-void Model::applyColour() {
+void Model::applyColour(){
     glColor3f(this->red, this->green, this->blue);
 }
 
-
-
-void Model::loadTexture() {
+void Model::loadTexture(){
 
     unsigned int t, tw, th;
     unsigned char *texData;
@@ -141,28 +134,35 @@ void Model::loadTexture() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 }
 
+void Model::setTexture(std::string *texture){
+    this->texturePath = texture;
+    if(!this->texturePath->empty()){
+        loadTexture();
+    }
+}
+
 void Model::draw(){
     applyColour();
     if(dColor != nullptr) dColor->applyColor();
     if(sColor != nullptr) sColor->applyColor();
     if(eColor != nullptr) eColor->applyColor();
     if(aColor != nullptr) aColor->applyColor();
-    if(texturePath !=nullptr && texturePath == new std::string("") != 0){
-        glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);
-        glTexCoordPointer(2, GL_FLOAT, 0, 0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
-        glNormalPointer(GL_FLOAT, 0, 0);
-
+    if(texturePath != nullptr && !texturePath->empty()){
         glBindTexture(GL_TEXTURE_2D, texture);
     }
-
     glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
     glVertexPointer(3,GL_FLOAT,0,0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
+    glNormalPointer(GL_FLOAT, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);
+    glTexCoordPointer(2, GL_FLOAT, 0, 0);
+
     glDrawArrays(GL_TRIANGLES, 0, getNumberOfPoints());
 
-    if(texturePath != nullptr && texturePath == new std::string("") != 0){
+    if(texturePath != nullptr && !texturePath->empty()){
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

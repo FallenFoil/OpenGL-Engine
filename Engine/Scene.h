@@ -12,9 +12,9 @@
 class Light{
 protected:
     short id;
-    float colorDiff[4] = {1,1,1,1};
-    float colorAmb[4] = {1,1,1,1};
     float pos[4] = {0,0,0,0};
+    float amb[4] = {1,1,1,1};
+    float diff[4] = {1,1,1,1};
 public:
     short getID(){return id;};
     virtual void turnOn() = 0;
@@ -26,13 +26,9 @@ public:
     PointLight(short id, float posX, float posY, float posZ){
         this->id = id;
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 1;
-    }
-    void turnOn() override{
-        glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
         glEnable(GL_LIGHT0 + id);
     }
+    void turnOn() override{ amb[2]=0.6; diff[2]=1; glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);}
 };
 
 class DiretionalLight : public Light{
@@ -40,31 +36,26 @@ public:
     DiretionalLight(short id, float posX, float posY, float posZ){
         this->id = id;
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 0;
-    }
-    void turnOn() override{
         glEnable(GL_LIGHT0 + id);
-        glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
     }
+    void turnOn() override{ glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff); }
 };
 
 class SpotLight : public Light{
-    float spotDir[3] = {0};
+    float spotDir[3] = {0,0,0};
 public:
     SpotLight(short id, float posX, float posY, float posZ, float dirX, float dirY, float dirZ){
         this->id = id;
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 1;
-        spotDir[0] = dirX; spotDir[1] = dirY; spotDir[2] = dirZ; spotDir[3] = 1;
+        spotDir[0] = dirX; spotDir[1] = dirY; spotDir[2] = dirZ;
+        glEnable(GL_LIGHT0 + id);
     }
     void turnOn() override{
-        glEnable(GL_LIGHT0 + id);
         glLightfv(GL_LIGHT0 + id, GL_POSITION, pos);
+        glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);
         glLightfv(GL_LIGHT0 + id, GL_SPOT_DIRECTION, spotDir);
         glLightf(GL_LIGHT0 + id, GL_SPOT_CUTOFF, 45.0);
         glLightf(GL_LIGHT0 + id ,GL_SPOT_EXPONENT, 0.0);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorDiff);
-        glLightfv(GL_FRONT, GL_DIFFUSE, colorAmb);
     }
 };
 
@@ -78,6 +69,7 @@ public:
     void addLight(Light *l);
     std::vector<Group> getGroups();
     Scene();
+    Group getGroup(char* name);
 };
 
 
