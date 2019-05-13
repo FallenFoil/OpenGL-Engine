@@ -1,12 +1,10 @@
 <scene>
+    <lights>
+        <light type="POINT" posX="3" posY="3" posZ="3" />
+    </lights>
     <group>
         <models>
-            <model file="../3d_Models/sphere.3d" R="255" G="0" B="0" />
-        </models>
-    </group>
-    <group>
-        <models>
-            <model file="../3d_Models/teste.3d" R="0" G="0" B="255" />
+            <model file="../3d_Models/box.3d" texture="../Textures/sun.jpg" />
         </models>
     </group>
 </scene>

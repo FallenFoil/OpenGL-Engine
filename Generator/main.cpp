@@ -25,42 +25,185 @@ string createBox(float width, float height, float depth,  int stacks, int slices
     ss << (slices * stacks * 2 + stacks * depthDivisions * 2 + depthDivisions * slices * 2) * 6 << "\n";
     float boxWidth, boxHeight, boxDepth;
     boxWidth = width/slices; boxHeight = height/stacks; boxDepth = depth/depthDivisions;
-    Ponto t1(-width/2, height/2, -depth/2);
-    Ponto t2, t3, t4, b1, b2, b3, b4;
+    float t1x, t1y, t1z, t2Savedx, t2Savedy, t2Savedz, b1Savedx, b1Savedy, b1Savedz;
+    t1x = -width/2; t1y = height/2; t1z = -depth/2;
 
     for(int i = 0; i < stacks; i++){
-        b1 = t1.translate(0,-boxHeight, 0);
-        Ponto b1Saved(b1);
+        b1Savedx = t1x; b1Savedy = t1y - boxHeight; b1Savedz = t1z;
         for(int k = 0; k < depthDivisions; k++){
-            t2 = t1.translate(0, 0, boxDepth);
-            Ponto t2Saved(t2);
+            t2Savedx = t1x; t2Savedy = t1y; t2Savedz = t1z + boxDepth;
             for(int j = 0; j < slices; j++){
-                t2 = t1.translate(0, 0, boxDepth);
-                t3 = t1.translate(boxWidth, 0, boxDepth);
-                t4 = t1.translate(boxWidth, 0, 0);
-                b1 = t1.translate(0,-boxHeight, 0);
-                b2 = t1.translate(0,-boxHeight, boxDepth);
-                b3 = t1.translate(boxWidth,-boxHeight, boxDepth);
-                b4 = t1.translate(boxWidth,-boxHeight, 0);
 
-                if(i == 0)
-                    ss << toStringPlane(t1,t2,t3,t4);
-                if(i == stacks-1)
-                    ss << toStringPlane(b3,b2,b1,b4);
-                if(k == 0)
-                    ss << toStringPlane(b4,b1,t1,t4);
-                if(k == depthDivisions-1)
-                    ss << toStringPlane(t2,b2,b3,t3);
-                if(j == 0)
-                    ss << toStringPlane(b2,t2,t1,b1);
-                if(j == slices-1)
-                    ss << toStringPlane(t3,b3,b4,t4);
+                if(i == 0){
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
 
-                t1 = t1.translate(boxWidth,0,0);
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices << " " << (k*1.f/3)/depthDivisions << endl;
+
+                }
+                if(i == stacks-1){
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices +0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << (j*1.f/2)/slices + 0.5<< " " << (k*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5  << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "-1 " << "0" << endl;
+                    ss << ((j+1)*1.f/2)/slices + 0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+
+                }
+
+                if(k == 0){
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "0 " << "0 " << "-1" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                }
+
+                if(k == depthDivisions-1){
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "0 " << "0 " << "1" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                }
+
+                if(j == 0){
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "-1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                }
+
+                if(j == slices-1){
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                    ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
+                    ss << "1 " << "0 " << "0" << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+
+                }
+                t1x += boxWidth;
             }
-            t1 = Ponto(t2Saved);
+            t1x = t2Savedx; t1y = t2Savedy; t1z = t2Savedz;
         }
-        t1 = Ponto(b1Saved);
+        t1x = b1Savedx; t1y = b1Savedy; t1z = b1Savedz;
     }
     return ss.str();
 }
