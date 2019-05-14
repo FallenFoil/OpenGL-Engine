@@ -19,6 +19,8 @@ public:
     short getID(){return id;};
     virtual void turnOn() = 0;
     void turnOff(){glDisable(GL_LIGHT0 + id);};
+    void setAmb(float ambR, float ambG, float ambB){amb[0]=ambR; amb[1]=ambG; amb[2]=ambB;}
+    void setDiff(float diffR, float diffG, float diffB){diff[0]=diffR; diff[1]=diffG; diff[2]=diffB;}
 };
 
 class PointLight : public Light{

@@ -1,6 +1,6 @@
 <scene>
 	<lights>
-		<light type="POINT" posX="0" posY="0" posZ="0" />
+		<light type="POINT" posX="0" posY="0" posZ="0"/>
 	</lights>
 	<group name="Univere">
 		<scale X="240" Y="240" Z="240"/>

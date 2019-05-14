@@ -25,11 +25,12 @@ XMLDocument doc;
 int timebase = 0, frame = 0;
 
 //Camera Variables
-
 float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
 float alpha = 3.1415, beta = 0, radius = 50;
+float rotationSpeed = 0.015;
+float camSpeed = 0.01f;
 
 //Controller Variables
 /*
@@ -42,7 +43,6 @@ float alpha = 3.1415, beta = 0, radius = 50;
 int keys[10] = {0,0,0,0,0,0,0,0,0,0};
 int mode=0, axes=0, light=1;
 GLenum OPTION = GL_FILL;
-float camSpeed = 0.01f;
 
 std::string getAttributeOrDefault(XMLElement *element, const char* atr, std::string defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
@@ -172,10 +172,10 @@ void sphericalToCartesian(){
 void controllers(){
     int modeMult=-1;
     if(mode==1){modeMult=1;}
-    if(keys[0]==1){alpha += modeMult*0.015;sphericalToCartesian();}
-    if(keys[1]==1){alpha -= modeMult*0.015;sphericalToCartesian();}
-    if(keys[2]==1){beta += 0.015f;if(beta >=  1.57f){beta =  1.57f;}sphericalToCartesian();}
-    if(keys[3]==1){beta -= 0.015f;if(beta <= -1.57f){beta = -1.57f;}sphericalToCartesian();}
+    if(keys[0]==1){alpha += modeMult*rotationSpeed;sphericalToCartesian();}
+    if(keys[1]==1){alpha -= modeMult*rotationSpeed;sphericalToCartesian();}
+    if(keys[2]==1){beta += rotationSpeed;if(beta >=  1.57f){beta =  1.57f;}sphericalToCartesian();}
+    if(keys[3]==1){beta -= rotationSpeed;if(beta <= -1.57f){beta = -1.57f;}sphericalToCartesian();}
 
     radius = sqrt(pow((lX-camX),2) + pow((lY-camY),2) + pow((lZ-camZ),2));
 
@@ -451,6 +451,17 @@ void loadLights(){
         short id = 0;
         if(strcmp(child->Value(), "light") == 0){
             string type = getAttributeOrDefault(child, "type", "");
+            float ambR, ambG, ambB;
+            ambR = getAttributeOrDefault(child, "ambR", 255) / 255;
+            ambG = getAttributeOrDefault(child, "ambG", 255) / 255;
+            ambB = getAttributeOrDefault(child, "ambB", 255) / 255;
+
+            float diffR, diffG, diffB;
+            diffR = getAttributeOrDefault(child, "diffR", 255) / 255;
+            diffG = getAttributeOrDefault(child, "diffG", 255) / 255;
+            diffB = getAttributeOrDefault(child, "diffB", 255) / 255;
+
+
 
             if(type == string("")) throw EngineException("type attribute is required in a light");
 
@@ -460,6 +471,8 @@ void loadLights(){
                 posY = getAttributeOrDefault(child, "posY", 0);
                 posZ = getAttributeOrDefault(child, "posZ", 0);
                 auto *l = new PointLight(id, posX, posY, posZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else if(type == string("DIRECTIONAL")){
                 float dirX, dirY, dirZ;
@@ -467,6 +480,8 @@ void loadLights(){
                 dirY = getAttributeOrDefault(child, "dirY", 0);
                 dirZ = getAttributeOrDefault(child, "dirZ", 0);
                 auto *l = new DiretionalLight(id, dirX, dirY, dirZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else if (type == string("SPOT")){
                 float posX, posY, posZ, dirX, dirY, dirZ;
@@ -477,6 +492,8 @@ void loadLights(){
                 dirY = getAttributeOrDefault(child, "dirY", 0);
                 dirZ = getAttributeOrDefault(child, "dirZ", 0);
                 auto *l = new SpotLight(id, posX, posY, posZ, dirX, dirY, dirZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else{
                 throw EngineException(string("There is no default type: ") + type);
@@ -487,17 +504,41 @@ void loadLights(){
     }
 }
 
+void cartesianToSpherical(){
+    radius = sqrt(pow((camX-lX),2) + pow((camY-lY),2) + pow((camZ-lZ),2));
+    if(mode==1){
+        alpha=atan((camX-lX)/(camZ-lZ));
+        beta=asin((camY-lY)/radius);
+    }
+    if(mode==0){
+        alpha= 3.1415 + atan((lX-camX)/(lZ-camZ));
+        beta=asin((lY-camY)/radius);
+    }
+}
+
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
-void loadScene(){
+void loadScene(char* str){
     printf("Loading Scene\n");
     ilInit();
-    XMLElement *child;
-    doc.LoadFile( "../scene3.xml" );
+    XMLElement *child, *aux;
+    doc.LoadFile( str );
 
     loadLights();
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
+
+    aux = doc.FirstChildElement( "scene" );
+    camX = getAttributeOrDefault(aux, "CamX", 0);
+    camY = getAttributeOrDefault(aux, "CamY", 0);
+    camZ = getAttributeOrDefault(aux, "CamZ", 50);
+
+    lX = getAttributeOrDefault(aux, "LookAtX", 0);
+    lY = getAttributeOrDefault(aux, "LookAtY", 0);
+    lZ = getAttributeOrDefault(aux, "LookAtZ", 0);
+
+    cartesianToSpherical();
+
     while(child){
         Group group = loadGroup(child);
         scene.addGroup(group);
@@ -509,18 +550,6 @@ void loadScene(){
 
 void Terminate(){
     TwTerminate();
-}
-
-void cartesianToSpherical(){
-    radius = sqrt(pow((camX-lX),2) + pow((camY-lY),2) + pow((camZ-lZ),2));
-   if(mode==1){
-       alpha=atan((camX-lX)/(camZ-lZ));
-       beta=asin((camY-lY)/radius);
-   }
-   if(mode==0){
-       alpha= 3.1415 + atan((lX-camX)/(lZ-camZ));
-       beta=asin((lY-camY)/radius);
-   }
 }
 
 void TW_CALL setCamX(const void *value, void *clientData){
@@ -644,6 +673,7 @@ void menuTweakBar(TwBar *myBar){
     TwDefine(" Menu/Esfericas  group=Camera \n");
 
     TwAddVarRW(myBar, "Cam Speed", TW_TYPE_FLOAT, &camSpeed, " min=0 step=0.001 group='Camera' ");
+    TwAddVarRW(myBar, "Rotation Speed", TW_TYPE_FLOAT, &rotationSpeed, " min=0 step=0.001 group='Camera' ");
 
     TwAddButton(myBar, "POINT", polygonModePoint, NULL, " group='Polygon Mode' ");
     TwAddButton(myBar, "LINE", polygonModeLine, NULL, " group='Polygon Mode' ");
@@ -658,6 +688,11 @@ void menuTweakBar(TwBar *myBar){
 }
 
 int main(int argc, char** argv){
+    if(argc<2){
+        printf("Path to scene is required.\n");
+        exit(1);
+    }
+
     //init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
@@ -682,7 +717,7 @@ int main(int argc, char** argv){
     glewInit();
 #endif
 
-    loadScene();
+    loadScene(argv[1]);
     glEnable(GL_TEXTURE_2D);
 
     TwBar *bar;
