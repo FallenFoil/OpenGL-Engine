@@ -148,8 +148,10 @@ void TranslateCatMull::renderCatmullRomCurve() {
 // draw curve using line segments with GL_LINE_LOOP
     float pos[4];
     float deriv[4];
+    float amb[4] = {1,1,1,1};
     int pointCount = 100;
     glBegin(GL_LINE_LOOP);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
     for (int i = 0; i < pointCount; i++) {
         getGlobalCatmullRomPoint(i * (1.0f) / pointCount, pos, deriv);
         glVertex3f(pos[0], pos[1], pos[2]);
