@@ -337,7 +337,7 @@ Model loadModel(XMLElement *model){
         green = getAttributeOrDefault(model, colors[i] + "G", -1);
         blue = getAttributeOrDefault(model, colors[i] + "B", -1);
 
-        if(red >= 0 && green >= 0 && blue >= 0)
+        if(red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255)
             switch(i){
                 case 0: m.setColour(red/255.0f, green/255.0f, blue/255.0f); break;
                 case 1: m.setDiffuseColor(red/255.0f, green/255.0f, blue/255.0f); break;
@@ -346,8 +346,13 @@ Model loadModel(XMLElement *model){
                 case 4: m.setAmbientColor(red/255.0f, green/255.0f, blue/255.0f); break;
                 default: break;
             }
-        else if(red >= 0 || green >= 0 || blue >= 0) {
-            throw EngineException("R, G and B attributes are all required to define color: " + colors[i]);
+        else{
+            if(red >= 0 || green >= 0 || blue >= 0) {
+                throw EngineException("R, G and B attributes are all required to define color: " + colors[i]);
+            }
+            if(red > 255 || green > 255 || blue > 255){
+                throw EngineException("R, G and B attributes must be >=0 and <=255: " + colors[i]);
+            }
         }
     }
     return m;
