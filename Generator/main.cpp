@@ -685,7 +685,7 @@ string getBezier(float ru, float rv, int p){
     derivV[1] = bigBYDerivV[0];
     derivV[2] = bigBZDerivV[0];
 
-    cross(derivU,derivV, bigBDeriv);
+    cross(derivV,derivU, bigBDeriv);
     ss << bigBDeriv[0] << " " << bigBDeriv[1] << " " << bigBDeriv[2] << endl;
 
     //Textura

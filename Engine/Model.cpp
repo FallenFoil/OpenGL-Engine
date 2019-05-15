@@ -29,10 +29,10 @@ Model::Model(char* filepath){
     std::strcpy(this->filePath, filepath);
     loadPoints();
     this->red = this->blue = this->green = 1;
-    dColor = nullptr;
-    sColor = nullptr;
-    eColor = nullptr;
-    aColor = nullptr;
+    dColor = new DiffuseColor();
+    sColor = new SpecularColor();
+    eColor = new EmissiveColor();
+    aColor = new AmbientColor();
 }
 
 Model::Model(Model *m){
@@ -143,10 +143,10 @@ void Model::setTexture(std::string *texture){
 
 void Model::draw(){
     applyColour();
-    if(dColor != nullptr) dColor->applyColor();
-    if(sColor != nullptr) sColor->applyColor();
-    if(eColor != nullptr) eColor->applyColor();
-    if(aColor != nullptr) aColor->applyColor();
+    dColor->applyColor();
+    sColor->applyColor();
+    eColor->applyColor();
+    aColor->applyColor();
 
     if(texturePath != nullptr && !texturePath->empty()){
         glBindTexture(GL_TEXTURE_2D, texture);

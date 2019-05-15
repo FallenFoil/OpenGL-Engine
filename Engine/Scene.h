@@ -19,6 +19,8 @@ public:
     short getID(){return id;};
     virtual void turnOn() = 0;
     void turnOff(){glDisable(GL_LIGHT0 + id);};
+    void setAmb(float ambR, float ambG, float ambB){amb[0]=ambR; amb[1]=ambG; amb[2]=ambB;}
+    void setDiff(float diffR, float diffG, float diffB){diff[0]=diffR; diff[1]=diffG; diff[2]=diffB;}
 };
 
 class PointLight : public Light{
@@ -28,7 +30,7 @@ public:
         pos[0] = posX; pos[1] = posY; pos[2] = posZ; pos[3] = 1;
         glEnable(GL_LIGHT0 + id);
     }
-    void turnOn() override{ amb[2]=0.6; diff[2]=1; glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);}
+    void turnOn() override{ glLightfv(GL_LIGHT0 + id, GL_POSITION, pos); glLightfv(GL_LIGHT0 + id, GL_AMBIENT, amb); glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diff);}
 };
 
 class DiretionalLight : public Light{

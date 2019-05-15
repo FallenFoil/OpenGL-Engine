@@ -5,13 +5,13 @@
 #include <GL/glut.h>
 #endif
 
+#include <AntTweakBar.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <tinyxml2.h>
 #include <math.h>
 #include <IL/il.h>
-#include "Ponto.h"
 #include "Scene.h"
 #include "EngineException.h"
 
@@ -25,11 +25,12 @@ XMLDocument doc;
 int timebase = 0, frame = 0;
 
 //Camera Variables
-
 float camX = 0, camY=0, camZ = 50;
 float lX=0, lY=0, lZ=0;
 float upX=0, upY=1, upZ=0;
 float alpha = 3.1415, beta = 0, radius = 50;
+float rotationSpeed = 0.015;
+float camSpeed = 0.01f;
 
 //Controller Variables
 /*
@@ -40,9 +41,8 @@ float alpha = 3.1415, beta = 0, radius = 50;
  *|--------------------------------------------------|
  */
 int keys[10] = {0,0,0,0,0,0,0,0,0,0};
-int mode=0, axes=0;
+int mode=0, axes=0, light=1;
 GLenum OPTION = GL_FILL;
-#define K 0.015f
 
 std::string getAttributeOrDefault(XMLElement *element, const char* atr, std::string defaultValue){
     const XMLAttribute *atrXml = element->FindAttribute(atr);
@@ -96,19 +96,31 @@ void changeSize(int w, int h){
 
     // return to the model view matrix mode
     glMatrixMode(GL_MODELVIEW);
+
+    TwWindowSize(w, h);
 }
 
 void drawAxes(){
+    float colors[4];
+
+
+
     glBegin(GL_LINES);
 
+    colors[0] = 1.0; colors[1] = 0.0; colors[2] = 0.0; colors[3] = 1.0;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, colors);
     glColor3f(1,0,0);
     glVertex3f(1000,0,0);
     glVertex3f(-1000,0,0);
 
+    colors[0] = 0.0; colors[1] = 1.0; colors[2] = 0.0; colors[3] = 1.0;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, colors);
     glColor3f(0,1,0);
     glVertex3f(0,1000,0);
     glVertex3f(0,-1000,0);
 
+    colors[0] = 0.0; colors[1] = 0.0; colors[2] = 1.0; colors[3] = 1.0;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, colors);
     glColor3f(0,0,1);
     glVertex3f(0,0,1000);
     glVertex3f(0,0,-1000);
@@ -139,7 +151,7 @@ void viewFramesPerSecond(){
         fps = frame*1000.0/(time-timebase);
         timebase = time;
         frame = 0;
-        sprintf(s, "FPS: %f6.2", fps);
+        sprintf(s, "FPS: %f6", fps);
         glutSetWindowTitle(s);
     }
 }
@@ -160,10 +172,10 @@ void sphericalToCartesian(){
 void controllers(){
     int modeMult=-1;
     if(mode==1){modeMult=1;}
-    if(keys[0]==1){alpha += modeMult*0.015;sphericalToCartesian();}
-    if(keys[1]==1){alpha -= modeMult*0.015;sphericalToCartesian();}
-    if(keys[2]==1){beta += 0.015f;if(beta >=  1.57f){beta =  1.57f;}sphericalToCartesian();}
-    if(keys[3]==1){beta -= 0.015f;if(beta <= -1.57f){beta = -1.57f;}sphericalToCartesian();}
+    if(keys[0]==1){alpha += modeMult*rotationSpeed;sphericalToCartesian();}
+    if(keys[1]==1){alpha -= modeMult*rotationSpeed;sphericalToCartesian();}
+    if(keys[2]==1){beta += rotationSpeed;if(beta >=  1.57f){beta =  1.57f;}sphericalToCartesian();}
+    if(keys[3]==1){beta -= rotationSpeed;if(beta <= -1.57f){beta = -1.57f;}sphericalToCartesian();}
 
     radius = sqrt(pow((lX-camX),2) + pow((lY-camY),2) + pow((lZ-camZ),2));
 
@@ -172,10 +184,10 @@ void controllers(){
     float dZ = lZ - camZ;
     float rX,rY,rZ;
 
-    if(keys[4]==1){camX = camX + K*dX;camY = camY + K*dY;camZ = camZ + K*dZ;lX = lX + K*dX;lY = lY + K*dY;lZ = lZ + K*dZ;}
-    if(keys[5]==1){camX = camX - K*dX;camY = camY - K*dY;camZ = camZ - K*dZ;lX = lX - K*dX;lY = lY - K*dY;lZ = lZ - K*dZ;}
-    if(keys[6]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX - K*rX;camY = camY - K*rY;camZ = camZ - K*rZ;lX = lX - K*rX;lY = lY - K*rY;lZ = lZ - K*rZ;}
-    if(keys[7]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX + K*rX;camY = camY + K*rY;camZ = camZ + K*rZ;lX = lX + K*rX;lY = lY + K*rY;lZ = lZ + K*rZ;}
+    if(keys[4]==1){camX = camX + camSpeed*dX;camY = camY + camSpeed*dY;camZ = camZ + camSpeed*dZ;lX = lX + camSpeed*dX;lY = lY + camSpeed*dY;lZ = lZ + camSpeed*dZ;}
+    if(keys[5]==1){camX = camX - camSpeed*dX;camY = camY - camSpeed*dY;camZ = camZ - camSpeed*dZ;lX = lX - camSpeed*dX;lY = lY - camSpeed*dY;lZ = lZ - camSpeed*dZ;}
+    if(keys[6]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX - camSpeed*rX;camY = camY - camSpeed*rY;camZ = camZ - camSpeed*rZ;lX = lX - camSpeed*rX;lY = lY - camSpeed*rY;lZ = lZ - camSpeed*rZ;}
+    if(keys[7]==1){rX = -dZ;rY = 0;rZ = dX;camX = camX + camSpeed*rX;camY = camY + camSpeed*rY;camZ = camZ + camSpeed*rZ;lX = lX + camSpeed*rX;lY = lY + camSpeed*rY;lZ = lZ + camSpeed*rZ;}
 
     if(keys[8]==1){camY += 0.2f;lY += 0.2f;}
     if(keys[9]==1){camY -= 0.2f;lY -= 0.2f;}
@@ -196,124 +208,119 @@ void renderScene(void){
     scene.turnOnLights();
 
     controllers();
-    viewFramesPerSecond();
     if(axes){drawAxes();}
+    viewFramesPerSecond();
     draw();
+    TwDraw();
 
     // End of frame
     glutSwapBuffers();
 }
 
 void processSpecialKeys(int key, int xx, int yy){
-    switch (key) {
-        case GLUT_KEY_RIGHT:
-            keys[0]=1;
-            break;
-        case GLUT_KEY_LEFT:
-            keys[1]=1;
-            break;
-        case GLUT_KEY_UP:
-            keys[2]=1;
-            break;
-        case GLUT_KEY_DOWN:
-            keys[3]=1;
-            break;
-        default:
-            break;
+    if(!TwEventSpecialGLUT(key,xx,yy)) {
+        switch (key) {
+            case GLUT_KEY_RIGHT:
+                keys[0] = 1;
+                break;
+            case GLUT_KEY_LEFT:
+                keys[1] = 1;
+                break;
+            case GLUT_KEY_UP:
+                keys[2] = 1;
+                break;
+            case GLUT_KEY_DOWN:
+                keys[3] = 1;
+                break;
+            default:
+                break;
+        }
     }
 
     glutPostRedisplay();
 }
 
 void processUpSpecialKeys(int key, int xx, int yy){
-    switch (key) {
-        case GLUT_KEY_RIGHT:
-            keys[0]=0;
-            break;
-        case GLUT_KEY_LEFT:
-            keys[1]=0;
-            break;
-        case GLUT_KEY_UP:
-            keys[2]=0;
-            break;
-        case GLUT_KEY_DOWN:
-            keys[3]=0;
-            break;
-        default:
-            break;
+    if(!TwEventSpecialGLUT(key,xx,yy)) {
+        switch (key) {
+            case GLUT_KEY_RIGHT:
+                keys[0] = 0;
+                break;
+            case GLUT_KEY_LEFT:
+                keys[1] = 0;
+                break;
+            case GLUT_KEY_UP:
+                keys[2] = 0;
+                break;
+            case GLUT_KEY_DOWN:
+                keys[3] = 0;
+                break;
+            default:
+                break;
+        }
     }
 
     glutPostRedisplay();
 }
 
 void processKeys(unsigned char key, int xx, int yy){
-    switch(key){
-        case 'w':
-            keys[4]=1;
-            break;
-        case 's':
-            keys[5]=1;
-            break;
-        case 'a':
-            keys[6]=1;
-            break;
-        case 'd':
-            keys[7]=1;
-            break;
-        case 'i':
-            keys[8]=1;
-            break;
-        case 'j':
-            keys[9]=1;
-            break;
-        case 'm':
-            if(mode==0){mode=1;}
-            else{mode=0;}
-            alpha+=3.1415;
-            beta = 0 - beta;
-            break;
-        case '1':
-            OPTION = GL_FILL;
-            break;
-        case '2':
-            OPTION = GL_LINE;
-            break;
-        case '3':
-            OPTION = GL_POINT;
-            break;
-        case '0':
-            if(axes==0){axes=1;}
-            else{axes=0;}
-            break;
-        default:
-            break;
+    if(!TwEventSpecialGLUT(key,xx,yy)) {
+        switch (key) {
+            case 'w':
+                keys[4] = 1;
+                break;
+            case 's':
+                keys[5] = 1;
+                break;
+            case 'a':
+                keys[6] = 1;
+                break;
+            case 'd':
+                keys[7] = 1;
+                break;
+            case 'i':
+                keys[8] = 1;
+                break;
+            case 'j':
+                keys[9] = 1;
+                break;
+            case 'm':
+                if (mode == 0) { mode = 1; alpha -= 3.1415;}
+                else { mode = 0; alpha += 3.1415;}
+                beta = 0 - beta;
+                break;
+            default:
+                break;
+        }
     }
 
     glutPostRedisplay();
 }
 
 void processUpKeys(unsigned char key, int xx, int yy){
-    switch(key){
-        case 'w':
-            keys[4]=0;
-            break;
-        case 's':
-            keys[5]=0;
-            break;
-        case 'a':
-            keys[6]=0;
-            break;
-        case 'd':
-            keys[7]=0;
-            break;
-        case 'i':
-            keys[8]=0;
-            break;
-        case 'j':
-            keys[9]=0;
-            break;
-        default:
-            break;
+    if(!TwEventSpecialGLUT(key,xx,yy)){
+        switch(key){
+            case 'w':
+                keys[4]=0;
+                break;
+            case 's':
+                keys[5]=0;
+                break;
+            case 'a':
+                keys[6]=0;
+                break;
+            case 'd':
+                keys[7]=0;
+                break;
+            case 'i':
+                keys[8]=0;
+                break;
+            case 'j':
+                keys[9]=0;
+                break;
+            default:
+                break;
+        }
     }
 
     glutPostRedisplay();
@@ -330,7 +337,7 @@ Model loadModel(XMLElement *model){
         green = getAttributeOrDefault(model, colors[i] + "G", -1);
         blue = getAttributeOrDefault(model, colors[i] + "B", -1);
 
-        if(red >= 0 && green >= 0 && blue >= 0)
+        if(red >= 0 && red <= 255 && green >= 0 && green <= 255 && blue >= 0 && blue <= 255)
             switch(i){
                 case 0: m.setColour(red/255.0f, green/255.0f, blue/255.0f); break;
                 case 1: m.setDiffuseColor(red/255.0f, green/255.0f, blue/255.0f); break;
@@ -339,8 +346,13 @@ Model loadModel(XMLElement *model){
                 case 4: m.setAmbientColor(red/255.0f, green/255.0f, blue/255.0f); break;
                 default: break;
             }
-        else if(red >= 0 || green >= 0 || blue >= 0) {
-            throw EngineException("R, G and B attributes are all required to define color: " + colors[i]);
+        else{
+            if(red >= 0 || green >= 0 || blue >= 0) {
+                throw EngineException("R, G and B attributes are all required to define color: " + colors[i]);
+            }
+            if(red > 255 || green > 255 || blue > 255){
+                throw EngineException("R, G and B attributes must be >=0 and <=255: " + colors[i]);
+            }
         }
     }
     return m;
@@ -435,12 +447,26 @@ Group loadGroup(XMLElement *group){
 void loadLights(){
     XMLElement *child;
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "lights");
-    if(child){child = child->FirstChildElement();glEnable(GL_LIGHTING);}
+    if(child){
+        child = child->FirstChildElement();
+        glEnable(GL_LIGHTING);
+    }
 
     while(child){
         short id = 0;
         if(strcmp(child->Value(), "light") == 0){
             string type = getAttributeOrDefault(child, "type", "");
+            float ambR, ambG, ambB;
+            ambR = getAttributeOrDefault(child, "ambR", 255) / 255;
+            ambG = getAttributeOrDefault(child, "ambG", 255) / 255;
+            ambB = getAttributeOrDefault(child, "ambB", 255) / 255;
+
+            float diffR, diffG, diffB;
+            diffR = getAttributeOrDefault(child, "diffR", 255) / 255;
+            diffG = getAttributeOrDefault(child, "diffG", 255) / 255;
+            diffB = getAttributeOrDefault(child, "diffB", 255) / 255;
+
+
 
             if(type == string("")) throw EngineException("type attribute is required in a light");
 
@@ -450,6 +476,8 @@ void loadLights(){
                 posY = getAttributeOrDefault(child, "posY", 0);
                 posZ = getAttributeOrDefault(child, "posZ", 0);
                 auto *l = new PointLight(id, posX, posY, posZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else if(type == string("DIRECTIONAL")){
                 float dirX, dirY, dirZ;
@@ -457,6 +485,8 @@ void loadLights(){
                 dirY = getAttributeOrDefault(child, "dirY", 0);
                 dirZ = getAttributeOrDefault(child, "dirZ", 0);
                 auto *l = new DiretionalLight(id, dirX, dirY, dirZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else if (type == string("SPOT")){
                 float posX, posY, posZ, dirX, dirY, dirZ;
@@ -467,6 +497,8 @@ void loadLights(){
                 dirY = getAttributeOrDefault(child, "dirY", 0);
                 dirZ = getAttributeOrDefault(child, "dirZ", 0);
                 auto *l = new SpotLight(id, posX, posY, posZ, dirX, dirY, dirZ);
+                l->setAmb(ambR,ambG,ambB);
+                l->setDiff(diffR,diffG,diffB);
                 scene.addLight(l);
             } else{
                 throw EngineException(string("There is no default type: ") + type);
@@ -477,61 +509,239 @@ void loadLights(){
     }
 }
 
+void cartesianToSpherical(){
+    radius = sqrt(pow((camX-lX),2) + pow((camY-lY),2) + pow((camZ-lZ),2));
+    if(mode==1){
+        alpha=atan((camX-lX)/(camZ-lZ));
+        beta=asin((camY-lY)/radius);
+    }
+    if(mode==0){
+        alpha= 3.1415 + atan((lX-camX)/(lZ-camZ));
+        beta=asin((lY-camY)/radius);
+    }
+}
+
 /*
  * Faz parse do ficheiro XML colocando a scene em memoria numa estrutura apropriada.
  */
-void loadScene(){
+void loadScene(char* str){
     printf("Loading Scene\n");
-    XMLElement *child;
-    doc.LoadFile( "../scene4.xml" );
+    ilInit();
+    XMLElement *child, *aux;
+    doc.LoadFile( str );
 
     loadLights();
     child = doc.FirstChildElement( "scene" )->FirstChildElement( "group");
+
+    aux = doc.FirstChildElement( "scene" );
+    camX = getAttributeOrDefault(aux, "CamX", 0);
+    camY = getAttributeOrDefault(aux, "CamY", 0);
+    camZ = getAttributeOrDefault(aux, "CamZ", 50);
+
+    lX = getAttributeOrDefault(aux, "LookAtX", 0);
+    lY = getAttributeOrDefault(aux, "LookAtY", 0);
+    lZ = getAttributeOrDefault(aux, "LookAtZ", 0);
+
+    cartesianToSpherical();
+
     while(child){
         Group group = loadGroup(child);
         scene.addGroup(group);
         child = child->NextSiblingElement( "group");
     }
-    loadLights();
+
     printf("Finished loading Scene!!!\n");
 }
 
+void Terminate(){
+    TwTerminate();
+}
+
+void TW_CALL setCamX(const void *value, void *clientData){
+    camX = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getCamX(void *value, void *clientData){
+    *(float *)value = camX;
+}
+
+void TW_CALL setCamY(const void *value, void *clientData){
+    camY = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getCamY(void *value, void *clientData){
+    *(float *)value = camY;
+}
+
+void TW_CALL setCamZ(const void *value, void *clientData){
+    camZ = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getCamZ(void *value, void *clientData){
+    *(float *)value = camZ;
+}
+
+void TW_CALL setLX(const void *value, void *clientData){
+    lX = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getLX(void *value, void *clientData){
+    *(float *)value = lX;
+}
+
+void TW_CALL setLY(const void *value, void *clientData){
+    lY = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getLY(void *value, void *clientData){
+    *(float *)value = lY;
+}
+
+void TW_CALL setLZ(const void *value, void *clientData){
+    lZ = *(const float *)value;
+    cartesianToSpherical();
+}
+
+void TW_CALL getLZ(void *value, void *clientData){
+    *(float *)value = lZ;
+}
+
+void TW_CALL setAlpha(const void *value, void *clientData){
+    float aux = *(const float *)value;
+    alpha = aux * 3.1415/180;
+    sphericalToCartesian();
+}
+
+void TW_CALL getAlpha(void *value, void *clientData){
+    *(float *)value = alpha * 180/3.1415;
+}
+
+void TW_CALL setBeta(const void *value, void *clientData){
+    float aux = *(const float *)value;
+    beta = aux * 3.1415/180;
+    sphericalToCartesian();
+}
+
+void TW_CALL getBeta(void *value, void *clientData){
+    *(float *)value = beta * 180/3.1415;
+}
+
+void TW_CALL toogleAxes(void *clientData){
+    if (axes == 0) { axes = 1; }
+    else { axes = 0; }
+}
+
+void TW_CALL exitProgram(void *clientData){
+    Terminate();
+    exit(0);
+}
+
+void TW_CALL toogleLighting(void *clientData){
+    if (light == 1){ glDisable(GL_LIGHTING); light=0; }
+    else { glEnable(GL_LIGHTING); light=1; }
+}
+
+void TW_CALL polygonModePoint(void *clientData){
+    OPTION = GL_POINT;
+}
+
+void TW_CALL polygonModeLine(void *clientData){
+    OPTION = GL_LINE;
+}
+
+void TW_CALL polygonModeFill(void *clientData){
+    OPTION = GL_FILL;
+}
+
+void menuTweakBar(TwBar *myBar){
+    myBar = TwNewBar("Menu");
+
+    TwAddVarCB(myBar, "Cam X", TW_TYPE_FLOAT, setCamX, getCamX, NULL, " step=0.01 group='Cartesianas' ");
+    TwAddVarCB(myBar, "Cam Y", TW_TYPE_FLOAT, setCamY, getCamY, NULL, " step=0.01 group='Cartesianas' ");
+    TwAddVarCB(myBar, "Cam Z", TW_TYPE_FLOAT, setCamZ, getCamZ, NULL, " step=0.01 group='Cartesianas' ");
+
+    TwAddVarCB(myBar, "LookAt X", TW_TYPE_FLOAT, setLX, getLX, NULL," step=0.01 group='Cartesianas' ");
+    TwAddVarCB(myBar, "LookAt Y", TW_TYPE_FLOAT, setLY, getLY, NULL," step=0.01 group='Cartesianas' ");
+    TwAddVarCB(myBar, "LookAt Z", TW_TYPE_FLOAT, setLZ, getLZ, NULL," step=0.01 group='Cartesianas' ");
+
+    TwDefine(" Menu/Cartesianas  group=Camera \n");
+
+    TwAddVarCB(myBar, "Alpha", TW_TYPE_FLOAT, setAlpha, getAlpha, NULL," step=0.01 group='Esfericas' ");
+    TwAddVarCB(myBar, "Beta", TW_TYPE_FLOAT, setBeta, getBeta, NULL," min=-90 max=90 step=0.01 group='Esfericas' ");
+    TwAddVarRW(myBar, "Radius", TW_TYPE_FLOAT, &radius, " step=0.01 group='Esfericas' ");
+
+    TwDefine(" Menu/Esfericas  group=Camera \n");
+
+    TwAddVarRW(myBar, "Cam Speed", TW_TYPE_FLOAT, &camSpeed, " min=0 step=0.001 group='Camera' ");
+    TwAddVarRW(myBar, "Rotation Speed", TW_TYPE_FLOAT, &rotationSpeed, " min=0 step=0.001 group='Camera' ");
+
+    TwAddButton(myBar, "POINT", polygonModePoint, NULL, " group='Polygon Mode' ");
+    TwAddButton(myBar, "LINE", polygonModeLine, NULL, " group='Polygon Mode' ");
+    TwAddButton(myBar, "FILL", polygonModeFill, NULL, " group='Polygon Mode' ");
+
+    TwDefine(" Menu/'Polygon Mode' opened=false ");
+
+    TwAddButton(myBar, "Axes", toogleAxes, NULL, "");
+    TwAddButton(myBar, "Lighting", toogleLighting, NULL, "");
+
+    TwAddButton(myBar, "Exit Program", exitProgram, NULL, "");
+}
+
 int main(int argc, char** argv){
+    if(argc<2){
+        printf("Path to scene is required.\n");
+        exit(1);
+    }
+
     //init GLUT and the window
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
     glutInitWindowPosition(100,100);
     glutInitWindowSize(1000,800);
     glutCreateWindow("MyWindow");
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    scene.turnOnLights();
     //Required callback registry
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);
     glutReshapeFunc(changeSize);
+    atexit(Terminate);
 
-    //Callback registration for keyboard processing
-    glutKeyboardFunc(processKeys);
-    glutKeyboardUpFunc(processUpKeys);
-    glutSpecialFunc(processSpecialKeys);
-    glutSpecialUpFunc(processUpSpecialKeys);
+    //OpenGL settings
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 #ifndef __APPLE__
     glewInit();
 #endif
 
-    ilInit();
-
-    loadScene();
-    Scene s = scene;
-    //OpenGL settings
+    loadScene(argv[1]);
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
 
+    TwBar *bar;
+
+    TwInit(TW_OPENGL, nullptr);
+
+    menuTweakBar(bar);
+
+    //Callback registration for keyboard processing
+    glutMouseFunc((GLUTmousebuttonfun)TwEventMouseButtonGLUT);
+    glutMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT);
+    glutPassiveMotionFunc((GLUTmousemotionfun)TwEventMouseMotionGLUT);
+
+    glutKeyboardFunc(processKeys);
+    glutKeyboardUpFunc(processUpKeys);
+    glutSpecialFunc(processSpecialKeys);
+    glutSpecialUpFunc(processUpSpecialKeys);
+
+    TwGLUTModifiersFunc(glutGetModifiers);
 
     //enter GLUT's main cycle
     glutMainLoop();
