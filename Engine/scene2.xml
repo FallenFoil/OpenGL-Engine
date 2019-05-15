@@ -1,6 +1,6 @@
 <scene CamY="20">
     <lights>
-        <light type="POINT" posX="0" posY="35" posZ="0"/>
+        <light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0"/>
     </lights>
     <group name="Floor">
         <scale X="4" Z="4" />
@@ -415,7 +415,7 @@
             <translate X="0" Y="37" Z="0"/>
             <scale X="0.5" Y="2" Z="0.5"/>
             <models>
-                <model file="../3d_Models/box.3d" R="75" G="75" B="75" />
+                <model file="../3d_Models/box.3d" R="0" G="0" B="0" emissR="0" emissG="0" emissB="0"/>
             </models>
         </group>
         <group>
