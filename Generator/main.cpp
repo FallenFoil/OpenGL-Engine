@@ -34,6 +34,7 @@ string createBox(float width, float height, float depth,  int stacks, int slices
             t2Savedx = t1x; t2Savedy = t1y; t2Savedz = t1z + boxDepth;
             for(int j = 0; j < slices; j++){
 
+
                 if(i == 0){
                     ss << t1x << " " << t1y << " " << t1z << endl;
                     ss << "0 " << "1 " << "0" << endl;
@@ -64,7 +65,8 @@ string createBox(float width, float height, float depth,  int stacks, int slices
                 if(i == stacks-1){
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "0 " << "-1 " << "0" << endl;
-                    ss << (j*1.f/2)/slices +0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "0 " << "-1 " << "0" << endl;
@@ -72,16 +74,19 @@ string createBox(float width, float height, float depth,  int stacks, int slices
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "-1 " << "0" << endl;
-                    ss << ((j+1)*1.f/2)/slices +0.5 << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+                    ss << (j*1.f/2)/slices +0.5 << " " << (k*1.f/3)/depthDivisions << endl;
+
 
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "0 " << "-1 " << "0" << endl;
-                    ss << (j*1.f/2)/slices + 0.5<< " " << (k*1.f/3)/depthDivisions << endl;
+                    ss << ((j+1)*1.f/2)/slices +0.5  << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "-1 " << "0" << endl;
-                    ss << ((j+1)*1.f/2)/slices +0.5  << " " << ((k+1)*1.f/3)/depthDivisions << endl;
+                    ss << (j*1.f/2)/slices + 0.5<< " " << (k*1.f/3)/depthDivisions << endl;
+
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "-1 " << "0" << endl;
@@ -92,29 +97,30 @@ string createBox(float width, float height, float depth,  int stacks, int slices
                 if(k == 0){
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
 
 
                     ss << t1x << " " << t1y << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+
 
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
 
                     ss << t1x << " " << t1y << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
 
                     ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
                     ss << "0 " << "0 " << "-1" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
                 }
 
                 if(k == depthDivisions-1){
@@ -124,11 +130,11 @@ string createBox(float width, float height, float depth,  int stacks, int slices
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "0 " << "0 " << "1" << endl;
-                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "0 " << "0 " << "1" << endl;
-                    ss << ((i+1)*1.f/2)/slices << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
 
 
                     ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
@@ -141,62 +147,67 @@ string createBox(float width, float height, float depth,  int stacks, int slices
 
                     ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
                     ss << "0 " << "0 " << "1" << endl;
-                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 1.f/3 << endl;
+                    ss << (i*1.f/2)/slices << " " << ((j+1)*1.f/3)/depthDivisions + 1.f/3 << endl;
+
                 }
 
-                if(j == 0){
+
+                if(j == 0) {
                     ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
-
+                    ss << ((i + 1) * 1.f / 2) / slices + 0.5 << " " << ((k + 1) * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
 
                     ss << t1x << " " << t1y << " " << t1z + boxDepth << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i * 1.f / 2) / slices + 0.5 << " " << ((k + 1) * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
+
 
                     ss << t1x << " " << t1y << " " << t1z << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i * 1.f / 2) / slices + 0.5 << " " << (k * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
+
 
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << ((i + 1) * 1.f / 2) / slices + 0.5 << " " << ((k + 1) * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
 
                     ss << t1x << " " << t1y << " " << t1z << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i * 1.f / 2) / slices + 0.5 << " " << (k * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
 
                     ss << t1x << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "-1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices + 0.5 << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << ((i + 1) * 1.f / 2) / slices + 0.5 << " " << (k * 1.f / 3) / depthDivisions + 2.f / 3 << endl;
+
                 }
 
                 if(j == slices-1){
                     ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((k+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z + boxDepth << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << ((k+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (k*1.f/3)/depthDivisions + 2.f/3 << endl;
 
 
                     ss << t1x + boxWidth << " " << t1y << " " << t1z + boxDepth << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << (i*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i*1.f/2)/slices  << " " << ((k+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
 
                     ss << t1x + boxWidth << " " << t1y - boxHeight << " " << t1z << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices  << " " << ((j+1)*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << ((i+1)*1.f/2)/slices  << " " << (k*1.f/3)/depthDivisions + 2.f/3 << endl;
 
                     ss << t1x + boxWidth << " " << t1y << " " << t1z << endl;
                     ss << "1 " << "0 " << "0" << endl;
-                    ss << ((i+1)*1.f/2)/slices  << " " << (j*1.f/3)/depthDivisions + 2.f/3 << endl;
+                    ss << (i*1.f/2)/slices  << " " << (k*1.f/3)/depthDivisions + 2.f/3 << endl;
 
                 }
                 t1x += boxWidth;
