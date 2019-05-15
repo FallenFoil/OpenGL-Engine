@@ -1,4 +1,7 @@
 <scene CamY="20">
+    <lights>
+        <light type="POINT" posX="0" posY="35" posZ="0"/>
+    </lights>
     <group name="Floor">
         <scale X="4" Z="4" />
         <models>
@@ -84,7 +87,7 @@
             </models>
         </group>
         <group name="Table_Base">
-            <translate X="0" Y="9.5" Z="0"/>
+            <translate X="0" Y="9.6" Z="0"/>
             <scale X="32" Z="22"/>
             <models>
                 <model file="../3d_Models/box.3d" texture="../Textures/wood.jpg" />
@@ -419,7 +422,7 @@
             <translate X="0" Y="35" Z="0"/>
             <scale X="4" Y="1" Z="2"/>
             <models>
-                <model file="../3d_Models/sphere.3d" R="255" G="255" B="255"/>
+                <model file="../3d_Models/sphere.3d" emissR="255" emissG="255" emissB="255" texture="../Textures/lamp.jpg"/>
             </models>
         </group>
     </group>

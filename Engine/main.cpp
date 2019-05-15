@@ -151,7 +151,7 @@ void viewFramesPerSecond(){
         fps = frame*1000.0/(time-timebase);
         timebase = time;
         frame = 0;
-        sprintf(s, "FPS: %f6.2", fps);
+        sprintf(s, "FPS: %f6", fps);
         glutSetWindowTitle(s);
     }
 }
