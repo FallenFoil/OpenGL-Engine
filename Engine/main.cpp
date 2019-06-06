@@ -661,6 +661,8 @@ void TW_CALL polygonModeFill(void *clientData){
 void menuTweakBar(TwBar *myBar){
     myBar = TwNewBar("Menu");
 
+    TwDefine(" Menu refresh=0.5 ");
+
     TwAddVarCB(myBar, "Cam X", TW_TYPE_FLOAT, setCamX, getCamX, NULL, " step=0.01 group='Cartesianas' ");
     TwAddVarCB(myBar, "Cam Y", TW_TYPE_FLOAT, setCamY, getCamY, NULL, " step=0.01 group='Cartesianas' ");
     TwAddVarCB(myBar, "Cam Z", TW_TYPE_FLOAT, setCamZ, getCamZ, NULL, " step=0.01 group='Cartesianas' ");

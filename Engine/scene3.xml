@@ -10,7 +10,6 @@
     </group>
     <group name="Sun">
         <scale X="8.11" Y="8.11" Z="8.11"/>
-		
         <models>
             <model file="../3d_Models/sphere.3d" emissR="155" emissG="155" emissB="155" texture="../Textures/sun.jpg"/>
         </models>
