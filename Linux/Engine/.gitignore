@@ -1,0 +1,11 @@
+/*
+!*.cpp
+!*.h
+!*.xml
+!CMakeLists.txt
+!/tinyxml2-master
+!.gitignore
+!*.3d
+!/3d_Models
+!/Textures
+!/toolkits
