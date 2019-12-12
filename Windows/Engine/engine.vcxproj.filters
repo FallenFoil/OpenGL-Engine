@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\group.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Transformation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\tinyxml2-master\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\group.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\Transformation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\tinyxml2-master\tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\luisj\Desktop\Luís Macedo\Programming\CG\Engine\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{D370C538-1FF7-39BF-821A-A227ED0A4C55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0164C19B-53E4-3B6E-B4C8-8DA1E5124E1C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

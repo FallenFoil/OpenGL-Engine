@@ -1,0 +1,429 @@
+<scene CamY="20">
+    <lights>
+        <light type="DIRECTIONAL" dirX="0" dirY="1" dirZ="0"/>
+    </lights>
+    <group name="Floor">
+        <scale X="4" Z="4" />
+        <models>
+            <model file="3d_Models\plane.3d" texture="Textures\tileFloor.png" />
+        </models>
+    </group>
+    <group name="Ceiling">
+        <translate Y="38"/>
+        <rotate ang="180" axisX="1" axisY="0" axisZ="0"/>
+        <scale X="4" Z="4" />
+        <models>
+            <model file="3d_Models\plane.3d" R="200" G="200" B="200" />
+        </models>
+    </group>
+    <group name="Wall Z Negativo">
+        <rotate ang="90" axisX="1" axisY="0" axisZ="0"/>
+        <translate Y="-40" Z="-19"/>
+        <scale X="4" Z="1.9"/>
+        <group>
+            <rotate ang="180" axisX="0" axisY="1" axisZ="0"/>
+            <models>
+                <model file="3d_Models\plane.3d" texture="Textures\fotoWall.png" />
+            </models>
+        </group>
+    </group>
+    <group name="Wall Z Positivo">
+        <rotate ang="-90" axisX="1" axisY="0" axisZ="0"/>
+        <translate Y="-40" Z="19"/>
+        <scale X="4" Z="1.9"/>
+        <models>
+            <model file="3d_Models\plane.3d" R="150" G="150" B="150" />
+        </models>
+    </group>
+    <group name="Wall X Positivo">
+        <rotate ang="90" axisX="0" axisY="1" axisZ="0"/>
+        <group>
+            <rotate ang="-90" axisX="1" axisY="0" axisZ="0"/>
+            <translate Y="-40" X="0" Z="19"/>
+            <scale Z="1.9" X="4"/>
+            <models>
+                <model file="3d_Models\plane.3d" texture="Textures\bestWall.png" />
+            </models>
+        </group>
+    </group>
+    <group name="Wall X Negativo">
+        <rotate ang="-90" axisX="0" axisY="1" axisZ="0"/>
+        <group>
+            <rotate ang="-90" axisX="1" axisY="0" axisZ="0"/>
+            <translate Y="-40" X="0" Z="19"/>
+            <scale Z="1.9" X="4"/>
+            <models>
+                <model file="3d_Models\plane.3d" texture="Textures\doorWall.png" />
+            </models>
+        </group>
+    </group>
+    <group name="Table">
+        <group name="Table_Leg 1">
+            <translate X="-15" Y="5" Z="10"/>
+            <scale X="1" Y="10" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Table_Leg 2">
+            <translate X="15" Y="5" Z="10"/>
+            <scale X="1" Y="10" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Table_Leg 3">
+            <translate X="-15" Y="5" Z="-10"/>
+            <scale X="1" Y="10" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Table_Leg 4">
+            <translate X="15" Y="5" Z="-10"/>
+            <scale X="1" Y="10" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Table_Base">
+            <translate X="0" Y="9.6" Z="0"/>
+            <scale X="32" Z="22"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 1">
+        <translate X="-6.5" Z="-12"/>
+        <group name="Chair_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 1_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 2">
+        <translate X="6.5" Z="-12"/>
+        <group name="Chair 2_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 2_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 3">
+        <translate X="-6.5" Z="12"/>
+        <rotate ang="180" axisX="0" axisY="1" axisZ="0"/>
+        <group name="Chair 3_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 3_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 4">
+        <translate X="6.5" Z="12"/>
+        <rotate ang="180" axisX="0" axisY="1" axisZ="0"/>
+        <group name="Chair 4_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 4_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 5">
+        <translate X="17"/>
+        <rotate ang="-90" axisX="0" axisY="1" axisZ="0"/>
+        <group name="Chair 5_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 5_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="Chair 6">
+        <translate X="-17"/>
+        <rotate ang="90" axisX="0" axisY="1" axisZ="0"/>
+        <group name="Chair 6_Leg 1">
+            <translate X="-1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Leg 2">
+            <translate X="1.8" Y="2.9" Z="1.8"/>
+            <scale X="1" Y="5.8" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Leg 3">
+            <translate X="-2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Leg 4">
+            <translate X="2" Y="7.5" Z="-2"/>
+            <scale X="1" Y="15" Z="1"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Base">
+            <translate X="0" Y="5.8" Z="0"/>
+            <scale X="4.9" Y="0.5" Z="4.9"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Strip1">
+            <translate X="0" Y="14" Z="-2"/>
+            <scale X="4.9" Y="1" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+        <group name="Chair 6_Strip2">
+            <translate X="0" Y="12" Z="-2"/>
+            <scale X="4.9" Y="0.5" Z="0.7"/>
+            <models>
+                <model file="3d_Models\box.3d" texture="Textures\wood.jpg" />
+            </models>
+        </group>
+    </group>
+    <group name="light">
+        <group>
+            <translate X="0" Y="37" Z="0"/>
+            <scale X="0.5" Y="2" Z="0.5"/>
+            <models>
+                <model file="3d_Models\box.3d" R="0" G="0" B="0" emissR="0" emissG="0" emissB="0"/>
+            </models>
+        </group>
+        <group>
+            <translate X="0" Y="35" Z="0"/>
+            <scale X="4" Y="1" Z="2"/>
+            <models>
+                <model file="3d_Models\sphere.3d" emissR="255" emissG="255" emissB="255" texture="Textures\lamp.jpg"/>
+            </models>
+        </group>
+    </group>
+</scene>

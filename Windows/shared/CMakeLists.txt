@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+project(Ponto)
+set(CMAKE_BUILD_TYPE Release)
+add_library(Ponto SHARED Ponto.cpp Ponto.h)
+install(TARGETS Ponto DESTINATION /usr/lib)
