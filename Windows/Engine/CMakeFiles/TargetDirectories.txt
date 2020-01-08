@@ -1,3 +1,0 @@
-C:/Users/luisj/Desktop/Luís Macedo/Programming/CG/Engine/CMakeFiles/engine.dir
-C:/Users/luisj/Desktop/Luís Macedo/Programming/CG/Engine/CMakeFiles/ALL_BUILD.dir
-C:/Users/luisj/Desktop/Luís Macedo/Programming/CG/Engine/CMakeFiles/ZERO_CHECK.dir
