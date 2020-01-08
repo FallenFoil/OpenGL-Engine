@@ -1,0 +1,118 @@
+<scene>
+    <group name="Sun">
+        <scale X="8.11" Y="8.11" Z="8.11"/>
+        <models>
+            <model file="..\scenes\3d_Models\sphere.3d" R="255" G="140" B="0"/>
+        </models>
+    </group>
+    <group name="Halley">
+        <translate time="100">
+            <point X="-20" Y="0" Z="0"/>
+            <point X="105" Y="30" Z="-30"/>
+            <point X="220" Y="0" Z="0"/>
+            <point X="105" Y="-30" Z="30"/>
+        </translate>
+        <scale X="0.3" Y="0.3" Z="0.3"/>
+        <models>
+            <model file="..\scenes\3d_Models\comet.3d" R="80" G="80" B="80" />
+        </models>
+    </group>
+    <group name="Planets" distanceScale = "ln(1 + AU)*30" radiusScale="ln(1 + percentage)">
+        <group name="Mercury">
+            <rotate time="87.97" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="13.579" />
+            <scale X="0.322" Y="0.322" Z="0.322"/>
+            <group>
+                <rotate time="58.66" axisX="0" axisY="1" axisZ="0"/>
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="55" G="55" B="55"/>
+                </models>
+            </group>
+        </group>
+        <group name="Venus">
+            <rotate time="224.7" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="30.367" />
+            <scale X="0.667" Y="0.667" Z="0.667"/>
+            <group>
+                <rotate time="-243.01" axisX="0" axisY="1" axisZ="0" />
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="150" G="95" B="40"/>
+                </models>
+            </group>
+        </group>
+        <group name="Earth">
+            <rotate time="365.5" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="41.053" />
+            <scale X="1" Y="1" Z="1"/>
+            <group>
+                <rotate time="24" axisX="0" axisY="1" axisZ="0" />
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="40" G="40" B="255" />
+                </models>
+                <group>
+                    <rotate time="27"  axisX="0" axisY="1" axisZ="0"/>
+                    <translate X="1.407"/>
+                    <scale X="0.239" Y="0.239" Z="0.239"/>
+                    <models>
+                        <model file="..\scenes\3d_Models\sphere.3d" R="30" G="30" B="30" />
+                    </models>
+                </group>
+            </group>
+        </group>
+        <group name="Mars">
+            <rotate time="686.93" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="52.23" />
+            <scale X="0.425" Y="0.425" Z="0.425"/>
+            <group>
+                <rotate time="24.025" axisX="0" axisY="1" axisZ="0"/>
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="150" G="60" B="0"/>
+                </models>
+            </group>
+        </group>
+        <group name="Jupiter">
+            <rotate time="4328.9" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="90.529" />
+            <scale X="2.49" Y="2.49" Z="2.49"/>
+            <group>
+                <rotate time="0.41" axisX="0" axisY="1" axisZ="0" />
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="255" G="120" B="100"/>
+                </models>
+            </group>
+        </group>
+        <group name="Saturn">
+            <rotate time="10752.9" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="108.607" />
+            <scale X="2.346" Y="2.346" Z="2.346"/>
+            <group>
+                <rotate time="0.43" axisX="0" axisY="1" axisZ="0"/>
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d"  R="210" G="140" B="140"/>
+                </models>
+            </group>
+        </group>
+        <group name="Uranus">
+            <rotate time="30799.095" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="129.406" />
+            <scale X="1.61" Y="1.61" Z="1.61"/>
+            <group>
+                <rotate time="0.5" axisX="0" axisY="1" axisZ="0"/>
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d" R="100" G="100" B="200"/>
+                </models>
+            </group>
+        </group>
+        <group name="Neptune">
+            <rotate time="60190.03" axisX="0" axisY="1" axisZ="0"/>
+            <translate X="143.308" />
+            <scale X="1.585" Y="1.585" Z="1.585"/>
+            <group>
+                <rotate time="0.66" axisX="0" axisY="1" axisZ="0"/>
+                <models>
+                    <model file="..\scenes\3d_Models\sphere.3d"  R="50" G="50" B="200"/>
+                </models>
+            </group>
+        </group>
+    </group>
+</scene>

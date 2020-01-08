@@ -9,7 +9,6 @@
 #include <IL/il.h>
 #include <cstring>
 #include <fstream>
-#include <stdlib.h>
 #include <string>
 #include "Model.h"
 

@@ -1,0 +1,10 @@
+<scene>
+    <lights>
+        <light type="POINT" posX="3" posY="3" posZ="3" />
+    </lights>
+    <group>
+        <models>
+            <model file="..\scenes\3d_Models\box.3d" texture="..\scenes\Textures\sun.jpg" />
+        </models>
+    </group>
+</scene>
