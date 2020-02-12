@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 # Project Name
 PROJECT(Engine)
 
-include_directories(tinyxml2-master)
+include_directories(${TOOLKITS_FOLDER}/tinyxml2)
 
 if (NOT APPLE)
     if (WIN32)
@@ -42,8 +42,8 @@ include_directories(${OpenGL_INCLUDE_DIRS})
 link_directories(${OpenGL_LIBRARY_DIRS})
 add_definitions(${OpenGL_DEFINITIONS})
 
-add_executable(${PROJECT_NAME} tinyxml2-master/tinyxml2.cpp
-        tinyxml2-master/tinyxml2.h
+add_executable(${PROJECT_NAME} ${TOOLKITS_FOLDER}/tinyxml2/tinyxml2.cpp
+        ${TOOLKITS_FOLDER}/tinyxml2/tinyxml2.h
         main.cpp Model.cpp Model.h Scene.cpp Scene.h group.cpp group.h Transformation.cpp Transformation.h)
 
 
