@@ -1,9 +1,4 @@
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
 #include <GL/glew.h>
-#include <GL/glut.h>
-#endif
 
 #include <AntTweakBar.h>
 #include <stdio.h>
@@ -14,6 +9,7 @@
 #include <IL/il.h>
 #include "Scene.h"
 #include "EngineException.h"
+#include <GL/glut.h>
 
 using namespace std;
 using namespace tinyxml2;
