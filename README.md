@@ -14,6 +14,7 @@ A scenes are descibed by an XML file, containing the path for the models, the li
   - **group**
     - **rotate**
     - **translate**
+      - **point**
     - **scale**
     - **models**
       - **model**
@@ -27,6 +28,74 @@ Each **group** can hava 0 or many **group** childs.
 Each **group** can have 0 or 1 **models**. 
 
 The order of the geometric transformations isn't fixed.
+
+The **scene** tag can have the following attributes:
+- **CamX**, x position of the camera;
+- **CamY**, y position of the camera;
+- **CamZ**, z position of the camera;
+- **LookAtX**, x positition of the point that the camera is looking at;
+- **LookAtY**, y positition of the point that the camera is looking at;
+- **LookAtZ**, z positition of the point that the camera is looking at;
+
+The **light** tag can have the following attributes:
+- **ambR**, red value of the ambient color between 0 and 255;
+- **ambG**, green value of the ambient color between 0 and 255;
+- **ambB**, blue value of the ambient color between 0 and 255;
+- **diffR**, red value of the diffuse color between 0 and 255;
+- **diffG**, green value of the diffuse color between 0 and 255;
+- **diffB**, blue value of the diffuse color between 0 and 255;
+- **Type**, that can be:
+  - DIRECTIONAL;
+  - POINT;
+  - SPOT.
+- **dirX**, x direction of the DIRECTIONAL and SPOT light;
+- **dirY**, y direction of the DIRECTIONAL and SPOT light;
+- **dirZ**, z direction of the DIRECTIONAL and SPOT light;
+- **posX**, x position of the POINT and SPOT light;
+- **posY**, Y position of the POINT and SPOT light;
+- **posZ**, Z position of the POINT and SPOT light;
+
+The **rotate** tag can have the following attributes:
+- **axisX**, can be 0 or 1. If 1 the rotation is centered in the X axis;
+- **axisY**, can be 0 or 1. If 1 the rotation is centered in the Y axis;
+- **axisZ**, can be 0 or 1. If 1 the rotation is centered in the Z axis;
+- **ang**, for the angle to rotate. Or **time** to rotate 360 degrees in the given seconds
+
+The **translate** tag can have the following attributes:
+- **X**, how many to move in the x axis;
+- **Y**, how many to move in the y axis;
+- **Z**, how many to move in the z axis;
+- **time**, time make a catmull-Rom curve. If time is present, the **X**, **Y**, **Z** are ignored and is expected to exists at least four children **points**;
+- **drawOrbit**, can be *true* or *false*, prints the orbit of the movement.
+
+The **point** tag can have the following attributes:
+- **X**, how many to move in the x axis;
+- **Y**, how many to move in the y axis;
+- **Z**, how many to move in the z axis;
+
+The **scale** tag can have the following attributes:
+- **X**, how many to scale in the x axis;
+- **Y**, how many to scale in the y axis;
+- **Z**, how many to scale in the z axis;
+
+The **model** tag can have the following attributes:
+- **file**, path to the shape file;
+- **texture**, path to the texture file
+- **R**, red value for the color of the shape;
+- **G**, green value for the color of the shape;
+- **B**, blue value for the color of the shape;
+- **diffR**, red value for the diffuse color of the shape;
+- **diffG**, green value for the diffuse color of the shape;
+- **diffB**, blue value for the diffuse color of the shape;
+- **specR**, red value for the specular color of the shape;
+- **specG**, green value for the specular color of the shape;
+- **specB**, blue value for the specular color of the shape;
+- **emissR**, red value for the emissive color of the shape;
+- **emissG**, green value for the emissive color of the shape;
+- **emissB**, blue value for the emissive color of the shape;
+- **ambiR**, red value for the ambiance color of the shape;
+- **ambiG**, green value for the ambiance color of the shape;
+- **ambiB**, blue value for the ambiance color of the shape;
 
 ## Generator
 
