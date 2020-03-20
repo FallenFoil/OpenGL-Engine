@@ -737,7 +737,7 @@ int main(int argc, char** argv) {
 	glewInit();
 #endif
 
-	loadScene("..\\scenes\\scene5.xml");
+	loadScene("..\\scenes\\scene3.xml");
 	glEnable(GL_TEXTURE_2D);
 
 	TwBar* bar;

@@ -1,0 +1,10 @@
+^C:\USERS\LUISJ\DESKTOP\OPENGL-ENGINE\WINDOWS\ENGINE\BIN\CMAKEFILES\42E924F71244150251659CE65771A67E\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/luisj/Desktop/OpenGL-Engine/Windows/Engine/src -BC:/Users/luisj/Desktop/OpenGL-Engine/Windows/Engine/bin --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/luisj/Desktop/OpenGL-Engine/Windows/Engine/bin/engine.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
