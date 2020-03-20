@@ -1,3 +1,0 @@
-/home/luis/Downloads/CG-master/Linux/Engine/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/luis/Downloads/CG-master/Linux/Engine/src/cmake-build-debug/CMakeFiles/Engine.dir
-/home/luis/Downloads/CG-master/Linux/Engine/src/cmake-build-debug/CMakeFiles/edit_cache.dir

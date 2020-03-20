@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include "Ponto.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -811,7 +810,7 @@ string createRing(float innerRadius, float outerRadius, int slices){
 int main(int argc, char** argv){
 
     if(argc<2){
-        printf("Required type of shape.\n");
+        printf("Required type of shape:\n    * Plane or plane\n    * Box or box\n    * Sphere or sphere\n    * ReverseSphere or reversesphere\n    * Cone or cone\n    * Bezier or bezier\n    * Ring or ring\n");
         exit(EXIT_FAILURE);
     }
 
