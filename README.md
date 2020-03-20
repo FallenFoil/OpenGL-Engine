@@ -18,6 +18,25 @@ A scenes are descibed by an XML file, containing the path for the models, the li
     - **models**
       - **model**
 
+Each **scene** can have 0 or 1 **lights**.
+
+Each **lights** can have 0 or many **light**.
+
+Each **group** can hava 0 or many **group** childs. 
+
+Each **group** can have 0 or 1 **models**. 
+
+The order of the geometric transformations isn't fixed.
+
+## Generator
+
+The **Generator** creates geometric shape using triangles. The first line of the shape file represents the number of points that makes the shape. For each point it is calculates its coordiantes, normal and texture coordinates.
+
+### Instructions
+
+#### Sphere
+
+
 ## Contributors
 
 [Cesar Borges](https://github.com/CesarAugustoBorges)
