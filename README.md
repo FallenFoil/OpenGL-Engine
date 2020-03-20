@@ -11,6 +11,12 @@ A scenes are descibed by an XML file, containing the path for the models, the li
 - **scene**
   - **lights**
     - **light**
+  - **group**
+    - **rotate**
+    - **translate**
+    - **scale**
+    - **models**
+      - **model**
 
 ## Contributors
 
